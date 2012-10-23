@@ -1,0 +1,36 @@
+/* -----------------------------------------------------------------------
+
+
+ Blueprint CSS Framework 1.0.1
+ http://blueprintcss.org
+
+   * Copyright (c) 2007-Present. See LICENSE for more info.
+   * See README for instructions on how to use Blueprint.
+   * For credits and origins, see AUTHORS.
+   * This is a compressed file. See the sources in the 'src' directory.
+
+----------------------------------------------------------------------- */
+
+/* ie.css */
+body {text-align:center;}
+.container {text-align:left;}
+* html .column, * html .span30, * html .span-2, * html .span-3, * html .span-4, * html .span-5, * html .span-6, * html .span-7, * html .span-8, * html .span-9, * html .span300, * html .span301, * html .span302, * html .span303, * html .span304, * html .span305, * html .span306, * html .span307, * html .span308, * html .span309, * html .span-20, * html .span-21, * html .span-22, * html .span-23, * html .span-24 {display:inline;overflow-x:hidden;}
+* html legend {margin:0px -8px 16px 0;padding:0;}
+sup {vertical-align:text-top;}
+sub {vertical-align:text-bottom;}
+html>body p code {*white-space:normal;}
+hr {margin:-8px auto 11px;}
+img {-ms-interpolation-mode:bicubic;}
+.clearfix, .container {display:inline-block;}
+* html .clearfix, * html .container {height:1%;}
+fieldset {padding-top:0;}
+legend {margin-top:-0.2em;margin-bottom:1em;margin-left:-0.5em;}
+textarea {overflow:auto;}
+label {vertical-align:middle;position:relative;top:-0.25em;}
+input.text, input.title, textarea {background-color:#fff;border:1px solid #bbb;}
+input.text:focus, input.title:focus {border-color:#666;}
+input.text, input.title, textarea, select {margin:0.5em 0;}
+input.checkbox, input.radio {position:relative;top:.25em;}
+form.inline div, form.inline p {vertical-align:middle;}
+form.inline input.checkbox, form.inline input.radio, form.inline input.button, form.inline button {margin:0.5em 0;}
+button, input.button {position:relative;top:0.25em;}

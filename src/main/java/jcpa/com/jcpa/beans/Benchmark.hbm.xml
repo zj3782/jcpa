@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.jcpa.beans">
+ <class name="Benchmark" table="Benchmark">
+  <id column="id" name="id" type="int">
+   <generator class="native"/>
+  </id>
+  <property generated="never" lazy="false" 
+   name="name"  type="java.lang.String">
+   <column name="name" unique="true" length="256" not-null="true"/>
+  </property>
+  <property generated="never" lazy="false"  name="descript" type="java.lang.String">
+   <column name="descript" length="10240"/>
+  </property>
+  <property generated="never" lazy="false" name="result" type="java.lang.String">
+   <column name="result" length="10240"/>
+  </property>
+ </class>
+</hibernate-mapping>
