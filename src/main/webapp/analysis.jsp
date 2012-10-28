@@ -10,19 +10,17 @@
 <script type="text/javascript" src="plugin/jquery.contextmenu.js"></script>
 <script type="text/javascript" src="js/analysis.js"></script>
 
-
-<hr class="space h100"/>
+<hr class="space h20"/>
 <h2 class="aCenter">Code Analysis</h2>
-<hr class="space h30"/>
 <div id="analysis">
-	<div class="box f12 clearfix" id="svnTitle" style="display:none;">
+	<div class="box f12 clearfix" id="codeTitle" style="display:none;">
 		<span class="span-19">
-			<span class="f14 fB">Url:&nbsp;&nbsp;</span><span id="SvnUrl" class="cGreen"></span>&nbsp;&nbsp;&nbsp;
-			<span class="f14 fB">User:&nbsp;&nbsp;</span><span id="SvnUser" class="cGreen"></span>
+			<span class="f14 fB">Url:&nbsp;&nbsp;</span><span id="codeUrl" class="cGreen"></span>&nbsp;&nbsp;&nbsp;
+			<span class="f14 fB">User:&nbsp;&nbsp;</span><span id="codeUser" class="cGreen"></span>
 		</span>
 		<span class="right">
-			<a href="javascript:;" onclick="ReAnalysis();">ReAnalysis</a>
-			<a href="javascript:;" onclick="exportResult();">ExportResult</a>
+			<a href="javascript:;" onclick="ReAnalysis();" title="Back">Back</a>
+			<a href="analysis.do?method=DownReport" target='_blank' title="Download Reports">DownReport</a>
 		</span>
 	</div>
 	<%if(report==null){%>
@@ -61,36 +59,27 @@
 	<%}else{%>
 		<script type="text/javascript">
 			$(document).ready(function(){
-				StartIntervalGetReport();
-				$("#svnTitle").show();
-				$("#SvnUrl").html('<%=(String)session.getAttribute("SvnUrl")%>');
-				$("#SvnUser").html('<%=(String)session.getAttribute("SvnUser")%>');
+				$("#codeTitle").show();
+				$("#codeUrl").html('<%=(String)session.getAttribute("codeUrl")%>');
+				$("#codeUser").html('<%=(String)session.getAttribute("codeUser")%>');
 			});
 		</script>
 	<%}%>
-	<div id='reporting' class='h40'></div>
 	<hr class="space">
 	<!-- report -->
 	<div id="reportArea" <%if(report==null){out.println("style='display:none;'");}%>>
 		<div class="info">
 			<h3 class="aCenter" >Reports</h3>
-			<input type="hidden" id="rline" value="0"/>
 			<div id="report" class="oAuto">
 				<table id="reportTB"></table>
 			</div>
 		</div>
 		<div class="error">
 			<h3 class="aCenter" >Errors</h3>
-			<input type="hidden" id="eline" value="0"/>
 			<div id="error" class="oAuto">
 				<table id="errorTB"></table>
 			</div>
 		</div>
-	</div>
-	<!-- 导出分析结果 -->
-	<div id="exportDiv" style="display:none;">
-		<div class="line"><a href="analysis.do?method=DownReport" target='_blank' title="Download Reports">Download</a></div>
-		<textarea id="exportTA" class="w560 h300 oAuto" wrap="off" title="Press Ctrl+C to copy"></textarea>
 	</div>
 	<!-- 查看单个report -->
 	<div id="viewReport" class="box" style="display:none;">
@@ -104,18 +93,18 @@
 			<span class="span-2">Method:</span><div id="viewMethod" class="span-15 oAuto"></div>
 		</div>
 		<div  class="line">
+			<span class="span-2">Location:</span><div id="viewLocation" class="span-15"></div>
+		</div>
+		<div  class="line">
+			<span class="span-2">Code:</span><div id="viewCode" class="span-15 oAuto"></div>
+		</div>
+		<div  class="line">
 			<span class="span-2">Rule:</span><div id="viewRule" class="span-15 oAuto"></div>
-		</div>
-		<div  class="line">
-			<span class="span-2">Description:</span><div id="viewDescription" class="span-15 oAuto"></div>
-		</div>
-		<div  class="line">
-			<span class="span-2">Example:</span><div id="viewExample" class="span-15 oAuto"></div>
 		</div>
 		<div  class="line">
 			<span class="span-2">Priority:</span><div id="viewPriority" class="span-15 oAuto"></div>
 		</div>
 	</div>
 </div>
-<hr class="space h200"/>
+<hr class="space h20"/>
 <%@ include file="footer.jsp" %>

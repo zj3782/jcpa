@@ -3,6 +3,8 @@ package com.jcpa.util;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -199,22 +201,38 @@ public class ToolUtil {
      * */
     public static double getRound(double dSource){
         double iRound;
-        //BigDecimal的构造函数参数类型是double
         BigDecimal deSource = new BigDecimal(dSource);
-        //deSource.setScale(0,BigDecimal.ROUND_HALF_UP) 返回值类型 BigDecimal
-        //intValue() 方法将BigDecimal转化为int
         iRound= deSource.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
         return iRound;
     }
-    
-//    public static void main(String args[]){
-//    	System.out.print(getRound(1.999999));
-//    }
+
     /**
+     * 获取文件指定行数之间的内容
+     * @throws Exception 
+     * */
+    public static String getFileConetent(String fn,int startLine,int endLine) throws IOException{
+    	String snippet = "";
+		String str = null;
+		BufferedReader reader = new BufferedReader(new FileReader(fn));
+		int line = 1;
+		str = reader.readLine();
+		while ( str != null){			
+			if (line >= startLine && line <= endLine){
+				snippet += str + "\r\n";
+				if (line == endLine){
+					break;
+				}
+			}
+			str = reader.readLine();
+			line++;
+		}	
+		reader.close();
+		return snippet;
+    }/**
      * 获取文件内容
      * @throws Exception 
      * */
-    public static String getFileConetent(String fn,String charset) throws Exception{
+    public static String getFileConetent(String fn,String charset) throws IOException{
     	String txt="";
 		BufferedReader bufr = new BufferedReader(new InputStreamReader (new FileInputStream (new File (fn)),charset));
 		String r=bufr.readLine();

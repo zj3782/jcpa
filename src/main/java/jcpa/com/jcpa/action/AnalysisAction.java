@@ -14,6 +14,7 @@ import com.jcpa.util.analysis.CodeReportError;
 import com.jcpa.util.analysis.CodeReports;
 import com.jcpa.util.analysis.PMDRenderer;
 import com.jcpa.util.json.Json;
+import com.jcpa.util.json.JsonLeafNode;
 import com.jcpa.util.json.JsonObjectNode;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,8 +49,8 @@ public class AnalysisAction extends Action{
 		String url=request.getParameter("url");
 		String user=request.getParameter("user");
 		String pwd=request.getParameter("pwd");
-		session.setAttribute("SvnUser",user);
-		session.setAttribute("SvnUrl",url);
+		session.setAttribute("codeUser",user);
+		session.setAttribute("codeUrl",url);
 		//判断是否是svn
 		boolean isSvn=false;
 		if(url.startsWith("http://") || url.startsWith("https://") ||
@@ -91,16 +92,50 @@ public class AnalysisAction extends Action{
 	/**
 	 * 客户端每隔一段时间获取分析进程
 	 * */
-	public void report() throws Exception{
+	public void step() throws Exception{
 		CodeReports report=(CodeReports)session.getAttribute("AnalysisReport");
 		if(report==null){
 			error("Session is empty");
 		}else{
-			int rstart=ToolUtil.strToInt(request.getParameter("rstart"));//report start
-			int estart=ToolUtil.strToInt(request.getParameter("estart"));//error start
 			Json j=new Json(1);
 			JsonObjectNode data=j.createData();
-			data.addChild(report.toJsonNode(rstart,estart));
+			data.addChild(new JsonLeafNode("step",String.valueOf(report.getStep())));
+			echo(j.toString());
+		}
+	}
+	/**
+	 * reportlist
+	 * */
+	public void reportlist() throws Exception{
+		CodeReports report=(CodeReports)session.getAttribute("AnalysisReport");
+		if(report==null){
+			error("Session is empty");
+		}else{
+			int ONE_PAGE_COUNT=ToolUtil.strToPositiveInt(request.getParameter("rp"),12);;//一页pattern的个数 
+			int page=ToolUtil.strToPositiveInt(request.getParameter("page"),1);//页码数
+			
+			JsonObjectNode j=new JsonObjectNode("");
+			j.addChild(new JsonLeafNode("page",String.valueOf(page)));
+			j.addChild(new JsonLeafNode("total",String.valueOf(report.reportCount())));
+			j.addChild(report.getReportJsonArray(page,ONE_PAGE_COUNT,"rows"));
+			echo(j.toString());
+		}
+	}
+	/**
+	 * errorlist
+	 * */
+	public void errorlist() throws Exception{
+		CodeReports report=(CodeReports)session.getAttribute("AnalysisReport");
+		if(report==null){
+			error("Session is empty");
+		}else{
+			int ONE_PAGE_COUNT=ToolUtil.strToPositiveInt(request.getParameter("rp"),12);;//一页pattern的个数 
+			int page=ToolUtil.strToPositiveInt(request.getParameter("page"),1);//页码数
+			
+			JsonObjectNode j=new JsonObjectNode("");
+			j.addChild(new JsonLeafNode("page",String.valueOf(page)));
+			j.addChild(new JsonLeafNode("total",String.valueOf(report.reportCount())));
+			j.addChild(report.getErrorJsonArray(page,ONE_PAGE_COUNT,"rows"));
 			echo(j.toString());
 		}
 	}
@@ -113,8 +148,8 @@ public class AnalysisAction extends Action{
 	private void _ClearReport(){
 		session.removeAttribute("AnalysisProgress");
 		session.removeAttribute("AnalysisReport");
-		session.removeAttribute("SvnUser");
-		session.removeAttribute("SvnUrl");
+		session.removeAttribute("codeUser");
+		session.removeAttribute("codeUrl");
 	}
 	/**
 	 * 下载report
@@ -123,19 +158,20 @@ public class AnalysisAction extends Action{
 		CodeReports report=(CodeReports)session.getAttribute("AnalysisReport");
 		if(report!=null){
 			String txt="<html><head><title>Code Analysis Report</title></head><body><div>";
-			txt+="<h3>SourceUrl:&nbsp;&nbsp;&nbsp;<span style='color:green'>"+(String)session.getAttribute("SvnUrl")+"</span></h3>";
-			txt+="<h3>UserName:&nbsp;&nbsp;&nbsp;<span style='color:green'>"+(String)session.getAttribute("SvnUser")+"</span></h3>";
+			txt+="<h3>SourceUrl:&nbsp;&nbsp;&nbsp;<span style='color:green'>"+(String)session.getAttribute("codeUrl")+"</span></h3>";
+			txt+="<h3>UserName:&nbsp;&nbsp;&nbsp;<span style='color:green'>"+(String)session.getAttribute("codeUser")+"</span></h3>";
 			txt+="<table border='1' align='center' cellspacing='0' cellpadding='3' width='100%'>";
-			txt+="<tr><th></th><th>package</th><th>class</th><th>method</th><th>rule</th><th>description</th><th>example</th><th>priority</th></tr>";
+			txt+="<tr><th></th><th>Package</th><th>Class</th><th>Method</th><th>Location</th><th>Code</th><th>Rule</th><th>Priority</th></tr>";
 			
 			int index=1;
 			Iterator<CodeReport> itr = report.reportIterator();
 			while(itr.hasNext()){
 				CodeReport r = itr.next();
 				txt+="<tr><td>"+index+"</td><td>"+r.getPackageName()+"</td><td>"+r.getClassName()+"</td>";
-				txt+="<td>"+r.getMethodName()+"</td><td>"+r.getRuleName()+"</td>";
-				txt+="<td>"+ToolUtil.strHtmlFmt(r.getDescription())+"</td>";
-				txt+="<td>"+ToolUtil.strHtmlFmt(r.getExample())+"</td>";
+				txt+="<td>"+r.getMethodName()+"</td>";
+				txt+="<td>Line:["+r.getLine()+"]Column:["+r.getColumn()+"]</td>";
+				txt+="<td>"+r.getCode()+"</td>";
+				txt+="<td>"+r.getRuleName()+"</td>";
 				txt+="<td>"+r.getRulePriority()+"</td></tr>";
 				index++;
 			}

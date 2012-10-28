@@ -11,6 +11,6 @@ public interface PatternDao {
 	public int delete(int id);
 	public int delete(String[] ids);
 	public long count(String where);
-	public List<Pattern> list(int page,int onePageCount,String where);
+	public List<Pattern> list(int page,int onePageCount,String where,String order);
 	public Pattern get(int id);
 }

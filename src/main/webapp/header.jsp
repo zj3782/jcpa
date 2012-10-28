@@ -40,10 +40,10 @@ pageUrl=URLEncoder.encode(pageUrl);
 		</div>
 		<div id='menu' class="cssmenus vrmenu">
 			<%if(!user.equals("guest")){%>
-			<div class='cssmenu'><a href="patterns.jsp" target="_blank" title='Pattern List'>Pattern List</a></div>
+			<div class='cssmenu'><a href="patterns.jsp" title='Pattern List'>Pattern List</a></div>
 		   	<%}%>
-		   	<div class='cssmenu'><a href="benchmark.jsp" target="_blank" title='Benchmark'>Benchmark</a></div>
-		   	<div class='cssmenu'><a href="analysis.jsp" target="_blank" title='Code Analysis'>Code Analysis</a></div>
+		   	<div class='cssmenu'><a href="benchmark.jsp"  title='Benchmark'>Benchmark</a></div>
+		   	<div class='cssmenu'><a href="analysis.jsp"  title='Code Analysis'>Code Analysis</a></div>
 		</div>
 	</div>
 	<div id="content" class="container" >

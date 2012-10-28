@@ -75,7 +75,7 @@ function runCase(rows){
 		row=rows[i];
 		htm+="<div id='case_"+row.cell[1]+"'>";
 		htm+="<input type='hidden' value='"+row.id+"' />";
-		htm+="<h4>"+row.cell[1]+"</h4>";
+		htm+="<h4>ID:"+row.cell[0]+"</h4>";
 		htm+="<div>"+tab2space(rn2br(row.cell[3]))+"</div>";
 		htm+="</div>";
 		htm+="<hr class='bGreen'/>";
@@ -90,7 +90,7 @@ function runCase(rows){
 		title:"Run Case",
 		content:ID('RunDiv'),
 		lock:true,
-		button:[{name:"Cancel"},{name:"Stop",callback:function(){stopCase(names);return false;},disabled:true}],
+		button:[{name:"OK"},{name:"Stop",callback:function(){stopCase(names);return false;},disabled:true}],
 		id:"runcase"
 	});
 }
@@ -105,7 +105,7 @@ function RealRunCase(){
 		return;
 	}
 	$("#RunDiv").mask("Runing");
-	art.dialog({id: 'runcase'}).button({name:"Cancel",disabled:true},{name:"Stop",disabled:false});;
+	art.dialog({id: 'runcase'}).button({name:"OK",disabled:true},{name:"Stop",disabled:false});;
 	$.post("benchmark.do",{method:"run","case":caseName,thread:threadNum,repeat:repeatNum,rwrate:RWRate},function(result){
 		if(result.status){
 			var results=result.data.result;
@@ -120,7 +120,7 @@ function RealRunCase(){
 			alert(result.info);
 		}
 		$("#RunDiv").unmask();
-		art.dialog({id: 'runcase'}).button({name:"Cancel",disabled:false},{name:"Stop",disabled:true});;
+		art.dialog({id: 'runcase'}).button({name:"OK",disabled:false},{name:"Stop",disabled:true});;
 	},"json");
 }
 //查看case

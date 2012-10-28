@@ -154,7 +154,7 @@ public class PatternAction extends Action{
 		
 		try {
 			PatternDao dao=new PatternDaoImpl();
-			List<Pattern> list = dao.list(page, ONE_PAGE_COUNT, "");
+			List<Pattern> list = dao.list(page, ONE_PAGE_COUNT, "","ID desc");
 			long Count=dao.count("");
 			JsonObjectNode j=new JsonObjectNode("");
 			j.addChild(new JsonLeafNode("page",String.valueOf(page)));
@@ -213,7 +213,8 @@ public class PatternAction extends Action{
 				error("Please Input FileName!");
 				return;
 			}
-			fn = (String)application.getAttribute("Ruleset")+fn+".xml";
+			if(!fn.endsWith(".xml"))fn+=".xml";
+			fn = (String)application.getAttribute("Ruleset")+fn;
 			String all = request.getParameter("all");
 			String cond = request.getParameter("cond");
 			if(all=="1")cond="";
@@ -228,7 +229,7 @@ public class PatternAction extends Action{
 			long Count = dao.count(cond);//数据总条数
 			long pages = ToolUtil.getSplitCount(Count, ONE_PAGE_COUNT);//总页数
 			for (int i = 0; i < pages; i++) {
-				List<Pattern> list = dao.list(i, ONE_PAGE_COUNT, cond);
+				List<Pattern> list = dao.list(i, ONE_PAGE_COUNT, cond,"");
 				Iterator<Pattern> it = list.iterator();
 				while (it.hasNext()) {
 					Pattern p = it.next();

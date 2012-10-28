@@ -7,8 +7,8 @@ public class CodeReportError {
 	private String file;
 	private String msg;
 	
-	public JsonArrayNode toJsonNode(){
-		JsonArrayNode j = new JsonArrayNode("");
+	public JsonArrayNode toJsonNode(String name){
+		JsonArrayNode j = new JsonArrayNode(name);
 		j.addItem(new JsonLeafNode("",file));
 		j.addItem(new JsonLeafNode("",msg));
 		return j;

@@ -37,27 +37,22 @@ public class PMDRenderer extends AbstractIncrementingRenderer {
      */
     @Override
     public void renderFileViolations(Iterator<RuleViolation> violations) throws IOException {
-		String tmp="";
-		while (violations.hasNext()) {
+		String tmp;
+    	while (violations.hasNext()) {
 		    RuleViolation rv = violations.next();
-		    String descri="break the rule <a href='"+rv.getRule().getExternalInfoUrl()+
-    		"' target='_blank'>"+rv.getRule().getName()+"</a>:\r\n";
-		    descri+=rv.getDescription()+"\r\nat ";
-		    if(rv.getPackageName()!="")descri+=rv.getPackageName()+".";
-		    descri+=rv.getClassName()+" [line "+rv.getBeginLine()+",column"+rv.getBeginColumn()+"]";
-
+		    
 		    CodeReport report=new CodeReport();
 		    report.setPackageName(rv.getPackageName());
 		    report.setClassName(rv.getClassName());
-		    report.setMethodName(rv.getMethodName());
+		    tmp=rv.getMethodName();
+		    if(tmp==null || tmp.equals(""))tmp="static";
+		    report.setMethodName(tmp);
 		    report.setRuleName(rv.getRule().getName());
-		    report.setDescription(descri);
 		    report.setRulePriority(rv.getRule().getPriority().getPriority());
-		    tmp="";
-		    if(rv.getRule().getExamples().size()>0){
-		    	tmp=rv.getRule().getExamples().get(0);
-		    }
-		    report.setExample(tmp);
+		    report.setColumn(rv.getBeginColumn());
+		    report.setLine(rv.getBeginLine());
+		    report.setCode(ToolUtil.getFileConetent(rv.getFilename(), rv.getBeginLine(),rv.getEndLine()));
+		    report.setExtInfoUrl(rv.getRule().getExternalInfoUrl());
 		    reports.add(report);
 		}
     }

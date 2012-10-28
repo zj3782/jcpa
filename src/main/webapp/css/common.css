@@ -372,7 +372,7 @@ hr.space {background:#fff;color:#fff;visibility:hidden;}
 /*menu*/
 #menu{}
 .cssmenus:after{content:"\0020";display:block;height:0;clear:both;visibility:hidden;overflow:hidden;}
-.cssmenus{z-index:1024;color:#fff;border-color: #3589A1;background:#4fbdf0; display:block; padding:0; margin:0;  border:1px solid; border-radius:5px; }
+.cssmenus{color:#fff;border-color: #3589A1;background:#4fbdf0; display:block; padding:0; margin:0;  border:1px solid; border-radius:5px; }
 .cssmenu{height: 37px;line-height: 37px;padding: 0 10px;}
 .cssmenu:hover{background:#3F3F3F;border-radius:5px;}
 .cssmenu.select{background: gray;border-radius:5px;}

@@ -4,27 +4,47 @@ import com.jcpa.util.json.JsonArrayNode;
 import com.jcpa.util.json.JsonLeafNode;
 
 public class CodeReport {
+	private int id=0;
 	private String packageName="";
 	private String className="";
 	private String methodName="";
 	private String ruleName="";
-	private String description="";
-	private String example;
 	private int rulePriority;
+	private int column;
+	private int line;
+	private String code="";
+	private String extInfoUrl="";
 	
-	public JsonArrayNode toJsonNode(){
-		JsonArrayNode j = new JsonArrayNode("");
+	public JsonArrayNode toJsonNode(String name){
+		JsonArrayNode j = new JsonArrayNode(name);
 		j.addItem(new JsonLeafNode("",packageName));
 		j.addItem(new JsonLeafNode("",className));
 		j.addItem(new JsonLeafNode("",methodName));
+		j.addItem(new JsonLeafNode("","Line:["+line+"]column:["+column+"]"));
+		j.addItem(new JsonLeafNode("",code));
 		j.addItem(new JsonLeafNode("",ruleName));
-		j.addItem(new JsonLeafNode("",description));
-		j.addItem(new JsonLeafNode("",example));
 		j.addItem(new JsonLeafNode("",String.valueOf(rulePriority)));
+		j.addItem(new JsonLeafNode("",extInfoUrl));
 		return j;
 	}
 	
 	
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
 	/**
 	 * @return the packageName
 	 */
@@ -78,42 +98,68 @@ public class CodeReport {
 		this.ruleName = ruleName;
 	}
 	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-	/**
-	 * @param description the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	/**
-	 * @return the example
-	 */
-	public String getExample() {
-		return example;
-	}
-	/**
-	 * @param example the example to set
-	 */
-	public void setExample(String example) {
-		this.example = example;
-	}
-
-	/**
 	 * @return the rulePriority
 	 */
 	public int getRulePriority() {
 		return rulePriority;
 	}
-
 	/**
 	 * @param rulePriority the rulePriority to set
 	 */
 	public void setRulePriority(int rulePriority) {
 		this.rulePriority = rulePriority;
+	}
+	/**
+	 * @return the column
+	 */
+	public int getColumn() {
+		return column;
+	}
+	/**
+	 * @param column the column to set
+	 */
+	public void setColumn(int column) {
+		this.column = column;
+	}
+	/**
+	 * @return the line
+	 */
+	public int getLine() {
+		return line;
+	}
+	/**
+	 * @param line the line to set
+	 */
+	public void setLine(int line) {
+		this.line = line;
+	}
+	/**
+	 * @return the code
+	 */
+	public String getCode() {
+		return code;
+	}
+	/**
+	 * @param code the code to set
+	 */
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+
+	/**
+	 * @return the extInfoUrl
+	 */
+	public String getExtInfoUrl() {
+		return extInfoUrl;
+	}
+
+
+	/**
+	 * @param extInfoUrl the extInfoUrl to set
+	 */
+	public void setExtInfoUrl(String extInfoUrl) {
+		this.extInfoUrl = extInfoUrl;
 	}
 	
 }

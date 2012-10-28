@@ -1,13 +1,16 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%pageTitle="Login";%>
+<%@ include file="header.jsp" %>
 <%
+if(!user.equals("guest")){
+	response.sendRedirect("patterns.jsp");
+}
 String from=request.getParameter("from");
 String initUser=(String)request.getAttribute("user");
 String error=(String)request.getAttribute("error");
-if(from==null)from="";
+if(from==null)from="patterns.jsp";
 if(initUser==null)initUser="";
 %>
-<%@ include file="header.jsp" %>
 <script type="text/javascript">
 function LoginSubmit(){
 	if(ID("user").value==""){

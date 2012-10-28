@@ -74,12 +74,14 @@ public class PatternDaoImpl implements PatternDao{
 		return rows.longValue();
 	}
 	
-	public List<Pattern> list(int page,int onePageCount,String where){
+	public List<Pattern> list(int page,int onePageCount,String where,String order){
 		if(page<=0)page=1;
 		Session session = HibernateUtil.getSession();
 		
 		String QuerySql="from Pattern ";
 		if(where!=null && !where.equals(""))QuerySql+="where "+where;//条件
+		if(order!=null && !order.equals(""))QuerySql+=" order by "+order;//排序
+		
 		Query query=session.createQuery(QuerySql);
 		query.setFirstResult( (page-1)*onePageCount );
 		query.setMaxResults(onePageCount);

@@ -1,57 +1,49 @@
 var flexTBR,flexTBE;
 $(document).ready(function() {
     var option = {
-        height: 435,
+        height: 510,
         colModel: [
-            { display: 'package', name: 'package', width: 70, sortable: true,sorttype:'ascii', align: 'left' },
-	        { display: 'class', name: 'class', width: 60, sortable: true,sorttype:'ascii', align: 'left' },
-	        { display: 'method', name: 'method', width: 70, sortable: false, align: 'left' },
-	        { display: 'rule', name: 'rule', width: 100, sortable: true,sorttype:'ascii', align: 'left' },
-	        { display: 'description', name: 'description', width: 280, sortable: false, align: 'left' },
-	        { display: 'example', name: 'example', width: 200, sortable: false, align: 'left' },
-	        { display: 'priority', name: 'priority', width: 50, sortable: true,sorttype:'num', align: 'left' }
+                { display: 'Package', name: 'package', width: 150, sortable: true,sorttype:'ascii', align: 'left' },
+       	        { display: 'Class', name: 'class', width: 130, sortable: true,sorttype:'ascii', align: 'left' },
+       	        { display: 'Method', name: 'method', width: 150, sortable: false, align: 'left' },
+       	        { display: 'Location', name: 'method', width: 150, sortable: false, align: 'left' },
+       	        { display: 'Code', name: 'code', width: 200, sortable: false, align: 'left' },
+    	        { display: 'Rule', name: 'rule', width: 220, sortable: true,sorttype:'ascii', align: 'left' },
+       	        { display: 'Priority', name: 'priority', width: 50, sortable: true,sorttype:'num', align: 'left' }
 		],
-//		usepager: true,
-//      useRp: true,
+		url:"Analysis.do?method=reportlist",
+		usepager: true,
+		useRp: true,
+		rp: 20, // results per page,每页默认的结果数
+        rpOptions: [12, 20, 30, 50, 100], //可选择设定的每页结果数
         onAddRow:onAddRowData,
         striped:false,
-        onRowProp:contextmenu
     };
     flexTBR=$("#reportTB").flexigrid(option);
+    flexTBR.flexToggleCol(4,false);//Code这一列隐藏
+    
     option = {
         height: 100,
         colModel: [
            { display: 'file', name: 'file', width: 450, sortable: true,sorttype:'ascii', align: 'left' },
            { display: 'error', name: 'error', width: 450, sortable: false, align: 'left' }
         ],
-        onAddRow:onAddRowData
+        url:"Analysis.do?method=errorlist",
+        usepager: true,
+		useRp: true,
+		rp: 12,
+        rpOptions: [12, 20, 30, 50, 100]
     };
     flexTBE=$("#errorTB").flexigrid(option);
 });
-/**右键菜单*/
-function contextmenu(row) {
-	var menu = { width: 150, items: [
-         { text: "View", icon: "css/images/view.png", alias: "contextmenu-view", action: contextMenuItem_click }
-      ]
-    };
-    $(row).contextmenu(menu);
-}
-function contextMenuItem_click(target) {
-    var id = $(target).attr("id").substr(3);
-    var rows=flexTBR.flexGetRowsByIds([id]);
-    var cell = rows[0].cell;
-    var cmd = this.data.alias;
-    if (cmd == "contextmenu-view") {
-    	viewReport(cell);
-    }
-}
+
 /**检查数据*/
 function onAddRowData(row){
 	for(var i=0;i<row.cell.length;i++){
 		row.cell[i]=decodeURIComponent(row.cell[i]);//解码
-		if(i!=4)row.cell[i]=htm2specil(row.cell[i]);//description无需转码
 	}
-	row.cell[4]="<u class='cHand' onclick='viewReportById("+row.id+");'>"+row.cell[4]+"</u>";
+	row.cell[3]="<a href='javascript:;' onclick='viewReportById("+row.id+")'>"+row.cell[3]+"</a>";
+	row.cell[5]="<a href='"+row.cell[7]+"' target='_blank'>"+row.cell[5]+"</a>";
 	row.style="color:"+getPriorityColor(row.cell[6]);
 	return row;
 }
@@ -77,9 +69,9 @@ function viewReport(cell){
 	$("#viewPackage").html(cell[0]);
 	$("#viewClass").html(cell[1]);
 	$("#viewMethod").html(cell[2]);
-	$("#viewRule").html(cell[3]);
-	$("#viewDescription").html(rn2br(tab2space(cell[4])));
-	$("#viewExample").html(rn2br(tab2space(cell[5])));
+	$("#viewLocation").html(cell[3]);
+	$("#viewCode").html(cell[4]);
+	$("#viewRule").html(cell[5]);
 	$("#viewPriority").html(cell[6]);
 	artDialog({content:ID('viewReport'),title:'View Report',lock:true,id:'viewReport'});
 }
@@ -98,7 +90,6 @@ var steps=['Starting','Svn Logining','Svn Login Ok','Svn CheckOuting',
            'Svn CheckOut Ok','Pmd Analysising','Pmd Analysis Ok','Code Analysis Ok','Code Analysis Fail'];
 
 var TimerID=null;
-var rowid=1;
 /**
  * 开始分析
  * */
@@ -110,119 +101,59 @@ function Analysis(){
 	data.rule=$("#rule").val();
 	$.post("Analysis.do",data,function(result){
 		if(result.status){
-			IntervalGetReport();
+			IntervalGetStep();
 		}else{//产生错误
-			artDialog({content:result.info});
-			EndIntervalGetReport();
+			alert(result.info);
+			EndIntervalGetStep();
 		}
 	},"json");
-	//定时获取结果report
-	StartIntervalGetReport();
+	StartIntervalGetStep();
 	
-	$("#svnTitle").show();
-	$("#SvnUrl").html($("#url").val());
-	$("#SvnUser").html($("#user").val());
+	$("#codeTitle").show();
+	$("#codeUrl").html($("#url").val());
+	$("#codeUser").html($("#user").val());
 	$("#login").remove();
 	$("#reportArea").show();
+	$("#reportArea").mask("Analysising...");
 }
 /**
  * 定时获取结果report
  * */
-function StartIntervalGetReport(interval){
+function StartIntervalGetStep(interval){
 	if(typeof(interval)!="number")interval=2000;
 	if(TimerID)clearInterval(TimerID);
-	TimerID=setInterval(IntervalGetReport,interval);
+	TimerID=setInterval(IntervalGetStep,interval);
 }
-function EndIntervalGetReport(){
+function EndIntervalGetStep(){
 	if(TimerID)clearInterval(TimerID);
 	TimerID=0;
 }
 
 /**
- * 定时获取结果report
+ * 定时获取step
  */
-function IntervalGetReport(){
-	var rstart=$("#rline").val();
-	var estart=$("#eline").val();
-	$.post("Analysis.do",{"method":"report","rstart":rstart,"estart":estart},function(result){
+function IntervalGetStep(){
+	$.post("Analysis.do",{"method":"step"},function(result){
+		EndIntervalGetStep();
 		if(result.status){
-			addReportData(result.data);
+			$("#reportArea").mask(steps[result.data.step]);
+			if(result.data.step==STEP_SUCCESSEND || result.data.step==STEP_FAILEND){
+				flexTBR.flexReload();
+				flexTBE.flexReload();
+				$("#reportArea").unmask();
+			}
 		}else{
-			EndIntervalGetReport();
+			alert(result.info);
+			$("#reportArea").unmask();
 		}
 	},"json");
-}
-function addReportData(data){
-	var report=data.report;
-	
-	$("#reporting").mask(steps[report.step]);
-	if(report.step==STEP_SUCCESSEND || report.step==STEP_FAILEND){
-		if(report.rstart==report.rend && report.estart==report.eend){
-			$("#reporting").unmask();$("#reporting").hide();
-			EndIntervalGetReport();
-		}
-	}
-	
-	var rstart=strToInt($("#rline").val());
-	if(report.rstart>=rstart){
-		$("#rline").val(report.rend);
-		var rows=[];
-		for(var i=0;i<report.report.length;i++){
-			var row={id:rowid,cell:report.report[i]};
-			rows.push(row);
-			rowid++;
-		}
-		flexTBR.flexAddRowsData(rows);
-	}
-	
-	var estart=strToInt($("#eline").val());
-	if(report.estart>=estart){
-		$("#eline").val(report.eend);
-		var rows=[];
-		for(var i=0;i<report.error.length;i++){
-			var row={id:0,cell:report.error[i]};
-			rows.push(row);
-		}
-		flexTBE.flexAddRowsData(rows); 
-	}
 }
 /**
  * 重新分析
  */
 function ReAnalysis(){
-	if(!confirm("Are You Sure To ReAnalysis?"))return;
+	if(!confirm("Do you want to go back?"))return;
 	$.post("Analysis.do",{"method":"ClearReport"},function(result){
 		document.location.reload();
 	});
-}
-/**
- * 导出结果
- */
-function exportResult(){
-	var htm="";
-	var rows=flexTBR.flexGetRows();
-	htm+="[reports]\r\n";
-	for(var i=0;i<rows.length;i++){
-		for(var j=0;j<rows[i].cell.length;j++){
-			htm+=rows[i].cell[j]+"\t";
-		}
-		htm+="\r\n";
-	}
-	htm+="\r\n";
-	var errors=flexTBE.flexGetRows();
-	htm+="[errors]\r\n";
-	for(var m=0;m<errors.length;m++){
-		for(var n=0;n<errors[m].cell.length;n++){
-			htm+=errors[m].cell[n]+"\t";
-		}
-		htm+="\r\n";
-	}
-	$("#exportTA").val(htm);
-	art.dialog({
-		content:ID("exportDiv"),
-		title:"Export Analysis Result"
-	});
-	//全选
-	ID("exportTA").focus();         
-	ID("exportTA").select();
 }

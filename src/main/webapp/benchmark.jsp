@@ -23,9 +23,9 @@ initPage=<%=sPage%>;
 </div>
 <div id="RunDiv" class="box w640" style="display:none;">
 	<div class="info">
-		<label>(*)ThreadNum:<input type="text" id="ThreadNum" value="" class="w80"/></label>
-		<label>(*)RepeatNum:<input type="text" id="RepeatNum" value="" class="w80"/></label>
-		<label>(*)Read Rate:<input type="text" id="RWRate" value="" class="w80" title='0~100'/>%</label>
+		<label>ThreadNum<span class="cRed">(*)</span>:<input type="text" id="ThreadNum" value="" class="w80"/></label>
+		<label>RepeatNum<span class="cRed">(*)</span>:<input type="text" id="RepeatNum" value="" class="w80"/></label>
+		<label>Read Rate<span class="cRed">(*)</span>:<input type="text" id="RWRate" value="" class="w80" title='0~100'/>%</label>
 		<input type="button" id="RunCaseBtn" value="Run" onclick="RealRunCase()"/>
 		<input type="hidden" id="RunCaseNames" value=""/>
 	</div>

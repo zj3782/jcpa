@@ -12,6 +12,7 @@ import com.jcpa.util.json.JsonObjectNode;
  * 分析产生的Report（放在session中）
  * */
 public class CodeReports {
+	private int reportCount=0;
 	private List<CodeReport> reports = new LinkedList<CodeReport>();
 	private List<CodeReportError> errors = new LinkedList<CodeReportError>();
 	
@@ -37,7 +38,20 @@ public class CodeReports {
 	 * */
 	public void add(CodeReport report){
 		synchronized(reports){
-			reports.add(report);
+			report.setId(reportCount);
+			reportCount++;
+			CodeReport r=null;
+			int i=0,size=reports.size();
+			for(i=0;i<size;i++){
+				r=reports.get(i);
+				if(r.getRulePriority()>=report.getRulePriority()){
+					reports.add(i,report);
+					break;
+				}
+			}
+			if(i==size){
+				reports.add(report);
+			}
 		}
 	}
 	/**
@@ -48,59 +62,35 @@ public class CodeReports {
 			errors.add(error);
 		}
 	}
-	/**
-	 * 转化为json字符串，从rstart、estart处开始
-	 * */
-	public JsonObjectNode toJsonNode(int rstart,int estart){
-		JsonObjectNode r=new JsonObjectNode("report");
-		
-		synchronized(reports){
-			//report
-			int rend=0;
-			JsonArrayNode arrReport=new JsonArrayNode("report");
-			Iterator<CodeReport> itr=reports.iterator();
-			for(int i=0;i<rstart;i++){
-				if(!itr.hasNext()){
-					rstart=i;
-					break;
-				}else{
-					itr.next();
-					rend++;
-				}
-			}
-			while(itr.hasNext()){
-				rend++;
-				arrReport.addItem(itr.next().toJsonNode());
-			}
-			r.addChild(new JsonLeafNode("rstart",String.valueOf(rstart)));	
-			r.addChild(arrReport);
-			r.addChild(new JsonLeafNode("rend",String.valueOf(rend)));
+	
+	public JsonArrayNode getReportJsonArray(int page,int onePageCount,String name){
+		JsonArrayNode arr = new JsonArrayNode(name);
+		int start=onePageCount*(page-1),size=reports.size();
+		CodeReport r;
+		for(int i=0;i<onePageCount;i++){
+			if(start+i>=size)break;
+			r=reports.get(start+i);
+			JsonObjectNode item=new JsonObjectNode("");
+			item.addChild(new JsonLeafNode("id", String.valueOf(r.getId())));
+			item.addChild(r.toJsonNode("cell"));
+			arr.addItem(item);
 		}
-		synchronized (errors) {
-			//error
-			int eend=0;
-			JsonArrayNode arrError=new JsonArrayNode("error");
-			Iterator<CodeReportError> ite=errors.iterator();
-			for(int i=0;i<estart;i++){
-				if(!ite.hasNext()){
-					estart=i;
-					break;
-				}else{
-					ite.next();
-					eend++;
-				}
-			}
-			while(ite.hasNext()){
-				eend++;
-				arrError.addItem(ite.next().toJsonNode());
-			}
-			r.addChild(new JsonLeafNode("estart",String.valueOf(estart)));
-			r.addChild(arrError);
-			r.addChild(new JsonLeafNode("eend",String.valueOf(eend)));
+		return arr;
+	}
+	
+	public JsonArrayNode getErrorJsonArray(int page,int onePageCount,String name){
+		JsonArrayNode arr = new JsonArrayNode(name);
+		int start=onePageCount*(page-1),size=errors.size();
+		CodeReportError r;
+		for(int i=0;i<onePageCount;i++){
+			if(start+i>=size)break;
+			r=errors.get(start+i);
+			JsonObjectNode item=new JsonObjectNode("");
+			item.addChild(new JsonLeafNode("id", "0"));
+			item.addChild(r.toJsonNode("cell"));
+			arr.addItem(item);
 		}
-		//step
-		r.addChild(new JsonLeafNode("step",String.valueOf(step)));
-		return r;
+		return arr;
 	}
 	/**
 	 * 返回report个数

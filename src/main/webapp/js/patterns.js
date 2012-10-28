@@ -7,12 +7,12 @@ $(document).ready(function() {
         url: 'pattern.do?method=page', //ajax url,ajax方式对应的url地址
         colModel: [
 	        { display: 'ID', name: 'ID', width: 30, sortable: false,sorttype:'num', align: 'left' },
-	        { display: 'Name', name: 'Name', width: 100, sortable: false,sorttype:'ascii', align: 'left' },
-	        { display: 'Expression', name: 'Expression', width: 180, sortable: false, align: 'left' },
+	        { display: 'Name', name: 'Name', width: 220, sortable: false,sorttype:'ascii', align: 'left' },
+	        { display: 'Expression', name: 'Expression', width: 120, sortable: false, align: 'left' },
 	        { display: 'Warning', name: 'Warning', width: 100, sortable: false, align: 'left' },
 	        { display: 'Category', name: 'Category', width: 100, sortable: false, sorttype:'ascii',align: 'left' },
-	        { display: 'Scope', name: 'Scope', width: 100, sortable: true, align: 'left'},
-	        { display: 'Example', name: 'Example', width: 170, sortable: false, align: 'left' },
+	        { display: 'Scope', name: 'Scope', width: 80, sortable: true, align: 'left'},
+	        { display: 'Example', name: 'Example', width: 130, sortable: false, align: 'left' },
 	        { display: 'Priority', name: 'Priority', width: 50, sortable: false,sorttype:'num', align: 'left' }
 	    ],
         buttons: [
@@ -26,6 +26,8 @@ $(document).ready(function() {
         title: "Patterns",
         usepager: true,
         useRp: true,
+        rp: 12, // results per page,每页默认的结果数
+        rpOptions: [12, 20, 30, 50, 100], //可选择设定的每页结果数
         showCheckbox: true,
         onAddRow:onAddRowData,
         onRowProp:contextmenu
@@ -102,7 +104,7 @@ function delPattern(rows){
 	
 	artDialog({
 		title:"Question",
-		content:"Are You Sure To Delete Those Patterns ?<br>"+strPattern,
+		content:"Are You Sure To Delete Selected Pattern(s) ?<br>"+strPattern,
 		button: [
 	        {
 	            name: 'OK',
@@ -191,7 +193,7 @@ function editPattern(id,fromView){
 				lock:true,
 				button: [
 			        {
-			            name: 'Edit',
+			            name: 'Ok',
 			            callback: function(){
 			    				var data={"method":"update"};
 			    				data.id=id;
@@ -327,7 +329,7 @@ function AddRuleSet(){
 			$.post("pattern.do",{method:'addruleset',fn:filename,'all':all,'cond':cond},function(result){
 				$("#addruleset").unmask();
 				if(result.status){
-					addRuleToTB(filename+".xml");
+					addRuleToTB(filename);
 					art.dialog({id:'addruleset'}).close();
 				}else{
 					alert(result.info);
@@ -337,8 +339,8 @@ function AddRuleSet(){
 		},
 		id:'addruleset'
 	});
-	 var today=new Date();
-	$("#AddFileName").val(today.getFullYear()+"_"+today.getMonth()+"_"+today.getDay()).focus().select();
+	var today=new Date();
+	$("#AddFileName").val(today.getFullYear()+"_"+(today.getMonth()+1)+"_"+today.getDate()+".xml").focus().select();
 }
 function addRuleToTB(filename){
 	var tb=ID("rulesetsTB"),tr,td;
