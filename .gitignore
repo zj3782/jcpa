@@ -5,10 +5,3 @@
 *.war
 *.ear
 
-#Folder#
-/target/
-/.settings/
-
-*.mymetadata
-*.project
-*.gitignore

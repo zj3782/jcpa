@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <context-param>
+    <param-name>hsql.dbPath</param-name>
+    <param-value>WEB-INF/db</param-value>
+  </context-param>
+  <context-param>
+    <param-name>hsql.dbName</param-name>
+    <param-value>jcpa</param-value>
+  </context-param>
+  <context-param>
+    <param-name>hsql.port</param-name>
+    <param-value>3305</param-value>
+  </context-param>
+  <context-param>
+    <param-name>hsql.user</param-name>
+    <param-value>SA</param-value>
+  </context-param>
+  <context-param>
+    <param-name>hsql.password</param-name>
+    <param-value></param-value>
+  </context-param>
+  <listener>
+    <listener-class>com.jcpa.listener.WebappListener</listener-class>
+  </listener>
+  <servlet>
+    <servlet-name>Controller</servlet-name>
+    <servlet-class>com.jcpa.servlet.Controller</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Controller</servlet-name>
+    <url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/404.jsp</location>
+  </error-page>
+  <login-config>
+    <auth-method>BASIC</auth-method>
+  </login-config>
+</web-app>

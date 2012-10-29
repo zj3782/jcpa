@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.jcpa.beans">
+ <class name="Pattern" table="Pattern">
+  <id column="id" name="id" type="int">
+   <generator class="native"/>
+  </id>
+  <property generated="never" lazy="false" name="name" type="java.lang.String">
+   <column length="256" name="name" not-null="true"/>
+  </property>
+  <property generated="never" lazy="false" name="expression" type="java.lang.String">
+   <column length="10240" name="expression" not-null="true"/>
+  </property>
+  <property generated="never" lazy="false" name="warning" type="java.lang.String">
+   <column length="1024" name="warning" not-null="true"/>
+  </property>
+  <property generated="never" lazy="false" name="category" type="java.lang.String">
+   <column length="80" name="category" not-null="true"/>
+  </property>
+  <property generated="never" lazy="false" name="example" type="java.lang.String">
+   <column length="10240" name="example"/>
+  </property>
+  <property generated="never" lazy="false" name="scope" type="java.lang.String">
+   <column default="'inner-class'" length="40" name="scope" not-null="true"/>
+  </property>
+  <property generated="never" lazy="false" name="priority" type="int">
+   <column default="3" name="priority" not-null="true"/>
+  </property>
+ </class>
+</hibernate-mapping>
