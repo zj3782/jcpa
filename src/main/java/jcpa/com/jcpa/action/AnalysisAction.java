@@ -134,7 +134,7 @@ public class AnalysisAction extends Action{
 			
 			JsonObjectNode j=new JsonObjectNode("");
 			j.addChild(new JsonLeafNode("page",String.valueOf(page)));
-			j.addChild(new JsonLeafNode("total",String.valueOf(report.reportCount())));
+			j.addChild(new JsonLeafNode("total",String.valueOf(report.errorCount())));
 			j.addChild(report.getErrorJsonArray(page,ONE_PAGE_COUNT,"rows"));
 			echo(j.toString());
 		}
