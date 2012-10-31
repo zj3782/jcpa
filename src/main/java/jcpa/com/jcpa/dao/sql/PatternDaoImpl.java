@@ -92,6 +92,22 @@ public class PatternDaoImpl implements PatternDao{
 		return result;
 	}
 	
+	public List<Pattern> list(String where,String order)
+	{
+		Session session = HibernateUtil.getSession();
+		
+		String QuerySql="from Pattern ";
+		if(where!=null && !where.equals(""))QuerySql+="where "+where;//条件
+		if(order!=null && !order.equals(""))QuerySql+=" order by "+order;//排序
+		
+		Query query=session.createQuery(QuerySql);
+
+		@SuppressWarnings("unchecked")
+		List<Pattern> result = query.list();
+
+		return result;
+	}
+	
 	public Pattern get(int id){
 		Session session = HibernateUtil.getSession();
 		Pattern p=(Pattern) session.get(Pattern.class,id);

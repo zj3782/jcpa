@@ -18,6 +18,7 @@ $(document).ready(function() {
         rpOptions: [12, 20, 30, 50, 100], //可选择设定的每页结果数
         onAddRow:onAddRowData,
         striped:false,
+        autoload:false
     };
     flexTBR=$("#reportTB").flexigrid(option);
     flexTBR.flexToggleCol(4,false);//Code这一列隐藏
@@ -32,7 +33,8 @@ $(document).ready(function() {
         usepager: true,
 		useRp: true,
 		rp: 12,
-        rpOptions: [12, 20, 30, 50, 100]
+        rpOptions: [12, 20, 30, 50, 100],
+        autoload:false
     };
     flexTBE=$("#errorTB").flexigrid(option);
 });

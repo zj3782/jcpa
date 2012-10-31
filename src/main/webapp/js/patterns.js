@@ -92,7 +92,10 @@ $(document).ready(function() {
 
 //删除pattern
 function delPattern(rows){
-	if(!rows)return;
+	if(!rows || !rows.length){
+		alert("Please Select The Row(s) You Want To Delete!");
+		return;
+	}
 	var strPattern="";
 	var strIds="";
 	var ids=[];

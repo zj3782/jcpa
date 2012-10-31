@@ -112,6 +112,7 @@ public class Pattern {
 		j.addChild(new JsonLeafNode("category",category));
 		j.addChild(new JsonLeafNode("scope",scope));
 		j.addChild(new JsonLeafNode("example",example));
+		j.addChild(new JsonLeafNode("priority",String.valueOf(priority)));
 		return j;
 	}
 }

@@ -40,13 +40,11 @@ initPage=<%=sPage%>;
 	<div  class="line">
 		<span class="span-2">(*)Category:</span>
 		<select id="patternCategory" class="span-15">
-			<option value="Frequent IOs">Frequent IOs</option>
-			<option value="Memory Leak">Memory Leak</option>
-			<option value="Corrupt Thread State">Corrupt Thread State</option>
-			<option value="Excessive Synchronization">Excessive Synchronization</option>
-			<option value="Legacy Usage">Legacy Usage</option>
-			<option value="Duplicate Invocations">Duplicate Invocations</option>
-			<option value="Redundant Operations">Redundant Operations</option>
+			<option value="ExcessiveSynchronization">ExcessiveSynchronization</option>
+			<option value="RedundantStatement">RedundantStatement</option>
+			<option value="RedundantInvocation">RedundantInvocation</option>
+			<option value="SuboptimalStatement">SuboptimalStatement</option>
+			<option value="UnsafeDataAccess">UnsafeDataAccess</option>
 			<option value="Other" selected="selected">Other</option>
 		</select>
 	</div>

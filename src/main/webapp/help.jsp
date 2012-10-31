@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*,com.jcpa.dao.sql.PatternDaoImpl,com.jcpa.dao.sql.interfaces.PatternDao,com.jcpa.beans.Pattern,com.jcpa.util.ToolUtil" pageEncoding="UTF-8"%>
 <%pageTitle="Help"; %>
 <%@ include file="header.jsp" %>
 <style>
@@ -10,6 +10,8 @@
 #cat .cat-h.closed{background:url(css/images/open.gif) no-repeat;}
 #cat .cat-h.selected a{color:green;font-weight:600;}
 #cat .cat-h a{text-decoration: none;color: black;}
+
+.pattern{border: dotted 2px green;margin-bottom: 15px;}
 </style>
 
 <script type="text/javascript">
@@ -32,7 +34,7 @@ $(document).ready(function(){
 	if(start>0){
 		cat=url.substr(start+1,url.length-start);
 	}
-	showTxt(cat);
+	setTimeout(function(){showTxt(cat);},1000);
 });
 function initCat(cat){
 	$(cat).click(function(){
@@ -64,41 +66,39 @@ function showTxt(cat){
 </script>
 
 <hr class="space">
-<h1 class="aCenter cBlue">The User Manual Of JCPA</h1>
 <div id="manual line">
 	<div id="cat" class="left oAuto alert">
-		<h1 cat="sys" txt="sys" class="cat-h"><a href="#sys">System Introduction</a></h1>
+		<h1 cat="sys" txt="sys" class="cat-h"><a href="#sys">Overview</a></h1>
 		<div class="cat-group" cat="sys">
-			<h2 cat="sysInfo" txt="sysInfo" class="cat-h"><a href="#sysInfo">The Brief Introduction</a></h2>
-			<h2 cat="sysDetail" txt="sysDetail" class="cat-h"><a href="#sysDetail">System Detailed Explanation</a></h2>
+			<h2 cat="sysInfo" txt="sysInfo" class="cat-h"><a href="#sysInfo">What's JCPA?</a></h2>
+			<h2 cat="sysDetail" txt="sysDetail" class="cat-h"><a href="#sysDetail">Main Features</a></h2>
 			<div class="cat-group" cat="sysDetail">
-				<h3 cat="sysDetailAnalysis" txt="sysDetailAnalysis" class="cat-h"><a href="#sysDetailAnalysis">Code Analysis</a></h3>
-				<h3 cat="sysDetailBenchmark" txt="sysDetailBenchmark" class="cat-h"><a href="#sysDetailBenchmark">Performance Benchmark</a></h3>
-				<h3 cat="sysDetailPattern" txt="sysDetailPattern" class="cat-h"><a href="#sysDetailPattern">Pattern List</a></h3>
-				<h3 cat="sysDetailLogin" txt="sysDetailLogin" class="cat-h"><a href="#sysDetailLogin">User and Access Control</a></h3>
+				<h3 cat="sysDetailAnalysis" txt="sysDetailAnalysis" class="cat-h"><a href="#sysDetailAnalysis">Scan Code</a></h3>
+				<h3 cat="sysDetailBenchmark" txt="sysDetailBenchmark" class="cat-h"><a href="#sysDetailBenchmark">Run Benchmark Program</a></h3>
+				<h3 cat="sysDetailPattern" txt="sysDetailPattern" class="cat-h"><a href="#sysDetailPattern">Maintain Patterns</a></h3>
 			</div>
-		</div>
-		<h1 cat="patterns" txt="patterns" class="cat-h"><a href="#patterns">A Detailed Pattern Introduction</a></h1>
-		<div class="cat-group" cat="patterns">
-			<h2 cat="patternsPMD" txt="patternsPMD" class="cat-h"><a href="#patternsPMD">PMD</a></h2>
-			<div class="cat-group" cat="patternsPMD">
-				<h3 cat="patternsPMDBrief" txt="patternsPMDBrief" class="cat-h"><a href="#patternsPMDBrief">Brief Introduction</a></h3>
-				<h3 cat="patternsPMDPlugin" txt="patternsPMDPlugin" class="cat-h"><a href="#patternsPMDPlugin">Eclipse Plugin</a></h3>
+			<h2 cat="sysDetailLogin" txt="sysDetailLogin" class="cat-h"><a href="#sysDetailLogin">User Role</a></h2>
+			<h2 cat="patterns" txt="patterns" class="cat-h"><a href="#patterns">PMD and JCPA</a></h2>
+			<div class="cat-group" cat="patterns">
+				<h3 cat="patternsPMD" txt="patternsPMD" class="cat-h"><a href="#patternsPMD">PMD</a></h3>
+				<h3 cat="patternsXPATH" txt="patternsXPATH" class="cat-h"><a href="#patternsXPATH">XPATH</a></h3>
+				<h3 cat="patternsSys" txt="patternsSys" class="cat-h"><a href="#patternsSys">Patterns</a></h3>
 			</div>
-			<h2 cat="patternsXPATH" txt="patternsXPATH" class="cat-h"><a href="#patternsXPATH">XPATH</a></h2>
-			<h2 cat="patternsSys" txt="patternsSys" class="cat-h"><a href="#patternsSys">Pattern Of System Commonly Used</a></h2>
+			<h2 cat="problems" txt="problems" class="cat-h"><a href="#problems">FAQ</a></h2>			
 		</div>
-		<h1 cat="problems" txt="problems" class="cat-h"><a href="#problems">Common Problems And Solutions</a></h1>
+		<h1 cat="usage" txt="usage" class="cat-h"><a href="#usage">Usage</a></h1>
+		<div class="cat-group" cat="usage">
+			<h2 cat="usageInstall" txt="usageInstall" class="cat-h"><a href="#usageInstall">Installation</a></h2>
+			<h2 cat="usagePlugin" txt="usagePlugin" class="cat-h"><a href="#usagePlugin">Eclipse plugin usage</a></h2>
+		</div>
 	</div>
 	<div id="txt" class="right oAuto info">
 	</div>
 	<div id="hiddenTxt" style="display:none;">
 		<div id="sys">
-			<a name="sys"></a>
-			<h1>System Introduction</h1>
-			<a name="sysInfo"></a>
+			<h1>Overview</h1>
 			<div id="sysInfo">
-				<h2>Brief Introduction of the System</h2>
+				<h2>What's JCPA?</h2>
 				<p>Java Code Performance Analysis (JCPA) is a tool to scan  java source code and provide performance recommendations.</p>
 				<p>This system includes the following pages:</p>
 				<p>1. Code Analysis page,mainly used to analyze codes to generate reports</p>
@@ -106,9 +106,9 @@ function showTxt(cat){
 				<p>3.Pattern List	page	,mainly used to display,modify,add patterns and management,generate,download,upload ruleSetFiles </p>
 			</div>
 			<div id="sysDetail">
-				<h2>System Detailed Explanation</h2>
+				<h2>Main Features</h2>
 				<div id="sysDetailAnalysis">
-					<h3>Code Analysis</h3>
+					<h3>Scan Code</h3>
 					<p>page address:<a href="analysis.jsp" target='_blank'>/analysis.jsp</a></p>
 					<img src="image/CodeAnalysis0.png" />
 					<p>(1) Input the address of the codes which would be analyzed in the SourceUrl text area containing the following conditions :</p>
@@ -132,7 +132,7 @@ function showTxt(cat){
 					<img src="image/CodeAnalysis4.png" />
 				</div>
 				<div id="sysDetailBenchmark">
-					<h3>Performance Benchmark</h3>
+					<h3>Run Benchmark Program</h3>
 					<p>page address:<a href="benchmark.jsp" target="_blank">/benchmark.jsp</a></p>
 					<img src="image/benchmark0.png"/>
 					<p>If you click a row in the list on the Right-click menu, you can choose to click Run or View menu.</p>
@@ -147,7 +147,7 @@ function showTxt(cat){
 					<img src="image/benchmark4.png"/>
 				</div>
 				<div id="sysDetailPattern">
-					<h3>Pattern List</h3>
+					<h3>Maintain Patterns</h3>
 					<p>page address:<a href="patterns.jsp" target="_blank">/patterns.jsp</a></p>
 					<img src="image/patterns0.png" />
 					<p>Only login users can access this page. The guest users don’t have permission to access this page, who can check the introduction of the user login and access control to log in.</p>
@@ -179,7 +179,7 @@ function showTxt(cat){
 					<p>Select the file, then click upload button.</p>
 				</div>
 				<div id="sysDetailLogin">
-					<h3>User and Access Control</h3>
+					<h2>User Role</h2>
 					<p>The ordinary guest users don’t need to log on, who can only visit the Performance Benchmark page and Code Analysis page. Only users logged in can access the Pattern List page.</p>
 					<p>There is a Login link on the right side of the head portion of each page.</p>
 					<img src="image/login0.png" />
@@ -192,353 +192,68 @@ function showTxt(cat){
 　　				<p>John	admin1111</p>
 				</div>
 			</div>
-		</div>
-		<div id="patterns">
-			<h1>A Detailed Pattern Introduction</h1>
+			<div id="patterns">
+			<h2>PMD and JCPA</h2>
 			<p>The code analysis of the system is based on the PMD, so the pattern format must be in accordance with the format of PMD, which is described by using the way of XPATH.</p>
 			<div id="patternsPMD">
-				<h2>PMD</h2>
-				<div id="patternsPMDBrief">
-					<h3>Brief Introduction</h3>
-					<p>PMD scans Java source code and looks for potential problems like:</p>
-					<p>1.Possible bugs - empty try/catch/finally/switch statements</p>
-					<p>2.Dead code - unused local variables, parameters and private methods</p>
-					<p>3.Suboptimal code - wasteful String/StringBuffer usage</p>
-					<p>4.Overcomplicated expressions - unnecessary if statements, for loops that could be while loops</p>
-					<p>5.Duplicate code - copied/pasted code means copied/pasted bugs</p>
-				</div>
-				<div id="patternsPMDPlugin">
-					<h3>Eclipse Plugin</h3>
-				</div>
+				<h3>PMD</h3>
+				<p>PMD scans Java source code and looks for potential problems like:</p>
+				<p>1.Possible bugs - empty try/catch/finally/switch statements</p>
+				<p>2.Dead code - unused local variables, parameters and private methods</p>
+				<p>3.Suboptimal code - wasteful String/StringBuffer usage</p>
+				<p>4.Overcomplicated expressions - unnecessary if statements, for loops that could be while loops</p>
+				<p>5.Duplicate code - copied/pasted code means copied/pasted bugs</p>
 			</div>
 			<div id="patternsXPATH">
-				<h2>XPATH</h2>
+				<h3>XPATH</h3>
 				<p>XPath is a language for searching information through the elements and attributes for navigation in XML documents.</p>
 			</div>
 			<div id="patternsSys">
-				<h2>Pattern Of System Commonly Used</h2>
+				<h3>Patterns</h3>
 				<div class="patterns">
-					<div class="pattern">
-					<pre>1、Name: ExcessiveDetectionWithLengthOrSize
-Category: Legacy Usage
-Scope: inner-class
-Priority: 3
-Warning: It's unnecessary to judge variable's length or size before it was used in For Statement.
-Example:
-(1)public class ClassA{
-  	void methodA() {
-  		ClassA[] array = {};
-  		if (array.length &gt; 0) {
-  			for (ClassA obj: array) {
-  				//doSometing
-  			}
-  		}
-  	}
-  }
- 
- 
-(2)public class ClassA{
-   void methodA() {
-		if (isNeedDeleteRememberMeCookie &amp;&amp; newCookies.size() &gt; 0) {
- 			for (Cookie cookie : newCookies) {
- 				response.addCookie(cookie);
- 			}
- 		}
-  }
- }</pre>
-					</div>
-					<div class="pattern">
-					<pre>2、Name: ExcessiveIfStatementWithNull
-Category: Redundant Operations
-Scope: inner-class
-Priority: 3
-Warning: It's unnecessary to judge whether the variable was set null value after it was allocated.
-Example:
-public class ClassA{
-　　void methodA() {
-	　　ClassA inst= new ClassA();
-	　　if (inst == null) {
-	　　//doSomething
-	　　}
-　　}
-}</pre>
-					</div>
-					<div class="pattern">
-					<pre>3、Name: ExplicitlyReclaimLocalVariable
-Category: Memory Leak
-Scope: inner-class
-Priority: 4
-Warning: It's unnecessary to set the local variable null value to reclaim the memory.
-Example:
-public class ClassA{
-	void methodA() {
-		ClassA inst = new ClassA();
-		// method body
-		inst = null;
-	}
-}</pre>
-					</div>
-					<div class="pattern">
-					<pre>4、Name: RepetiveMethodInvocationAsArgument
-Category: Duplicate Invocations
-Scope: inner-class
-Priority: 2
-Warning: Repetive method invocations are arguments of other methods.
-Example:
-public class ClassA{
-  	void methodA() {
-  		ClassA inst = new ClassA();
-  		one(inst.sum());
-  		two(inst.sum());
-  		three(inst.sum());
-  	}
-}</pre>
-					</div>
-					<div class="pattern">
-					<pre>5、Name: RepetiveMethodInvocationInDifferentMethod
-Category: Duplicate Invocations
-Scope: inner-class
-Priority: 1
-Warning: Repetive method invocations are used in different method.
-Example:
-public class ClassA{
-  	void methodA() {
-     		HandlerFactory hf = HandlerFactory.getInstance().getHandler("A");
-  	}
-  	void methodB() {
-  		HandlerFactory hf = HandlerFactory.getInstance().getHandler("A");
-  	}
-}</pre>
-					</div>
-					<div class="pattern">
-					<pre>6、Name: RepetiveBitOperation
-Category: Redundant Operations
-Scope: inner-class
-Priority: 3
-Warning: Repetive bit operation can be merged.
-Example:
-public class ClassA{
-  	void methodA() {
-  		if (!A && !B && !C && !D) {
-  			//doSomething
-  		}
-  	}
-}</pre>
-					</div>
-					<div class="pattern">
-					<pre>7、Name: BrokenThreadStateWithMutiThreads
-Category: Corrupt Thread State
-Scope: inner-class
-Priority: 1
-Warning: It'll be broken when there are multiple threads.
-Example:
-public class KeyHolder{
-  	private Set&lt;key&gt; keys= new HashSet&lt;key&gt;();
-          private static int size = 500;
-          public void put(String key) {
-               int less = keys.size() - size;
-               for (Key key: keys) {
-                    if (less-- &lt;= 0) break;
-                    keys.remove(key);
-                    
-               }
-               keys.add(key);
-          }
-  }</pre>
-					</div>
-					<div class="pattern">
-					<pre>8、Name: LegacyUsageBecomeNewForStatement
-Category: Legacy Usage
-Scope: inner-class
-Priority: 2
-Warning: Legacy usage can be replaced with new ForStatement.
-Example:
-(1)public class ClassA{
-  	void methodA() {
-  		List queue = new ArrayList();
-  		int size = queue.size();
-  		for (int i=0; i&lt; size; i++) {
-  			ClassA inst = (ClassA) queue.get(i);
-  		}
-  	}
-  }
- 
- 
- (2)class A{
- public JSONObject toJSON() throws JSONException {
- Iterator&lt;string&gt; candidatesIterator = this.getCandidates().keySet().iterator();
-     	JSONObject jsonCandidates = new JSONObject();
-     	while(candidatesIterator.hasNext()){
-     		String key = candidatesIterator.next();
-     		jsonCandidates.put(key, this.getCandidates().get(key).toJSON());
-     	}
-    }
- }</pre>
-					</div>
-					<div class="pattern">
-					<pre>9、Name: NoTargetTypeInArrayConversion
-Category: Other
-Scope: inner-class
-Priority: 1
-Warning: Array conversion does not specify target type.
-Example:
-public class ClassA{
-  	public void doSomething() {
-  		Integer[] a = (Integer [])c.toArray();
-  	}
-  }</pre>
-					</div>
-					<div class="pattern">
-					<pre>10、Name: ExcessivedActionInSynchronizedBlock
-Category: Excessive Synchronization
-Scope: inner-class
-Priority: 1
-Warning: Some actions are excessived in synchronized block.
-Example:
-public class ClassA{
-  	private Map&lt;key,value&gt; mapper = new HashMap&lt;key, value=""&gt;();
-  	public void put(Key k, Value v) {
-  		synchronized(mapper) {
-  			mapper.put(k,v);
-  			processItem(k, v);
-                  }
-          }
-  }</pre>
-					</div>
-					<div class="pattern">
-					<pre>11、Name: ExcessivedRWLock
-Category: Excessive Synchronization
-Scope: inner-class
-Priority: 2
-Warning: It's excessived to use ReentrantReadWriteLock for simple action. Use synchronized instead.
-Example:
-class RWDictionary {
-      private final Map&lt;string, data=""&gt; m = new HashMap&lt;string, data=""&gt;();
-      private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
-      private final Lock r = rwl.readLock();
-      private final Lock w = rwl.writeLock();
-  
-      public Data get(String key) {
-          r.lock();
-          try { return m.get(key); }
-          finally { r.unlock(); }
-      }
-      public String[] allKeys() {
-          r.lock();
-          try { return m.keySet().toArray(); }
-          finally { r.unlock(); }
-      }
-      public Data put(String key, Data value) {
-          w.lock();
-          try { return m.put(key, value); }
-          finally { w.unlock(); }
-      }
-      public void clear() {
-          w.lock();
-          try { m.clear(); }
-          finally { w.unlock(); }
-      }
-   }</pre>
-					</div>
-					<div class="pattern">
-					<pre>12、Name: SynchronizedSetIsExcessive
-Category: 2
-Scope: inner-class
-Priority: Excessive Synchronization
-Warning: SynchronizedSet is excessive, you can use ConcurrentHashMap instead.
-Example:
-public class ClassA{
-	void methodA() {
-　　	Set safeSet= Collections.synchronizedSet(new HashSet());
-		Set safeSet2=Collections.newSetFromMap(new ConcurrentHashMap&lt;String, Boolean&gt;());
-　　}
-}</pre>
-					</div>
-					<div class="pattern">
-					<pre>13、Name: LongRoundTripsInDifferentMethod
-Category: Frequent IOs
-Scope: inner-class
-Priority: 1
-Warning: There are long round trips in different method.
-Example:
-public class ClassA{
-  	public void methodA() {
-  		serviceA.call(url1);
-  		serviceA.call(url2);
-  		methodB();
-  	}
-  	public void methodB() {
-  		serviceA.call(url3);
-  		serviceA.call(url4);
-  	}
-  }</pre>
-					</div>
-					<div class="pattern">
-					<pre>14、Name: FrequentIOsUseForStatement
-Category: Frequent IOs
-Scope: inner-class
-Priority: 1
-Warning: To access database frequently for reading and writing data.
-Example:
-public class ClassA{
-  	public void methodA() {
-  		for (String key: keys) {
-  			ClassA curRow = DBManager.getRowByID(key);
-  			processRow(curRow);
-  		}
-  	}
-  }</pre>
-					</div>
-					<div class="pattern">
-					<pre>15、Name: InfiniteLoop
-Category: Other
-Scope: inner-class
-Priority: 1
-Warning: The time complexity of the infinite loop is too high.
-Example:
-public class ClassA{
-  	public void doSomething() {
-  		int size = 100;
-  		for (int i=0; i &lt; size; i++) {
-  			for (int j=0; j &lt; size; j++){
-  				//doSomething
-  			}
-  		}
-  	}
-  }</pre>
-					</div>
-					<div class="pattern">
-					<pre>16、Name: RepetiveMethodInvocationAsStatement
-Category: Duplicate Invocations
-Scope: inner-class
-Priority: 2
-Warning: Repetive method invocations are just statements or Assignment statements.
-Example:
-public class ClassA{
- 	public void put() {
- 		if(IdentityConstants.TRAIN_CONTEXT_TYPE.equalsIgnoreCase(assistantContext.getContextType())) {
- 			 ServiceSessionManager.getInstance().deleteServiceSession(AuthenticationContext.NAME);
- 		 } else {
- 			 ServiceSessionManager.getInstance().setServiceSession(assistantContext);
- 			 SPIContextManager.getSPIContext().registerServiceSessionParam(AssistantContext.NAME, assistantContext.getAttributes().get(IdentityConstants.TOKEN));
- 		 }	
-         }
- }</pre>
-					</div>
-					<div class="pattern">
-					<pre>17、Name: NeverUsedMethod
-Category: Other
-Scope: inner-class
-Priority: 1
-Warning: The method is never used.
-Example:
-NeverUsedMethod</pre>
-					</div>
+					<%
+						PatternDao dao = new PatternDaoImpl();
+						List<Pattern> list = dao.list("","ID desc");
+						Iterator<Pattern> it = list.iterator();
+						while(it.hasNext()){
+							Pattern p=it.next();%>
+							<div class="pattern">
+								<div  class="line">
+									<span class="span-2">Name:</span>
+									<div id="patternNameDiv" class="span-20 oHidden"><%=ToolUtil.strHtmlFmt(p.getName())%></div>
+								</div>
+								<div  class="line">
+									<span class="span-2">Expression:</span>
+									<div id="patternExpressionDiv" class="span-20 oAuto"><%=ToolUtil.strHtmlFmt(p.getExpression()) %></div>
+								</div>
+								<div  class="line">
+									<span class="span-2">Warning:</span>
+									<div id="patternWarningDiv" class="span-20 oAuto"><%=ToolUtil.strHtmlFmt(p.getWarning()) %></div>
+								</div>
+								<div  class="line">
+									<span class="span-2">Category:</span>
+									<div id="patternCategoryDiv" class="span-20 oHidden"><%=ToolUtil.strHtmlFmt(p.getCategory()) %></div>
+								</div>
+								<div  class="line">
+									<span class="span-2">Scope:</span>
+									<div id="patternScopeDiv" class="span-20 oHidden"><%=ToolUtil.strHtmlFmt(p.getScope()) %></div>
+								</div>
+								<div  class="line">
+									<span class="span-2">Example:</span>
+									<div id="patternExampleDiv" class="span-20 oAuto"><%=ToolUtil.strHtmlFmt(p.getExample()) %></div>
+								</div>
+								<div  class="line">
+									<span class="span-2">Priority:</span>
+									<div id="patternPriorityDiv" class="span-20 oAuto"><%=p.getPriority() %></div>
+								</div>
+							</div>	
+						<%}
+					%>
 				</div>
 			</div>
 		</div>
 		<div id="problems">
-			<h1>Common Problems And Solutions</h1>
+			<h2>FAQ</h2>
 			<div class="problem">
 				<h3>System Compatibility</h3>
 				<p>The system considers a variety of browser compatibility as much as possible to ensure universal function and strive for browser aesthetics at the same time. The main functions of the system are performing well in different browser , such as IE7/8/9, Chrome, Firefox, Opera, Safari. 
@@ -552,6 +267,22 @@ NeverUsedMethod</pre>
 			<div class="problem">
 				<h3>Why Can't I See The Pattern List ?</h3>
 				<p>Only Login User Can Access This Page.Guest has no this power.</p>
+			</div>
+			<div class="problem">
+				<h3>I add or modify a pattern in one server. I go to Pattern List page in another server. Why can’t see my change?</h3>
+				<p>Each server has it's own database based on file system.The database location is "%TOMCAT_HOME%\webapps\jcpa\WEB-INF\db".
+					If you changed pattern(s) on server A and you want it make change on server B,you can copy this directory to server B.
+				</p>
+			</div>
+		</div>
+		</div>
+		<div id="usage">
+			<h1>Usage</h1>
+			<div id="usageInstall">
+				<h2>Installation</h2>
+			</div>
+			<div id="usagePlugin">
+				<h2>Eclipse plugin usage</h2>
 			</div>
 		</div>
 	</div>
