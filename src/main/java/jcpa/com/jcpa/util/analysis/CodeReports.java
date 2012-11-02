@@ -44,9 +44,13 @@ public class CodeReports {
 			int i=0,size=reports.size();
 			for(i=0;i<size;i++){
 				r=reports.get(i);
-				if(r.getRulePriority()>=report.getRulePriority()){
+				if(r.getRulePriority() > report.getRulePriority()){
 					reports.add(i,report);
 					break;
+				}else if(r.getRulePriority() == report.getRulePriority()){
+					if(r.isEquals(report)){//相同的错误（同种错误、同行同列）
+						break;
+					}
 				}
 			}
 			if(i==size){

@@ -59,6 +59,7 @@
 	<%}else{%>
 		<script type="text/javascript">
 			$(document).ready(function(){
+				StartIntervalGetStep();
 				$("#codeTitle").show();
 				$("#codeUrl").html('<%=(String)session.getAttribute("codeUrl")%>');
 				$("#codeUser").html('<%=(String)session.getAttribute("codeUser")%>');

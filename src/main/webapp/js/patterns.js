@@ -8,11 +8,12 @@ $(document).ready(function() {
         colModel: [
 	        { display: 'ID', name: 'ID', width: 30, sortable: false,sorttype:'num', align: 'left' },
 	        { display: 'Name', name: 'Name', width: 220, sortable: false,sorttype:'ascii', align: 'left' },
-	        { display: 'Expression', name: 'Expression', width: 120, sortable: false, align: 'left' },
+	        { display: 'Expression', name: 'Expression', width: 100, sortable: false, align: 'left' },
+	        { display: 'Auxiliary', name: 'Auxiliary', width: 50, sortable: false, align: 'left' },
 	        { display: 'Warning', name: 'Warning', width: 100, sortable: false, align: 'left' },
 	        { display: 'Category', name: 'Category', width: 100, sortable: false, sorttype:'ascii',align: 'left' },
 	        { display: 'Scope', name: 'Scope', width: 80, sortable: true, align: 'left'},
-	        { display: 'Example', name: 'Example', width: 130, sortable: false, align: 'left' },
+	        { display: 'Example', name: 'Example', width: 100, sortable: false, align: 'left' },
 	        { display: 'Priority', name: 'Priority', width: 50, sortable: false,sorttype:'num', align: 'left' }
 	    ],
         buttons: [
@@ -26,8 +27,8 @@ $(document).ready(function() {
         title: "Patterns",
         usepager: true,
         useRp: true,
-        rp: 12, // results per page,每页默认的结果数
-        rpOptions: [12, 20, 30, 50, 100], //可选择设定的每页结果数
+        rp: 15, // results per page,每页默认的结果数
+        rpOptions: [15, 25, 50, 100], //可选择设定的每页结果数
         showCheckbox: true,
         onAddRow:onAddRowData,
         onRowProp:contextmenu
@@ -135,6 +136,7 @@ function AddPattern()
 {
 	$("#patternName").val("");
 	$("#patternExpression").val("");
+	$("#patternAuxiliary").val("");
 	$("#patternWarning").val("");
 	$("#patternExample").val("");
 	artDialog({
@@ -148,6 +150,7 @@ function AddPattern()
 	    				var data={"method":"add"};
 	    				data.name=$("#patternName").val();
 	    				data.expression=$("#patternExpression").val();
+	    				data.aux=$("#patternAuxiliary").val();
 	    				data.warning=$("#patternWarning").val();
 	    				data.example=$("#patternExample").val();
 	    				data.category=$("#patternCategory").val();
@@ -185,6 +188,7 @@ function editPattern(id,fromView){
 		if(result.status){
 			$("#patternName").val(decodeURIComponent(result.data.name));
 			$("#patternExpression").val(decodeURIComponent(result.data.expression));
+			$("#patternAuxiliary").val(decodeURIComponent(result.data.aux));
 			$("#patternWarning").val(decodeURIComponent(result.data.warning));
 			$("#patternCategory").val(decodeURIComponent(result.data.category));
 			$("#patternScope").val(decodeURIComponent(result.data.scope));
@@ -202,6 +206,7 @@ function editPattern(id,fromView){
 			    				data.id=id;
 			    				data.name=$("#patternName").val();
 			    				data.expression=$("#patternExpression").val();
+			    				data.aux=$("#patternAuxiliary").val();
 			    				data.warning=$("#patternWarning").val();
 			    				data.example=$("#patternExample").val();
 			    				data.category=$("#patternCategory").val();
@@ -247,15 +252,17 @@ function viewPattern(cell){
 	s=strHtmFmt(cell[2]);
 	$("#patternExpressionDiv").html(s).attr("title",cell[2]);
 	s=strHtmFmt(cell[3]);
-	$("#patternWarningDiv").html(s).attr("title",cell[3]);
-	s=cell[4];
-	$("#patternCategoryDiv").html(s).attr("title",cell[4]);
+	$("#patternAuxiliaryDiv").html(s).attr("title",cell[3]);
+	s=strHtmFmt(cell[4]);
+	$("#patternWarningDiv").html(s).attr("title",cell[4]);
 	s=cell[5];
-	$("#patternScopeDiv").html(s).attr("title",cell[5]);
-	s=strHtmFmt(cell[6]);
-	$("#patternExampleDiv").html(s).attr("title",cell[6]);
-	s=cell[7];
-	$("#patternPriorityDiv").html(s).attr("title",cell[7]);
+	$("#patternCategoryDiv").html(s).attr("title",cell[5]);
+	s=cell[6];
+	$("#patternScopeDiv").html(s).attr("title",cell[6]);
+	s=strHtmFmt(cell[7]);
+	$("#patternExampleDiv").html(s).attr("title",cell[7]);
+	s=cell[8];
+	$("#patternPriorityDiv").html(s).attr("title",cell[8]);
 	artDialog({
 		title:"View Pattern",
 		content:ID('patternDetail'),

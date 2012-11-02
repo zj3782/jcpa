@@ -38,7 +38,7 @@ public class OperateUnsynchronizedCollection {
 
     public void CorrectPutUnsafeSet() {
         synchronized (unsafeSet) {
-            unsafeSet.add("A");
+            safeSet.add("A");
         }
 
         synchronized (unsafeSet) {
@@ -52,7 +52,7 @@ public class OperateUnsynchronizedCollection {
 
     public void wrongPutUnsafeSet() {
         unsafeSet.add("A");
-        safeList.add("A");
-        safeMap.put("K", "V");
+        unsafeList.add("A");
+        unsafeMap.put("K", "V");
     }
 }

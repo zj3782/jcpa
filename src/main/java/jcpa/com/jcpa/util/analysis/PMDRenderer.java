@@ -51,7 +51,7 @@ public class PMDRenderer extends AbstractIncrementingRenderer {
 		    report.setRulePriority(rv.getRule().getPriority().getPriority());
 		    report.setColumn(rv.getBeginColumn());
 		    report.setLine(rv.getBeginLine());
-		    report.setCode(ToolUtil.getFileConetent(rv.getFilename(), rv.getBeginLine(),rv.getEndLine()));
+		    report.setCode(ToolUtil.getFileConetent(rv.getFilename(), rv.getBeginLine()-3,rv.getEndLine()+3));
 		    report.setExtInfoUrl(rv.getRule().getExternalInfoUrl());
 		    reports.add(report);
 		}

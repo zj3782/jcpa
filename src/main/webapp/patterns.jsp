@@ -35,6 +35,9 @@ initPage=<%=sPage%>;
 		<span class="span-2">(*)Expression:</span><textarea id="patternExpression" class="span-15 h100"></textarea>
 	</div>
 	<div  class="line">
+		<span class="span-2">Auxiliary:</span><textarea id="patternAuxiliary" class="span-15 h30"></textarea>
+	</div>
+	<div  class="line">
 		<span class="span-2">(*)Warning:</span><textarea id="patternWarning" class="span-15 h80"></textarea>
 	</div>
 	<div  class="line">
@@ -75,10 +78,13 @@ initPage=<%=sPage%>;
 		<span class="span-2">Name:</span><div id="patternNameDiv" class="span-15 oHidden"></div>
 	</div>
 	<div  class="line">
-		<span class="span-2">Expression:</span><div id="patternExpressionDiv" class="span-15 h200 oAuto"></div>
+		<span class="span-2">Expression:</span><div id="patternExpressionDiv" class="span-15  oAuto"></div>
 	</div>
 	<div  class="line">
-		<span class="span-2">Warning:</span><div id="patternWarningDiv" class="span-15 h80 oAuto"></div>
+		<span class="span-2">Auxiliary:</span><div id="patternAuxiliaryDiv" class="span-15  oAuto"></div>
+	</div>
+	<div  class="line">
+		<span class="span-2">Warning:</span><div id="patternWarningDiv" class="span-15  oAuto"></div>
 	</div>
 	<div  class="line">
 		<span class="span-2">Category:</span><div id="patternCategoryDiv" class="span-15 oHidden"></div>
@@ -87,7 +93,7 @@ initPage=<%=sPage%>;
 		<span class="span-2">Scope:</span><div id="patternScopeDiv" class="span-15 oHidden"></div>
 	</div>
 	<div  class="line">
-		<span class="span-2">Example:</span><div id="patternExampleDiv" class="span-15 h100 oAuto"></div>
+		<span class="span-2">Example:</span><div id="patternExampleDiv" class="span-15  oAuto"></div>
 	</div>
 	<div  class="line">
 		<span class="span-2">Priority:</span><div id="patternPriorityDiv" class="span-15 oHidden"></div>

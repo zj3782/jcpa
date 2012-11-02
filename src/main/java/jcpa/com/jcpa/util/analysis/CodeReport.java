@@ -4,16 +4,16 @@ import com.jcpa.util.json.JsonArrayNode;
 import com.jcpa.util.json.JsonLeafNode;
 
 public class CodeReport {
-	private int id=0;
-	private String packageName="";
-	private String className="";
-	private String methodName="";
-	private String ruleName="";
-	private int rulePriority;
-	private int column;
-	private int line;
-	private String code="";
-	private String extInfoUrl="";
+	protected int id=0;
+	protected String packageName="";
+	protected String className="";
+	protected String methodName="";
+	protected String ruleName="";
+	protected int rulePriority;
+	protected int column;
+	protected int line;
+	protected String code="";
+	protected String extInfoUrl="";
 	
 	public JsonArrayNode toJsonNode(String name){
 		JsonArrayNode j = new JsonArrayNode(name);
@@ -162,4 +162,20 @@ public class CodeReport {
 		this.extInfoUrl = extInfoUrl;
 	}
 	
+	/**
+	 * 判断两个report是否相等
+	 * */
+	public boolean isEquals(CodeReport another){
+		if(this.rulePriority==another.rulePriority &&
+			this.column==another.column &&
+			this.line==another.line &&
+			this.packageName.equals(another.packageName) &&
+			this.className.equals(another.className) &&
+			this.methodName.equals(another.methodName) &&
+			this.ruleName.equals(another.ruleName))
+		{
+			return true;
+		}
+		return false;
+	}
 }

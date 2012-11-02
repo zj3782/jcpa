@@ -214,6 +214,7 @@ public class ToolUtil {
     	String snippet = "";
 		String str = null;
 		BufferedReader reader = new BufferedReader(new FileReader(fn));
+		if(startLine<1)startLine=1;
 		int line = 1;
 		str = reader.readLine();
 		while ( str != null){			

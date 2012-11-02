@@ -21,7 +21,7 @@ function LoginSubmit(){
 		alert("Please Input Password!");
 		return false;
 	}
-	ID("loginForm").submit();
+//	ID("loginForm").submit();
 	return true;
 }
 </script>
@@ -32,11 +32,11 @@ function LoginSubmit(){
 </div>
 <%}%>
 <div id="login" class="info aCenter">
-	<form action="login.do?method=in" method="post" id="loginForm">
+	<form action="login.do?method=in" method="post" id="loginForm"  onsubmit="return LoginSubmit();">
 		<input type="hidden" value="<%=from%>" name="from" id="from"/>
 		<label>UserName:<input type="text" name="user" id="user" value="<%=initUser%>"></label><br>
 		<label>PassWord:<input type="password" name="password" id="password"></label><br>
-		<input type="button" value="Login" onclick="LoginSubmit();"/><input type="reset" value="Reset"/>
+		<input type="submit" value="Login" /><input type="reset" value="Reset"/>
 	</form>
 </div>
 <hr class="space h100">

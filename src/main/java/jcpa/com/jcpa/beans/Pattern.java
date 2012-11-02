@@ -13,6 +13,7 @@ public class Pattern {
 	protected String example;
 	protected String scope;
 	protected int priority;
+	protected String aux;
 	
 	public int getId() {
 		return id;
@@ -83,6 +84,12 @@ public class Pattern {
 		}
 		this.priority = priority;
 	}
+	public String getAux() {
+		return aux;
+	}
+	public void setAux(String aux) {
+		this.aux = aux;
+	}
 	/**
 	 * 
 	 * */
@@ -93,6 +100,7 @@ public class Pattern {
 		cell.addItem(new JsonLeafNode("",String.valueOf(id)));
 		cell.addItem(new JsonLeafNode("",name));
 		cell.addItem(new JsonLeafNode("",expression));
+		cell.addItem(new JsonLeafNode("",aux));
 		cell.addItem(new JsonLeafNode("",warning));
 		cell.addItem(new JsonLeafNode("",category));
 		cell.addItem(new JsonLeafNode("",scope));
@@ -113,6 +121,7 @@ public class Pattern {
 		j.addChild(new JsonLeafNode("scope",scope));
 		j.addChild(new JsonLeafNode("example",example));
 		j.addChild(new JsonLeafNode("priority",String.valueOf(priority)));
+		j.addChild(new JsonLeafNode("aux",aux));
 		return j;
 	}
 }

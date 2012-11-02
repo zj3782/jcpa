@@ -18,6 +18,7 @@ import org.apache.commons.fileupload.util.Streams;
 import com.jcpa.beans.Pattern;
 import com.jcpa.dao.sql.PatternDaoImpl;
 import com.jcpa.dao.sql.interfaces.PatternDao;
+import com.jcpa.util.PMDUtil;
 import com.jcpa.util.ToolUtil;
 import com.jcpa.util.json.Json;
 import com.jcpa.util.json.JsonArrayNode;
@@ -45,6 +46,7 @@ public class PatternAction extends Action{
 		try {
 			p.setName(request.getParameter("name"));
 			p.setExpression(request.getParameter("expression"));
+			p.setAux(request.getParameter("aux"));
 			p.setWarning(request.getParameter("warning"));
 			p.setCategory(request.getParameter("category"));
 			p.setScope(request.getParameter("scope"));
@@ -104,6 +106,7 @@ public class PatternAction extends Action{
 			p.setId(Integer.parseInt(request.getParameter("id")));
 			p.setName(request.getParameter("name"));
 			p.setExpression(request.getParameter("expression"));
+			p.setAux(request.getParameter("aux"));
 			p.setWarning(request.getParameter("warning"));
 			p.setCategory(request.getParameter("category"));
 			p.setScope(request.getParameter("scope"));
@@ -240,7 +243,7 @@ public class PatternAction extends Action{
 							+ "</description>");
 					fw.write("<priority>"+p.getPriority()+"</priority>");
 					fw.write("<properties><property name=\"xpath\"><value><![CDATA["
-							+ p.getExpression()
+							+ PMDUtil.ExpIntegrate(p.getExpression(),p.getAux())
 							+ "]]></value></property></properties>");
 					fw.write("<example><![CDATA[" + p.getExample()
 							+ "]]></example>");
@@ -356,4 +359,5 @@ public class PatternAction extends Action{
             error("enctype error!");  
         }  
 	}
+
 }

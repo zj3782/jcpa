@@ -145,4 +145,26 @@ public class PMDUtil{
 		args[0]=InputPaths;args[1]=ReportFmt;args[2]=RuleSets;
 		return PMD.run(args);
 	}
+	/**
+	 * 通过expression和auxiliary获取完整的expression
+	 * */
+	public static String ExpIntegrate(String exp,String auxStr){
+		if(exp==null || exp.equals(""))return "";
+		if(auxStr==null || auxStr.equals(""))return exp;
+		if(auxStr.startsWith("##"))auxStr=auxStr.substring(2);
+		
+		String auxs[]=auxStr.split("##");
+		for(String aux:auxs){
+			String items[]=aux.split(",");
+			String itemStr="";
+			if(items.length>0){
+				itemStr+="@Image=\""+items[0]+"\"";
+			}
+			for(int i=1;i<items.length;i++){
+				itemStr+=" or @Image=\""+items[i]+"\"";
+			}
+			exp=exp.replaceFirst("##AUX##",itemStr);
+		}
+		return exp;
+	}
 }

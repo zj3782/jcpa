@@ -34,7 +34,8 @@ $(document).ready(function() {
 		useRp: true,
 		rp: 12,
         rpOptions: [12, 20, 30, 50, 100],
-        autoload:false
+        autoload:false,
+        onAddRow:onAddErrorRowData
     };
     flexTBE=$("#errorTB").flexigrid(option);
 });
@@ -45,6 +46,7 @@ function onAddRowData(row){
 		row.cell[i]=decodeURIComponent(row.cell[i]);//解码
 	}
 	row.cell[3]="<a href='javascript:;' onclick='viewReportById("+row.id+")'>"+row.cell[3]+"</a>";
+	row.cell[4]=htm2specil(row.cell[4]);
 	row.cell[5]="<a href='"+row.cell[7]+"' target='_blank'>"+row.cell[5]+"</a>";
 	row.style="color:"+getPriorityColor(row.cell[6]);
 	return row;
@@ -60,6 +62,12 @@ function getPriorityColor(priority){
 	}
 	return "#000";
 }
+function onAddErrorRowData(row){
+	for(var i=0;i<row.cell.length;i++){
+		row.cell[i]=decodeURIComponent(row.cell[i]);//解码
+	}
+	return row;
+}
 /**
  * 查看单个report
  * */
@@ -72,7 +80,7 @@ function viewReport(cell){
 	$("#viewClass").html(cell[1]);
 	$("#viewMethod").html(cell[2]);
 	$("#viewLocation").html(cell[3]);
-	$("#viewCode").html(cell[4]);
+	$("#viewCode").html(strHtmFmt(cell[4]));
 	$("#viewRule").html(cell[5]);
 	$("#viewPriority").html(cell[6]);
 	artDialog({content:ID('viewReport'),title:'View Report',lock:true,id:'viewReport'});
@@ -89,7 +97,7 @@ var STEP_PMDOK=6;//pmd处理成功
 var STEP_SUCCESSEND=7;//成功结束
 var STEP_FAILEND=8;//失败结束
 var steps=['Starting','Svn Logining','Svn Login Ok','Svn CheckOuting',
-           'Svn CheckOut Ok','Pmd Analysising','Pmd Analysis Ok','Code Analysis Ok','Code Analysis Fail'];
+           'Svn CheckOut Ok','Pmd Analysing','Pmd Analyse Ok','Code Analyse Ok','Code Analyse Fail'];
 
 var TimerID=null;
 /**
@@ -136,17 +144,18 @@ function EndIntervalGetStep(){
  */
 function IntervalGetStep(){
 	$.post("Analysis.do",{"method":"step"},function(result){
-		EndIntervalGetStep();
 		if(result.status){
 			$("#reportArea").mask(steps[result.data.step]);
 			if(result.data.step==STEP_SUCCESSEND || result.data.step==STEP_FAILEND){
 				flexTBR.flexReload();
 				flexTBE.flexReload();
+				EndIntervalGetStep();
 				$("#reportArea").unmask();
 			}
 		}else{
-			alert(result.info);
+			EndIntervalGetStep();
 			$("#reportArea").unmask();
+			alert(result.info);
 		}
 	},"json");
 }

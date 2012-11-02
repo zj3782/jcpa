@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*,com.jcpa.dao.sql.PatternDaoImpl,com.jcpa.dao.sql.interfaces.PatternDao,com.jcpa.beans.Pattern,com.jcpa.util.ToolUtil" pageEncoding="UTF-8"%>
+X<%@ page language="java" import="java.util.*,com.jcpa.dao.sql.PatternDaoImpl,com.jcpa.dao.sql.interfaces.PatternDao,com.jcpa.beans.Pattern,com.jcpa.util.ToolUtil" pageEncoding="UTF-8"%>
 <%pageTitle="Help"; %>
 <%@ include file="header.jsp" %>
 <style>
@@ -89,6 +89,11 @@ function showTxt(cat){
 		<h1 cat="usage" txt="usage" class="cat-h"><a href="#usage">Usage</a></h1>
 		<div class="cat-group" cat="usage">
 			<h2 cat="usageInstall" txt="usageInstall" class="cat-h"><a href="#usageInstall">Installation</a></h2>
+			<div class="cat-group" cat="usageInstall">
+				<h3 cat="usageEnvironment" txt="usageEnvironment" class="cat-h"><a href="#usageEnvironment">Environment</a></h3>
+				<h3 cat="usageCompile" txt="usageCompile" class="cat-h"><a href="#usageCompile">Compile</a></h3>
+				<h3 cat="usageRelease" txt="usageRelease" class="cat-h"><a href="#usageRelease">Release</a></h3>
+			</div>
 			<h2 cat="usagePlugin" txt="usagePlugin" class="cat-h"><a href="#usagePlugin">Eclipse plugin usage</a></h2>
 		</div>
 	</div>
@@ -128,7 +133,9 @@ function showTxt(cat){
 					<p>If you click a row in the list on the right-click menu and select the View menu, you can view the details report of this row.</p>
 					<p>You can click the underlined content to go to see the View Report page, as the same function as the View menu of the right-click menu.	</p>
 					<img src="image/CodeAnalysis3.png" />
-					<p>There is an error list below the report list. If the list is not empty which shows that there are files that can’t be resolved in the analyzing codes, please check whether the file contains syntax errors.</p>
+					<p>There is an error list below the report list. If the list is not empty which shows that there are files that can’t be resolved in the analyzing codes, please check whether the file contains syntax errors.
+					If not,make sure your patterns expression is correct.
+					</p>
 					<img src="image/CodeAnalysis4.png" />
 				</div>
 				<div id="sysDetailBenchmark">
@@ -154,6 +161,19 @@ function showTxt(cat){
 					<p>(1) add pattern</p>
 					<p>Click the Add button on the top left of the list.</p>
 					<img src="image/patterns1.png" />
+					<p><span style="color:red;">Attention:</span>If you meet the following situation--you want to find the line which call some function such as 'method1'、'method2'.</p>
+					<p>You can write the expression like this:<span style="color:green;">//PrimarySuffix[@Image='method1' or @Image='method2']</span>.</p>
+					<p>You can also write like this:<br>
+						Expression: <span style="color:green;">//PrimarySuffix[##AUX##]</span><br>
+						Auxiliary: <span style="color:green;">method1,method2</span><br>
+						That means you can write "##AUX##" in the expression to occupy the position and auxiliary will take its position latter.
+					</p>
+					<p>What if there are more than one "##AUX##" in the expression ? </p>
+					<p>You can write like this:<br>
+						Expression: <span style="color:green;">//PrimarySuffix[##AUX##]..........[##AUX##]</span><br>
+						Auxiliary: <span style="color:green;">method1,method2##class1,class2,class3##</span><br>
+						You can use "##" to split in the auxiliary filed.
+					</p>
 					<p>(2) delete pattern</p>
 					<p>If you want to delete a single pattern in the pattern line, you can use the right-click menu to delete.</p>
 					<p>If you want to delete many patterns in the pattern line, you can click the Delete button on the top left of the list to delete the patterns selected.</p>
@@ -280,6 +300,34 @@ function showTxt(cat){
 			<h1>Usage</h1>
 			<div id="usageInstall">
 				<h2>Installation</h2>
+				<div id="usageEnvironment">
+					<h3>Environment</h3>
+					<p>Jdk1.6.0_33、Maven 3.0.4、Tomcat 7.0</p>
+　　				<p>1. install jdk and configure the system environment variables</p>
+　　				<p>2. install Maven to configure the environment variables<p>
+					<p>&nbsp;&nbsp;(a). visit http://maven.apache.org/download.html to download Maven program. And then unzip the downloaded file to the local folder, for example D:\Program\apache-maven-3.0.4.<p>
+					<p>&nbsp;&nbsp;(b). Set the environment variables as following mentioned.
+					 Add "MAVEN_HOME" to the name item and add its value is the path of unzipped local folder as "D:\Program\apache-maven-3.0.4".
+					 Add ";%MAVEN_HOME%\bin" to the end of the PATH variable to modify its value. </p>
+					<p>&nbsp;&nbsp;(c). Open cmd and input "mvn –v"  to check whether the installation is successful.</p>
+ 　　				<p>3.install Tomcat</p>
+				</div>
+				<div id="usageCompile">
+					<h3>Compile</h3>
+					<p>For example, checkout the source code to the directory that values "D:\WorkSpace\MyEclipse\jcpa Maven Webapp."</p>
+					<p>1、Open cmd and go to the directory "D:\WorkSpace\MyEclipse\jcpa Maven Webapp".</p>
+　　				<p>2、Execute "mvn clean" instruction to delete the previous target directory. (If there is no target directory in the source codes, you don’t need to do this step.)
+					<p>3、Execute "mvn package" instruction to pack the program</p>　
+					<p>4、You can see some jar packages is downloading by the maven program. 
+					If the downloading operation can’t be completed because of the network or other reasons,
+					please set maven repository or add the downloaded jar file to maven repository in accordance with the rules.
+					( The default path is ". M2" directory in the current user directory.)</p>
+　　				<p>5、Go to the target directory, you will see a war file which is packed through the above mentioned direction.</p>
+				</div>
+				<div id="usageRelease">
+					<h3>Release</h3>
+					<p>Copy the compiled war package to the webapps directory of tomcat and start tomcat service, the website will release automatically. You can input the URL "http://%TOMCAT_URL%/jcpa" directly to access it.</p>
+				</div>
 			</div>
 			<div id="usagePlugin">
 				<h2>Eclipse plugin usage</h2>

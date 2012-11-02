@@ -27,5 +27,8 @@
   <property generated="never" lazy="false" name="priority" type="int">
    <column default="3" name="priority" not-null="true"/>
   </property>
+  <property generated="never" lazy="false" name="aux" type="java.lang.String">
+   <column length="10240" name="aux"/>
+  </property>
  </class>
 </hibernate-mapping>

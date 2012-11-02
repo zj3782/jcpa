@@ -27,6 +27,10 @@
 			<div id="patternExpressionDiv" class="span-20 oAuto"><%=ToolUtil.strHtmlFmt(p.getExpression()) %></div>
 		</div>
 		<div  class="line">
+			<span class="span-2">Auxiliary:</span>
+			<div id="patternAuxiliaryDiv" class="span-20 oAuto"><%=ToolUtil.strHtmlFmt(p.getAux()) %></div>
+		</div>
+		<div  class="line">
 			<span class="span-2">Warning:</span>
 			<div id="patternWarningDiv" class="span-20 oAuto"><%=ToolUtil.strHtmlFmt(p.getWarning()) %></div>
 		</div>

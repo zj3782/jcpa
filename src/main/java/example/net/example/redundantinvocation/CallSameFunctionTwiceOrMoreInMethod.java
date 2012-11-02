@@ -19,8 +19,8 @@ public class CallSameFunctionTwiceOrMoreInMethod {
     }
 
     public long wrongCallFunctions() {
-        long part1 = f(5);
-        long part2 = f(5);
+        long part1 = f(6);
+        long part2 = f(6);
         return part1 + part2;
     }
 }

@@ -28,7 +28,7 @@ pageUrl=URLEncoder.encode(pageUrl);
 <body>
 	<div id="header" class="bGreen cWhite">
 		<div id='title' class="container h30">
-			<div class="left"><img src="css/images/logo.png" class="h30"/></div>
+			<div class="left"><a href="./"><img src="css/images/logo.png" class="h30"/></a></div>
 			<div class="left f20 fB"> Java Code Performance Analysis </div>
 			<div class="right f20">
 				<%if(user.equals("guest")){%>
