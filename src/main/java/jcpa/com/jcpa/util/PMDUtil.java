@@ -153,18 +153,23 @@ public class PMDUtil{
 		if(auxStr==null || auxStr.equals(""))return exp;
 		if(auxStr.startsWith("##"))auxStr=auxStr.substring(2);
 		
+		String itemStr="",auxsStr="";
 		String auxs[]=auxStr.split("##");
-		for(String aux:auxs){
-			String items[]=aux.split(",");
-			String itemStr="";
+		for(int j=0;j<auxs.length;j++){
+			String items[]=auxs[j].split(",");
+			itemStr="";
 			if(items.length>0){
 				itemStr+="@Image=\""+items[0]+"\"";
 			}
 			for(int i=1;i<items.length;i++){
 				itemStr+=" or @Image=\""+items[i]+"\"";
 			}
-			exp=exp.replaceFirst("##AUX##",itemStr);
+			exp=exp.replaceAll("##AUX"+j+"##",itemStr);
+			auxsStr+=itemStr+" or ";
 		}
+		int auxsStrLen=auxsStr.length();
+		if(auxsStrLen>4)auxsStr=auxsStr.substring(0,auxsStrLen-4);
+		exp=exp.replaceAll("##AUX##",auxsStr);
 		return exp;
 	}
 }

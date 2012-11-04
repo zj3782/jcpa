@@ -43,7 +43,13 @@ $(document).ready(function() {
          { text: "View", icon: "css/images/view.png", alias: "contextmenu-view", action: contextMenuItem_click },
          { text: "Edit", icon: "css/images/edit.png", alias: "contextmenu-edit", action: contextMenuItem_click },
          { text: "Delete", icon: "css/images/delete.png", alias: "contextmenu-delete", action: contextMenuItem_click },
-      ]
+      ],onContextMenu:function(event,e){
+      		var target=event.currentTarget;
+      		var id = $(target).attr("id").substr(3);
+      		flexTB.flexUnCheck();
+      		flexTB.flexCheck(id);
+	        return true;
+	   }
     };
     function contextmenu(row) {
         $(row).contextmenu(menu);
@@ -78,6 +84,8 @@ $(document).ready(function() {
         else {
         	flexTB.flexReload();
         }
+        flexTB.flexUnCheck();
+        flexTB.flexCheck(id);
     }
     /**检查数据*/
     function onAddRowData(row){

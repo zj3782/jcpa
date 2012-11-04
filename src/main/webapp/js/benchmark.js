@@ -41,7 +41,13 @@ $(document).ready(function() {
         var menu = { width: 150, items: [
              { text: "Run", icon: "css/images/run.png", alias: "contextmenu-run", action: contextMenuItem_click },          
              { text: "View", icon: "css/images/view.png", alias: "contextmenu-view", action: contextMenuItem_click }          
-        ]};
+        ],onContextMenu:function(event,e){
+        	var target=event.currentTarget;
+        	 var id = $(target).attr("id").substr(3);
+        	 flexGrid.flexUnCheck();
+             flexGrid.flexCheck(id);
+             return true;
+        }};
         $(row).contextmenu(menu);
     }
     /**右键菜单*/

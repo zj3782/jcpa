@@ -34,7 +34,7 @@ $(document).ready(function(){
 	if(start>0){
 		cat=url.substr(start+1,url.length-start);
 	}
-	setTimeout(function(){showTxt(cat);},1000);
+	setTimeout(function(){showTxt(cat);},1000);//延时一段时间显示
 });
 function initCat(cat){
 	$(cat).click(function(){
@@ -168,11 +168,16 @@ function showTxt(cat){
 						Auxiliary: <span style="color:green;">method1,method2</span><br>
 						That means you can write "##AUX##" in the expression to occupy the position and auxiliary will take its position latter.
 					</p>
-					<p>What if there are more than one "##AUX##" in the expression ? </p>
-					<p>You can write like this:<br>
-						Expression: <span style="color:green;">//PrimarySuffix[##AUX##]..........[##AUX##]</span><br>
-						Auxiliary: <span style="color:green;">method1,method2##class1,class2,class3##</span><br>
-						You can use "##" to split in the auxiliary filed.
+					<p>What if I need more than one "##AUX##" in the expression ? </p>
+					<p>For example:I want to replace the first position with "method1,method2" 
+						and replace the second position with "method3,method4" 
+						and replace the second position with "method1,method2,method3,method4":<br>
+						Expression: <span style="color:green;">//PrimarySuffix[##AUX0##]..........[##AUX1##]......[##AUX##]</span><br>
+						Auxiliary: <span style="color:green;">method1,method2##method3,method4##</span><br>
+						We use "##" to split the auxiliary filed to many parts.<br>
+						"##AUX0##"means that position should be replaced by the first part of the auxiliary filed,<br>
+						"##AUX1##"means that position should be replaced by the second part of the auxiliary filed and so on.<br>
+						"##AUX##" means this position should be replaced by all of the auxiliary filed.
 					</p>
 					<p>(2) delete pattern</p>
 					<p>If you want to delete a single pattern in the pattern line, you can use the right-click menu to delete.</p>

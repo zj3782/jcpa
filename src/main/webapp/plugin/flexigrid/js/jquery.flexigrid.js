@@ -753,6 +753,35 @@
                 });
             	return rows;
             },
+           /**设置选中*/
+            check:function(ids){
+            	if(!p.showCheckbox || ids==null || typeof(ids)=='undefined')return;
+            	if(typeof(ids)=='object'){
+            		for(var i=0;i<ids.length;i++){
+            			$("#chk_"+ids[i],t).attr("checked","checked");
+            			$("#row"+ids[i],t).addClass("trSelected");
+            		}
+            	}else{
+            		$("#chk_"+ids,t).attr("checked","checked");
+            		$("#row"+ids,t).addClass("trSelected");
+            	}
+            },
+            /**设置取消选中*/
+            uncheck:function(ids){
+            	if(!p.showCheckbox)return;
+            	if(typeof(ids)=='object'){
+            		for(var i=0;i<ids.length;i++){
+            			$("#chk_"+ids[i],t).removeAttr("checked");
+            			$("#row"+ids[i],t).removeClass("trSelected");
+            		}
+            	}else if(typeof(ids)=='undefined'){
+            		$(".chboxtd input[type='checkbox']",t).removeAttr("checked");
+            		$("tr").removeClass("trSelected");
+            	}else{
+            		$("#chk_"+ids,t).removeAttr("checked");
+            		$("#row"+ids,t).removeClass("trSelected");
+            	}
+            },
             /**获取列数zhujie add*/
             getColCount:function(){
             	var ths = $('thead tr:first th', g.hDiv);
@@ -1539,6 +1568,16 @@
             return this[0].grid.getCheckedRows();
         }
         return [];
+    };
+    $.fn.flexCheck = function(ids){
+    	 if (this[0].grid) {
+             return this[0].grid.check(ids);
+         }
+    };
+    $.fn.flexUnCheck = function(ids){
+    	if (this[0].grid) {
+            return this[0].grid.uncheck(ids);
+        }
     };
     $.fn.flexGetRowsByIds = function(ids){//通过ids获取rows
     	if (this[0].grid) {
