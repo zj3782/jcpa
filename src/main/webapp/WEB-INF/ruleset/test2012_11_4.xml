@@ -1,0 +1,650 @@
+<?xml version="1.0"?> <ruleset name="jcpa pmd rules" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd" xsi:noNamespaceSchemaLocation="http://pmd.sourceforge.net/ruleset_2_0_0.xsd"><description>jcpa pmd ruleset</description><rule name="ProbeSizeOfArrayOrCollectionBeforeForStatement" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=1"><description>You'd better not probe the size of array or collection before For statement.</description><priority>3</priority><properties><property name="xpath"><value><![CDATA[//BlockStatement
+ [
+     descendant::*/IfStatement/descendant::*[RelationalExpression]/descendant::*/Literal[@Image="0"]
+ ]
+ [
+     ends-with(descendant::*/IfStatement/descendant::*/Name/@Image,'.length')
+ ]
+ [
+     starts-with(
+     descendant::*/IfStatement/descendant::*/Name/@Image,
+     concat(
+     preceding-sibling::*
+     [./LocalVariableDeclaration/Type/ReferenceType[@Array="true"]]
+     [count(./LocalVariableDeclaration/*/*/ArrayInitializer/*)=0]
+     /LocalVariableDeclaration/*/VariableDeclaratorId/@Image, ".")
+     )
+ ]
+ [
+     not(preceding-sibling::*[descendant::*/AssignmentOperator]) or
+     not(starts-with(
+     descendant::*/RelationalExpression/descendant::*/Name/@Image,
+     preceding-sibling::*[descendant::*/AssignmentOperator]
+     /descendant::*/PrimaryPrefix/Name/@Image))
+ ]
+ |
+ //BlockStatement
+ [
+     descendant::*/IfStatement/descendant::*[RelationalExpression]/descendant::*/Literal[@Image="0"]
+ ]
+ [
+     ends-with(descendant::*/IfStatement/descendant::*/Name/@Image,'.length')
+ ]
+ [
+     starts-with(
+     descendant::*/IfStatement/descendant::*/Name/@Image,
+     concat(descendant::*/IfStatement/descendant::*/ForStatement/descendant::*/Name/@Image, ".")
+     )
+ ]
+ |
+ //BlockStatement
+ [
+ ends-with(
+ descendant::*/IfStatement/Expression//RelationalExpression[@Image=">"][PrimaryExpression/PrimaryPrefix/Literal[@Image="0"]]
+ /PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount="0"]]/PrimaryPrefix/Name/@Image,'.size'
+ )
+ ]
+ [
+ starts-with(
+ descendant::*/IfStatement/Expression//RelationalExpression[@Image=">"][PrimaryExpression/PrimaryPrefix/Literal[@Image="0"]]
+ /PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount="0"]]/PrimaryPrefix/Name/@Image,
+ concat(
+ descendant::*/IfStatement/descendant::*/ForStatement/descendant::*/Name/@Image, ".")
+ )
+ ]]]></value></property></properties><example><![CDATA[(1)public class ClassA{
+  	void methodA() {
+  		ClassA[] array = {};
+  		if (array.length > 0) {
+  			for (ClassA obj: array) {
+  				//doSometing
+  			}
+  		}
+  	}
+  }
+ 
+ 
+ （2）public class ClassA{
+   void methodA() {
+ if (isNeedDeleteRememberMeCookie &amp;&amp; newCookies.size() > 0) {
+ 			for (Cookie cookie : newCookies) {
+ 				response.addCookie(cookie);
+ 			}
+ 		}
+  }
+ }]]></example></rule><rule name="UnnecessaryLogicalJudgement" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=2"><description>There's unnecessary logical judgement here.</description><priority>3</priority><properties><property name="xpath"><value><![CDATA[//BlockStatement
+ [
+     descendant::*/IfStatement/descendant::*[EqualityExpression]/descendant::*/Literal/NullLiteral
+ ]
+ [
+     descendant::*/IfStatement/descendant::*[EqualityExpression]/descendant::*/PrimaryPrefix/Name/@Image=
+ preceding-sibling::*[descendant::*/AllocationExpression]/descendant::*/VariableDeclaratorId/@Image 
+ ]
+ [
+     not(preceding-sibling::*[descendant::*/AssignmentOperator]) or
+     not(
+     descendant::*/IfStatement/descendant::*[EqualityExpression]/descendant::*/Name/@Image=
+     preceding-sibling::*[descendant::*/AssignmentOperator]
+     /descendant::*/PrimaryPrefix/Name/@Image)
+ ]
+ |
+ //BlockStatement
+ [
+   descendant::*/IfStatement/descendant::*/EqualityExpression[@Image="=="]
+ 	[descendant::*/Literal/NullLiteral]/PrimaryExpression/PrimaryPrefix/Name/@Image=
+ 	preceding-sibling::*/LocalVariableDeclaration/VariableDeclarator[descendant::*/Literal/NullLiteral]/VariableDeclaratorId/@Image
+ ]
+ |
+ //BlockStatement
+ [
+ 	descendant::*/IfStatement/descendant::*/EqualityExpression[@Image="!="]
+ 	[descendant::*/Literal/NullLiteral]/PrimaryExpression/PrimaryPrefix/Name/@Image=
+ 	preceding-sibling::*/LocalVariableDeclaration/VariableDeclarator[not(descendant::*/Literal/NullLiteral)]/VariableDeclaratorId/@Image
+ ]]]></value></property></properties><example><![CDATA[public class ClassA{
+     void methodA() {
+       ClassA inst= new ClassA();
+       if (inst == null) {
+       //doSomething
+       }
+     }
+   }]]></example></rule><rule name="ReclaimMemorySpace" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=3"><description>It's unnecessary to reclaim memory space here.</description><priority>3</priority><properties><property name="xpath"><value><![CDATA[//BlockStatement
+ [Statement/StatementExpression/AssignmentOperator/following-sibling::*[self::Expression and position()=1]/PrimaryExpression/PrimaryPrefix/Literal/NullLiteral]
+ [not(ancestor::*/following-sibling::*/descendant::*/PrimaryPrefix/Name/@Image=descendant::*/PrimaryPrefix/Name/@Image)]
+ [not(following-sibling::*/descendant::*/PrimaryPrefix/Name/@Image=descendant::*/PrimaryPrefix/Name/@Image)]]]></value></property></properties><example><![CDATA[public class ClassA{
+  	void methodA() {
+  		ClassA inst = new ClassA();
+  		// method body
+  		inst = null;
+  	}
+  }]]></example></rule><rule name="CallSameFunctionTwiceOrMoreInMethod" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=4"><description>You'd better not call the same function twice or more times in a method.</description><priority>2</priority><properties><property name="xpath"><value><![CDATA[//ClassOrInterfaceBodyDeclaration/descendant::*/BlockStatement
+[
+descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image=
+preceding-sibling::*/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image
+]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name
+|
+//ClassOrInterfaceBodyDeclaration/descendant::*/BlockStatement
+[
+descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name/@Image=
+preceding-sibling::*/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name/@Image
+]
+[
+descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@Image=
+preceding-sibling::*/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@Image
+]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name]]></value></property></properties><example><![CDATA[public class ClassA{
+  	void methodA() {
+  		ClassA inst = new ClassA();
+  		one(inst.sum());
+  		two(inst.sum());
+  		three(inst.sum());
+  	}
+  }]]></example></rule><rule name="CallSameFunctionTwiceOrMoreInClass" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=5"><description>You'd better not call the same function twice or more times in a class.</description><priority>2</priority><properties><property name="xpath"><value><![CDATA[//ClassOrInterfaceBodyDeclaration
+[
+descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image=
+preceding-sibling::*/FieldDeclaration/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image
+]/descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name
+|
+//ClassOrInterfaceBodyDeclaration/descendant::*/BlockStatement
+[
+descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image=
+ancestor::*[self::ClassOrInterfaceBodyDeclaration]/preceding-sibling::*/descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image
+]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name
+|
+//ClassOrInterfaceBodyDeclaration
+[
+descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name/@Image=
+preceding-sibling::*/FieldDeclaration/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name/@Image
+]
+[
+descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal[not(@Image="")]/@Image=
+preceding-sibling::*/FieldDeclaration/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal[not(@Image="")]/@Image
+]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name
+|
+//ClassOrInterfaceBodyDeclaration/descendant::*/BlockStatement
+[
+descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name/@Image=
+ancestor::*[self::ClassOrInterfaceBodyDeclaration]/preceding-sibling::*/descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name/@Image
+]
+[
+descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal[not(@Image="")]/@Image=
+ancestor::*[self::ClassOrInterfaceBodyDeclaration]/preceding-sibling::*/descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal[not(@Image="")]/@Image
+]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name]]></value></property></properties><example><![CDATA[public class ClassA{
+  	void methodA() {
+     		HandlerFactory hf = HandlerFactory.getInstance().getHandler("A");
+  	}
+  	void methodB() {
+  		HandlerFactory hf = HandlerFactory.getInstance().getHandler("A");
+  	}
+  }]]></example></rule><rule name="SuboptimalLogicalExpression" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=6"><description>There're some suboptimal logical expressions.</description><priority>3</priority><properties><property name="xpath"><value><![CDATA[//Expression
+ [
+     ConditionalAndExpression
+     [
+         count(descendant::UnaryExpressionNotPlusMinus[@Image="!"])>1
+     ]
+     or AndExpression
+     [
+         count(descendant::UnaryExpressionNotPlusMinus[@Image="!"])>1
+     ]
+         or ConditionalOrExpression
+     [
+         count(descendant::UnaryExpressionNotPlusMinus[@Image="!"])>1
+     ]
+     or InclusiveOrExpression
+     [
+         count(descendant::UnaryExpressionNotPlusMinus[@Image="!"])>1
+     ]
+ ]]]></value></property></properties><example><![CDATA[public class ClassA{
+  	void methodA() {
+  		if (!A && !B && !C && !D) {
+  			//doSomething
+  		}
+  	}
+  }]]></example></rule><rule name="OperateUnsynchronizedCollection" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=7"><description>There's no synchronized collection for doing some operations. </description><priority>1</priority><properties><property name="xpath"><value><![CDATA[//ClassOrInterfaceBodyDeclaration
+ [FieldDeclaration[descendant::*/ClassOrInterfaceType[@Image="Map"]]
+ /VariableDeclarator[descendant::*/AllocationExpression/ClassOrInterfaceType[@Image="HashMap"]]/VariableDeclaratorId
+ ]
+ [
+ following-sibling::*
+ [self::ClassOrInterfaceBodyDeclaration]
+ [descendant::*/PrimaryExpression/PrimarySuffix[@Image="putAll"]]
+ /descendant::*/PrimaryExpression[PrimarySuffix[@Image="putAll"]]/PrimarySuffix/@Image
+ =
+ FieldDeclaration[descendant::*/ClassOrInterfaceType[@Image="Map"]]
+ /VariableDeclarator[descendant::*/AllocationExpression/ClassOrInterfaceType[@Image="HashMap"]]/VariableDeclaratorId/@Image
+ ]
+ |
+ //ClassOrInterfaceBodyDeclaration
+ [FieldDeclaration[descendant::*/ClassOrInterfaceType[@Image="Map"]]
+ /VariableDeclarator[descendant::*/AllocationExpression/ClassOrInterfaceType[@Image="HashMap"]]/VariableDeclaratorId
+ ]
+ [
+ starts-with(
+ following-sibling::*
+ [self::ClassOrInterfaceBodyDeclaration]
+ [descendant::*/PrimaryExpression/PrimaryPrefix/Name[ends-with(@Image,".putAll")]]
+ /descendant::*/PrimaryExpression/PrimaryPrefix/Name[ends-with(@Image,".putAll")]/@Image
+ ,
+ FieldDeclaration[descendant::*/ClassOrInterfaceType[@Image="Map"]]
+ /VariableDeclarator[descendant::*/AllocationExpression/ClassOrInterfaceType[@Image="HashMap"]]/VariableDeclaratorId/@Image
+ )
+ ]
+ |
+ //ClassOrInterfaceBodyDeclaration
+ [not(
+ FieldDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="Set"]
+ /descendant::*/TypeArgument]/VariableDeclarator/VariableDeclaratorId/@Image
+ =following-sibling::*[ConstructorDeclaration]/descendant::*/StatementExpression
+ [Expression/PrimaryExpression/PrimarySuffix/Arguments[@ArgumentCount=1]/
+ descendant::*/ClassOrInterfaceType[@Image="ConcurrentHashMap"]/TypeArguments
+ ]
+ /PrimaryExpression/PrimaryPrefix/Name/@Image)
+ ]
+ [
+ FieldDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="Set"]
+ /descendant::*/TypeArgument]/VariableDeclarator/VariableDeclaratorId/@Image
+ =following-sibling::*[ConstructorDeclaration]/descendant::*/StatementExpression
+ [Expression/PrimaryExpression/PrimaryPrefix/AllocationExpression/ClassOrInterfaceType]
+ /PrimaryExpression/PrimaryPrefix/Name/@Image
+ ]
+ [
+ following-sibling::*
+ [MethodDeclaration]
+ [count(descendant::*[@Synchronized="true"])=0]
+ [count(descendant::*/SynchronizedStatement)=0]
+ /descendant::*/Name/@Image=concat(FieldDeclaration/VariableDeclarator/VariableDeclaratorId/@Image, ".add")
+ ]
+ |
+ //ClassOrInterfaceBodyDeclaration
+ [not(
+ FieldDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="List"]
+ /descendant::*/TypeArgument]/VariableDeclarator/VariableDeclaratorId/@Image
+ =following-sibling::*[ConstructorDeclaration]/descendant::*/StatementExpression
+ [Expression/PrimaryExpression
+ [PrimarySuffix/Arguments[@ArgumentCount=1]]
+ /PrimaryPrefix/Name[@Image="Collections.synchronizedList"]]
+ /PrimaryExpression/PrimaryPrefix/Name/@Image)
+ ]
+ [
+ FieldDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="List"]
+ /descendant::*/TypeArgument]/VariableDeclarator/VariableDeclaratorId/@Image
+ =following-sibling::*[ConstructorDeclaration]/descendant::*/StatementExpression
+ [Expression/PrimaryExpression/PrimaryPrefix/AllocationExpression/ClassOrInterfaceType]
+ /PrimaryExpression/PrimaryPrefix/Name/@Image
+ ]
+ [
+ following-sibling::*
+ [MethodDeclaration]
+ [count(descendant::*[@Synchronized="true"])=0]
+ [count(descendant::*/SynchronizedStatement)=0]
+ /descendant::*/Name/@Image=concat(FieldDeclaration/VariableDeclarator/VariableDeclaratorId/@Image, ".add")
+ ]
+ |
+ //ClassOrInterfaceBodyDeclaration
+ [not(
+ FieldDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="Map"]
+ /descendant::*/TypeArgument]/VariableDeclarator/VariableDeclaratorId/@Image
+ =following-sibling::*[ConstructorDeclaration]/descendant::*/StatementExpression
+ [Expression/PrimaryExpression
+ [PrimarySuffix/Arguments[@ArgumentCount=1]]
+ /PrimaryPrefix/Name[@Image="Collections.synchronizedMap"]]
+ /PrimaryExpression/PrimaryPrefix/Name/@Image)
+ ]
+ [
+ FieldDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="Map"]
+ /descendant::*/TypeArgument]/VariableDeclarator/VariableDeclaratorId/@Image
+ =following-sibling::*[ConstructorDeclaration]/descendant::*/StatementExpression
+ [Expression/PrimaryExpression/PrimaryPrefix/AllocationExpression/ClassOrInterfaceType]
+ /PrimaryExpression/PrimaryPrefix/Name/@Image
+ ]
+ [
+ following-sibling::*
+ [MethodDeclaration]
+ [count(descendant::*[@Synchronized="true"])=0]
+ [count(descendant::*/SynchronizedStatement)=0]
+ /descendant::*/Name/@Image=concat(FieldDeclaration/VariableDeclarator/VariableDeclaratorId/@Image, ".put")
+ ]
+ |
+ //ClassOrInterfaceBodyDeclaration
+ [not(
+ FieldDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="Set"]
+ /descendant::*/TypeArgument]/VariableDeclarator/VariableInitializer/
+ Expression/PrimaryExpression/PrimarySuffix/Arguments[@ArgumentCount=1]/
+ descendant::*/ClassOrInterfaceType[@Image="ConcurrentHashMap"]/TypeArguments)
+ ]
+ [
+ FieldDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="Set"]/descendant::*/TypeArgument]
+ /VariableDeclarator/VariableInitializer/Expression/PrimaryExpression/PrimaryPrefix/AllocationExpression
+ ]
+ [
+ following-sibling::*
+ [MethodDeclaration]
+ [count(descendant::*[@Synchronized="true"])=0]
+ [count(descendant::*/SynchronizedStatement)=0]
+ /descendant::*/Name/@Image=concat(FieldDeclaration/VariableDeclarator/VariableDeclaratorId/@Image, ".add")
+ ]
+ |
+ //ClassOrInterfaceBodyDeclaration
+ [not(
+ FieldDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="List"]
+ /descendant::*/TypeArgument]/VariableDeclarator/VariableInitializer/
+ Expression/PrimaryExpression[PrimaryPrefix/Name[@Image="Collections.synchronizedList"]]/PrimarySuffix/Arguments)
+ ]
+ [
+ FieldDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="List"]/descendant::*/TypeArgument]
+ /VariableDeclarator/VariableInitializer/Expression/PrimaryExpression/PrimaryPrefix/AllocationExpression
+ ]
+ [
+ following-sibling::*
+ [MethodDeclaration]
+ [count(descendant::*[@Synchronized="true"])=0]
+ [count(descendant::*/SynchronizedStatement)=0]
+ /descendant::*/Name/@Image=concat(FieldDeclaration/VariableDeclarator/VariableDeclaratorId/@Image, ".add")
+ ]
+ |
+ //ClassOrInterfaceBodyDeclaration
+ [not(
+ FieldDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="Map"]
+ /descendant::*/TypeArgument]/VariableDeclarator/VariableInitializer/
+ Expression/PrimaryExpression[PrimaryPrefix/Name[@Image="Collections.synchronizedMap"]]/PrimarySuffix/Arguments)
+ ]
+ [
+ FieldDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="Map"]/descendant::*/TypeArgument]
+ /VariableDeclarator/VariableInitializer/Expression/PrimaryExpression/PrimaryPrefix/AllocationExpression
+ ]
+ [
+ following-sibling::*
+ [MethodDeclaration]
+ [count(descendant::*[@Synchronized="true"])=0]
+ [count(descendant::*/SynchronizedStatement)=0]
+ /descendant::*/Name/@Image=concat(FieldDeclaration/VariableDeclarator/VariableDeclaratorId/@Image, ".put")
+ ]]]></value></property></properties><example><![CDATA[public class KeyHolder{
+  	private Set<key> keys= new HashSet<key>();
+          private static int size = 500;
+          public void put(String key) {
+               int less = keys.size() - size;
+               for (Key key: keys) {
+                    if (less-- <= 0) break;
+                    keys.remove(key);
+                    
+               }
+               keys.add(key);
+          }
+  }]]></example></rule><rule name="LegacyUsageForLoop" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=8"><description>You'd better not use legacy of For loop.</description><priority>2</priority><properties><property name="xpath"><value><![CDATA[//BlockStatement
+ [
+     ends-with(descendant::*/ForStatement/descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount="1"]]/PrimaryPrefix/Name/@Image,'.get')
+ ]
+ [
+     starts-with(
+     descendant::*/ForStatement/descendant::*/BlockStatement/descendant::*/PrimaryPrefix/Name/@Image,
+     concat(preceding-sibling::*/LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image='List' or @Image='Set']]/VariableDeclarator/VariableDeclaratorId/@Image, ".")
+     )
+ ]
+ |
+ //BlockStatement
+ [
+ starts-with(descendant::*/ForStatement/Expression
+ /RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image,
+ previous-sibiling/LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="String"]]/VariableDeclarator/VariableDeclaratorId/@Image)
+ ]
+ [
+ starts-with(descendant::*/ForStatement/Expression
+ /RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image,
+ descendant::*/ForStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix/Name/@Image)
+ ]
+ [
+ ends-with(descendant::*/ForStatement/Expression
+ /RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image,".length")
+ ]
+ |
+ //BlockStatement
+ [starts-with(descendant::*/VariableDeclarator
+ /descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image,
+ previous-sibling/LocalVariableDeclaration[Type/descendant::*/ClassOrInterfaceType[@Image="List"]
+ /TypeArguments]/VariableDeclarator/VariableDeclaratorId/@Image
+ )]
+ [ends-with(descendant::*/VariableDeclarator
+ /descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image,'.iterator'
+ )]
+ /following-sibling::*
+ [ends-with(
+ descendant::*/WhileStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image,'.hasNext'
+ )]
+ [starts-with(
+ descendant::*/WhileStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image,
+ LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="Iterator"]]/VariableDeclarator/VariableDeclaratorId/@Image
+ )]
+ [1]
+ |
+ //BlockStatement
+ [ends-with(descendant::*/StatementExpression
+ /Expression/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image,'.iterator'
+ )]
+ [starts-with(descendant::*/StatementExpression
+ /Expression/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image,
+ previous-sibling/LocalVariableDeclaration[Type/descendant::*/ClassOrInterfaceType[@Image="Set"]
+ /TypeArguments]/VariableDeclarator/VariableDeclaratorId/@Image
+ )]
+ /following-sibling::*
+ [ends-with(
+ descendant::*/WhileStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image,'.hasNext'
+ )]
+ [starts-with(
+ descendant::*/WhileStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image,
+ descendant::*/StatementExpression[Expression/PrimaryExpression/PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryExpression/PrimaryPrefix/Name/@Image
+ )]
+ [1]]]></value></property></properties><example><![CDATA[(1)public class ClassA{
+  	void methodA() {
+  		List queue = new ArrayList();
+  		int size = queue.size();
+  		for (int i=0; i< size; i++) {
+  			ClassA inst = (ClassA) queue.get(i);
+  		}
+  	}
+  }
+ 
+ 
+ (2)class A{
+ public JSONObject toJSON() throws JSONException {
+ Iterator<string> candidatesIterator = this.getCandidates().keySet().iterator();
+     	JSONObject jsonCandidates = new JSONObject();
+     	while(candidatesIterator.hasNext()){
+     		String key = candidatesIterator.next();
+     		jsonCandidates.put(key, this.getCandidates().get(key).toJSON());
+     	}
+    }
+ }]]></example></rule><rule name="UnspecifyTargetTypeInArrayConversion" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=9"><description>You'd better specify target type in array conversion.</description><priority>2</priority><properties><property name="xpath"><value><![CDATA[//CastExpression[Type/ReferenceType/ClassOrInterfaceType[@Image != "Object"]]//PrimaryExpression
+ [
+ PrimaryPrefix/Name[ends-with(@Image, '.toArray')]
+ and
+ PrimarySuffix/Arguments[count(*) = 0]
+ and
+ count(PrimarySuffix) = 1
+ ]]]></value></property></properties><example><![CDATA[public class ClassA{
+  	public void doSomething() {
+  		Integer[] a = (Integer [])c.toArray();
+  	}
+  }]]></example></rule><rule name="ExpensiveOperationsInSynchronizedBlock" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=10"><description>There're some expensive operations in synchronized block.</description><priority>1</priority><properties><property name="xpath"><value><![CDATA[//ClassOrInterfaceBodyDeclaration
+[
+descendant::*/BlockStatement/Statement/SynchronizedStatement
+[
+descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimaryPrefix/Name[@Image="costMethod" or @Image="processItem"]]/PrimarySuffix/Arguments[@ArgumentCount>=0]
+]
+/Expression/PrimaryExpression/PrimaryPrefix/Name/@Image=
+preceding-sibling::*/FieldDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="Map" or @Image="Set" or @Image="List"]/TypeArguments]/VariableDeclarator/VariableDeclaratorId/@Image
+]
+/MethodDeclaration/MethodDeclarator]]></value></property></properties><example><![CDATA[public class ClassA{
+  	private Map<key,value> mapper = new HashMap<key, value="">();
+  	public void put(Key k, Value v) {
+  		synchronized(mapper) {
+  			mapper.put(k,v);
+  			processItem(k, v);
+                  }
+          }
+  }]]></example></rule><rule name="SynchronizeCollectionWithLockVariable" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=11"><description>You'd better use synchronize collection with lock variables.</description><priority>1</priority><properties><property name="xpath"><value><![CDATA[//ClassOrInterfaceBodyDeclaration
+ [
+ starts-with(MethodDeclaration/descendant::*/BlockStatement
+ [ends-with(preceding-sibling::*/descendant::*/PrimaryExpression[PrimarySuffix/Arguments]/PrimaryPrefix/Name/@Image,'.lock')]
+ /descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments]/PrimaryPrefix/Name/@Image,
+ concat(preceding-sibling::*/FieldDeclaration[descendant::*/ClassOrInterfaceType[@Image="Map" or @Image="Set" or @Image="List"]]/descendant::*/VariableDeclaratorId/@Image,'.'))
+ ]
+/MethodDeclaration/MethodDeclarator]]></value></property></properties><example><![CDATA[class RWDictionary {
+      private final Map<string, data=""> m = new HashMap<string, data="">();
+      private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
+      private final Lock r = rwl.readLock();
+      private final Lock w = rwl.writeLock();
+  
+      public Data get(String key) {
+          r.lock();
+          try { return m.get(key); }
+          finally { r.unlock(); }
+      }
+      public String[] allKeys() {
+          r.lock();
+          try { return m.keySet().toArray(); }
+          finally { r.unlock(); }
+      }
+      public Data put(String key, Data value) {
+          w.lock();
+          try { return m.put(key, value); }
+          finally { w.unlock(); }
+      }
+      public void clear() {
+          w.lock();
+          try { m.clear(); }
+          finally { w.unlock(); }
+      }
+   }]]></example></rule><rule name="UseSynchronizedSet" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=12"><description>You'd better use ConcurrentHashMap instead of SynchronizedSet.</description><priority>1</priority><properties><property name="xpath"><value><![CDATA[//BlockStatement/descendant::*/PrimaryExpression
+ [starts-with(PrimaryPrefix/Name/@Image,'Collections.')]
+ [ends-with(PrimaryPrefix/Name/@Image,'.synchronizedSet')]
+ [PrimarySuffix/Arguments[@ArgumentCount="1"]/ArgumentList/descendant::*/
+ AllocationExpression[ClassOrInterfaceType[@Image="HashSet"]]/Arguments[@ArgumentCount="0"]]]]></value></property></properties><example><![CDATA[public class ClassA{
+  	void methodA() {
+  		Set safeSet= Collections.synchronizedSet(new HashSet());
+                 Set safeSet2=Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
+  	}
+  }]]></example></rule><rule name="CallCombinativeFunctionTwiceOrMore" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=13"><description>It'll call combinative function twice Or more times.</description><priority>1</priority><properties><property name="xpath"><value><![CDATA[//Statement[ForStatement]
+[
+descendant::*/Statement[descendant::*/BlockStatement/descendant::*/PrimaryExpression
+[PrimaryPrefix/Name[@Image="cominativeMethod" or @Image="serviceA.call" or @Image="processRow"]]
+/PrimarySuffix/Arguments[@ArgumentCount="1"]/ArgumentList/descendant::*/PrimaryPrefix/Name/@Image=
+ancestor::*/ForStatement/LocalVariableDeclaration/VariableDeclarator/VariableDeclaratorId/@Image]
+]
+|
+//ClassOrInterfaceBodyDeclaration/descendant::*/BlockStatement
+[
+descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name[@Image="cominativeMethod" or @Image="serviceA.call" or @Image="processRow"]/@Image=
+preceding-sibling::*/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name/@Image
+]
+[
+descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@IntLiteral=
+preceding-sibling::*/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@IntLiteral
+]
+[
+descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@FloatLiteral=
+preceding-sibling::*/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@FloatLiteral
+]
+[
+descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@CharLiteral=
+preceding-sibling::*/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@CharLiteral
+]
+[
+descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@StringLiteral=
+preceding-sibling::*/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@StringLiteral
+]
+[
+descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@SingleCharacterStringLiteral=
+preceding-sibling::*/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@SingleCharacterStringLiteral
+]
+[not(
+descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@Image=
+preceding-sibling::*/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@Image)
+]
+|
+//ClassOrInterfaceBodyDeclaration/descendant::*/BlockStatement
+[
+descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name[@Image="cominativeMethod" or @Image="serviceA.call" or @Image="processRow"]/@Image=
+ancestor::*[self::ClassOrInterfaceBodyDeclaration]/preceding-sibling::*/descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name/@Image
+]
+[not(
+descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal[not(@Image="")]/@Image=
+ancestor::*[self::ClassOrInterfaceBodyDeclaration]/preceding-sibling::*/descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal[not(@Image="")]/@Image)
+]
+[
+descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@IntLiteral=
+ancestor::*[self::ClassOrInterfaceBodyDeclaration]/preceding-sibling::*/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@IntLiteral
+]
+[
+descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@FloatLiteral=
+ancestor::*[self::ClassOrInterfaceBodyDeclaration]/preceding-sibling::*/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@FloatLiteral
+]
+[
+descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@CharLiteral=
+ancestor::*[self::ClassOrInterfaceBodyDeclaration]/preceding-sibling::*/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@CharLiteral
+]
+[
+descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@StringLiteral=
+ancestor::*[self::ClassOrInterfaceBodyDeclaration]/preceding-sibling::*/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@StringLiteral
+]
+[
+descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@SingleCharacterStringLiteral=
+ancestor::*[self::ClassOrInterfaceBodyDeclaration]/preceding-sibling::*/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
+/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@SingleCharacterStringLiteral
+]]]></value></property></properties><example><![CDATA[(1)public class ClassA{
+  	public void methodA() {
+  		serviceA.call(url1);
+  		serviceA.call(url2);
+  		methodB();
+  	}
+  	public void methodB() {
+  		serviceA.call(url3);
+  		serviceA.call(url4);
+  	}
+  }
+(2)public class ClassA{
+	public void methodA() {
+		for (String key: keys) {
+			ClassA curRow = DBManager.getRowByID(key);
+			processRow(curRow);
+		}
+	}
+}]]></example></rule><rule name="ComputationalComplexityProblem" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=14"><description>It  will cause the high computational time complexity.</description><priority>1</priority><properties><property name="xpath"><value><![CDATA[//BlockStatement
+ [count(
+ Statement[ForStatement or WhileStatement or DoStatement]
+ /descendant::*/Statement[ForStatement or WhileStatement or DoStatement]
+ )>0]]]></value></property></properties><example><![CDATA[public class ClassA{
+  	public void doSomething() {
+  		int size = 100;
+  		for (int i=0; i< size; i++) {
+  			for (int j=0; j< size; j++){
+  				//doSomething
+  			}
+  		}
+  	}
+  }]]></example></rule></ruleset>
