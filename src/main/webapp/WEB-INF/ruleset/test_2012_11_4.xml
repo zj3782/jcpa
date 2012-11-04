@@ -138,7 +138,7 @@ preceding-sibling::*/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/Primary
   		two(inst.sum());
   		three(inst.sum());
   	}
-  }]]></example></rule><rule name="CallSameFunctionTwiceOrMoreInClass" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=5"><description>You'd better not call the same function twice or more times in a class.</description><priority>2</priority><properties><property name="xpath"><value><![CDATA[//ClassOrInterfaceBodyDeclaration
+  }]]></example></rule><rule name="CallSameFunctionTwiceOrMoreInClass" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=5"><description>You'd better not call the same function twice or more times in a class.</description><priority>4</priority><properties><property name="xpath"><value><![CDATA[//ClassOrInterfaceBodyDeclaration
 [
 descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image=
 preceding-sibling::*/FieldDeclaration/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image
