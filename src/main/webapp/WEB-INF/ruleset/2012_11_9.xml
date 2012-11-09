@@ -72,34 +72,48 @@
  		}
   }
  }]]></example></rule><rule name="UnnecessaryLogicalJudgement" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=2"><description>There's unnecessary logical judgement here.</description><priority>3</priority><properties><property name="xpath"><value><![CDATA[//BlockStatement
- [
-     descendant::*/IfStatement/descendant::*[EqualityExpression]/descendant::*/Literal/NullLiteral
- ]
- [
-     descendant::*/IfStatement/descendant::*[EqualityExpression]/descendant::*/PrimaryPrefix/Name/@Image=
- preceding-sibling::*[descendant::*/AllocationExpression]/descendant::*/VariableDeclaratorId/@Image 
- ]
- [
-     not(preceding-sibling::*[descendant::*/AssignmentOperator]) or
-     not(
-     descendant::*/IfStatement/descendant::*[EqualityExpression]/descendant::*/Name/@Image=
-     preceding-sibling::*[descendant::*/AssignmentOperator]
-     /descendant::*/PrimaryPrefix/Name/@Image)
- ]
- |
- //BlockStatement
- [
-   descendant::*/IfStatement/descendant::*/EqualityExpression[@Image="=="]
- 	[descendant::*/Literal/NullLiteral]/PrimaryExpression/PrimaryPrefix/Name/@Image=
- 	preceding-sibling::*/LocalVariableDeclaration/VariableDeclarator[descendant::*/Literal/NullLiteral]/VariableDeclaratorId/@Image
- ]
- |
- //BlockStatement
- [
- 	descendant::*/IfStatement/descendant::*/EqualityExpression[@Image="!="]
- 	[descendant::*/Literal/NullLiteral]/PrimaryExpression/PrimaryPrefix/Name/@Image=
- 	preceding-sibling::*/LocalVariableDeclaration/VariableDeclarator[not(descendant::*/Literal/NullLiteral)]/VariableDeclaratorId/@Image
- ]]]></value></property></properties><example><![CDATA[public class ClassA{
+[
+    Statement/IfStatement/descendant::*[EqualityExpression]/descendant::*/Literal/NullLiteral
+]
+[
+    descendant::*/IfStatement/descendant::*[EqualityExpression]/descendant::*/PrimaryPrefix/Name/@Image=
+preceding-sibling::*[descendant::*/AllocationExpression]/descendant::*/VariableDeclaratorId/@Image 
+]
+[
+    not(preceding-sibling::*[descendant::*/AssignmentOperator]) or
+    not(
+    descendant::*/IfStatement/descendant::*[EqualityExpression]/descendant::*/Name/@Image=
+    preceding-sibling::*[descendant::*/AssignmentOperator]
+    /descendant::*/PrimaryPrefix/Name/@Image)
+]
+|
+//BlockStatement
+[
+  Statement/IfStatement/descendant::*/EqualityExpression[@Image="=="]
+	[descendant::*/Literal/NullLiteral]/PrimaryExpression/PrimaryPrefix/Name/@Image=
+	preceding-sibling::*/LocalVariableDeclaration/VariableDeclarator[descendant::*/Literal/NullLiteral]/VariableDeclaratorId/@Image
+]
+[
+    not(preceding-sibling::*[descendant::*/AssignmentOperator]) or
+    not(
+    descendant::*/IfStatement/descendant::*[EqualityExpression]/descendant::*/Name/@Image=
+    preceding-sibling::*[descendant::*/AssignmentOperator]
+    /descendant::*/PrimaryPrefix/Name/@Image)
+]
+|
+//BlockStatement
+[
+Statement/IfStatement/Expression/EqualityExpression[@Image="!="][PrimaryExpression/PrimaryPrefix/Literal/NullLiteral]/PrimaryExpression/PrimaryPrefix/Name/@Image=
+preceding-sibling::*/LocalVariableDeclaration/VariableDeclarator[not(descendant::*/PrimaryExpression[PrimarySuffix/Arguments]/PrimaryPrefix/Name)]
+[not(descendant::*/Literal/NullLiteral)]/VariableDeclaratorId/@Image
+]
+[
+    not(preceding-sibling::*[descendant::*/AssignmentOperator]) or
+    not(
+    descendant::*/IfStatement/descendant::*[EqualityExpression]/descendant::*/Name/@Image=
+    preceding-sibling::*[descendant::*/AssignmentOperator]
+    /descendant::*/PrimaryPrefix/Name/@Image)
+]]]></value></property></properties><example><![CDATA[public class ClassA{
      void methodA() {
        ClassA inst= new ClassA();
        if (inst == null) {
@@ -115,64 +129,35 @@
   		// method body
   		inst = null;
   	}
-  }]]></example></rule><rule name="CallSameFunctionTwiceOrMoreInMethod" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=4"><description>You'd better not call the same function twice or more times in a method.</description><priority>2</priority><properties><property name="xpath"><value><![CDATA[//ClassOrInterfaceBodyDeclaration/descendant::*/BlockStatement
+  }]]></example></rule><rule name="CallSameFunctionTwiceOrMoreInMethod" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=4"><description>You'd better not call the same function twice or more times in a method.</description><priority>2</priority><properties><property name="xpath"><value><![CDATA[//PrimaryExpression
+[PrimarySuffix/Arguments[@ArgumentCount=0]]
+[ancestor::*/ArgumentList]
 [
-descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image=
-preceding-sibling::*/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image
-]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name
-|
-//ClassOrInterfaceBodyDeclaration/descendant::*/BlockStatement
-[
-descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name/@Image=
-preceding-sibling::*/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name/@Image
-]
-[
-descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
-/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@Image=
-preceding-sibling::*/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
-/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal/@Image
-]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name]]></value></property></properties><example><![CDATA[public class ClassA{
+    ancestor::*[self::BlockStatement]
+    /preceding-sibling::*/descendant::*/
+    PrimarySuffix/Arguments[@ArgumentCount=0]
+    [ancestor::*/ArgumentList]
+    /../../PrimaryPrefix/Name/@Image = ./PrimaryPrefix/Name/@Image
+]]]></value></property></properties><example><![CDATA[public class ClassA{
   	void methodA() {
   		ClassA inst = new ClassA();
   		one(inst.sum());
   		two(inst.sum());
   		three(inst.sum());
   	}
-  }]]></example></rule><rule name="CallSameFunctionTwiceOrMoreInClass" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=5"><description>You'd better not call the same function twice or more times in a class.</description><priority>4</priority><properties><property name="xpath"><value><![CDATA[//ClassOrInterfaceBodyDeclaration
+  }]]></example></rule><rule name="CallSameFunctionTwiceOrMoreInClass" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=5"><description>You'd better not call the same function twice or more times in a class.</description><priority>4</priority><properties><property name="xpath"><value><![CDATA[//PrimaryExpression
+[PrimarySuffix/Arguments[@ArgumentCount=0]]
+[ancestor::*/VariableInitializer]
 [
-descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image=
-preceding-sibling::*/FieldDeclaration/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image
-]/descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name
-|
-//ClassOrInterfaceBodyDeclaration/descendant::*/BlockStatement
-[
-descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image=
-ancestor::*[self::ClassOrInterfaceBodyDeclaration]/preceding-sibling::*/descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image
-]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name
-|
-//ClassOrInterfaceBodyDeclaration
-[
-descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name/@Image=
-preceding-sibling::*/FieldDeclaration/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name/@Image
-]
-[
-descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
-/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal[not(@Image="")]/@Image=
-preceding-sibling::*/FieldDeclaration/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
-/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal[not(@Image="")]/@Image
-]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name
-|
-//ClassOrInterfaceBodyDeclaration/descendant::*/BlockStatement
-[
-descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name/@Image=
-ancestor::*[self::ClassOrInterfaceBodyDeclaration]/preceding-sibling::*/descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name/@Image
-]
-[
-descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
-/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal[not(@Image="")]/@Image=
-ancestor::*[self::ClassOrInterfaceBodyDeclaration]/preceding-sibling::*/descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimaryPrefix/Name]/PrimarySuffix/Arguments[@ArgumentCount>0]
-/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal[not(@Image="")]/@Image
-]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount>0]]/PrimaryPrefix/Name]]></value></property></properties><example><![CDATA[public class ClassA{
+    ancestor::*[self::ClassOrInterfaceBodyDeclaration]/preceding-sibling::*/descendant::*/PrimaryExpression
+    [PrimarySuffix/Arguments[@ArgumentCount=0]]
+    [
+        PrimaryPrefix/Name/@Image=./PrimaryPrefix/Name/@Image
+        and PrimarySuffix/@Image=./PrimarySuffix/@Image
+        and PrimarySuffix/Arguments[@ArgumentCount=1]/ArgumentList/descendant::*/PrimaryPrefix/Literal/@Image=
+        ./PrimarySuffix/Arguments[@ArgumentCount=1]/ArgumentList/descendant::*/PrimaryPrefix/Literal/@Image
+    ]
+]]]></value></property></properties><example><![CDATA[public class ClassA{
   	void methodA() {
      		HandlerFactory hf = HandlerFactory.getInstance().getHandler("A");
   	}
@@ -374,69 +359,42 @@ ancestor::*[self::ClassOrInterfaceBodyDeclaration]/preceding-sibling::*/descenda
                keys.add(key);
           }
   }]]></example></rule><rule name="LegacyUsageForLoop" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=8"><description>You'd better not use legacy of For loop.</description><priority>2</priority><properties><property name="xpath"><value><![CDATA[//BlockStatement
- [
-     ends-with(descendant::*/ForStatement/descendant::*/BlockStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount="1"]]/PrimaryPrefix/Name/@Image,'.get')
- ]
- [
-     starts-with(
-     descendant::*/ForStatement/descendant::*/BlockStatement/descendant::*/PrimaryPrefix/Name/@Image,
-     concat(preceding-sibling::*/LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image='List' or @Image='Set']]/VariableDeclarator/VariableDeclaratorId/@Image, ".")
-     )
- ]
- |
- //BlockStatement
- [
- starts-with(descendant::*/ForStatement/Expression
- /RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image,
- previous-sibiling/LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="String"]]/VariableDeclarator/VariableDeclaratorId/@Image)
- ]
- [
- starts-with(descendant::*/ForStatement/Expression
- /RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image,
- descendant::*/ForStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix/Name/@Image)
- ]
- [
- ends-with(descendant::*/ForStatement/Expression
- /RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image,".length")
- ]
- |
- //BlockStatement
- [starts-with(descendant::*/VariableDeclarator
- /descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image,
- previous-sibling/LocalVariableDeclaration[Type/descendant::*/ClassOrInterfaceType[@Image="List"]
- /TypeArguments]/VariableDeclarator/VariableDeclaratorId/@Image
- )]
- [ends-with(descendant::*/VariableDeclarator
- /descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image,'.iterator'
- )]
- /following-sibling::*
- [ends-with(
- descendant::*/WhileStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image,'.hasNext'
- )]
- [starts-with(
- descendant::*/WhileStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image,
- LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="Iterator"]]/VariableDeclarator/VariableDeclaratorId/@Image
- )]
- [1]
- |
- //BlockStatement
- [ends-with(descendant::*/StatementExpression
- /Expression/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image,'.iterator'
- )]
- [starts-with(descendant::*/StatementExpression
- /Expression/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image,
- previous-sibling/LocalVariableDeclaration[Type/descendant::*/ClassOrInterfaceType[@Image="Set"]
- /TypeArguments]/VariableDeclarator/VariableDeclaratorId/@Image
- )]
- /following-sibling::*
- [ends-with(
- descendant::*/WhileStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image,'.hasNext'
- )]
- [starts-with(
- descendant::*/WhileStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image,
- descendant::*/StatementExpression[Expression/PrimaryExpression/PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryExpression/PrimaryPrefix/Name/@Image
- )]
- [1]]]></value></property></properties><example><![CDATA[(1)public class ClassA{
+[starts-with(
+descendant::*/ForStatement/descendant::*/BlockStatement/descendant::*/PrimaryPrefix/Name/@Image,
+concat(preceding-sibling::*/LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image='List' or @Image='Set']]/VariableDeclarator/VariableDeclaratorId/@Image, ".")
+)]/descendant::*/ForStatement
+[
+ForUpdate/descendant::*/PrimaryPrefix/Name/@Image=
+Statement/descendant::*/PrimaryExpression/PrimarySuffix/descendant::*/Name/@Image
+]
+|
+//BlockStatement
+[
+starts-with(descendant::*/ForStatement/Expression
+/RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image,
+previous-sibiling/LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="String"]]/VariableDeclarator/VariableDeclaratorId/@Image)
+]
+[
+starts-with(descendant::*/ForStatement/Expression
+/RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image,
+descendant::*/ForStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix/Name/@Image)
+]
+[
+ends-with(descendant::*/ForStatement/Expression
+/RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image,".length")
+]
+|
+//BlockStatement
+[ends-with(
+Statement/WhileStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image,".hasNext"
+)]
+[starts-with(
+Statement/WhileStatement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image,
+preceding-sibling/LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="Iterator"]]/VariableDeclarator/VariableDeclaratorId/@Image
+)]
+[ends-with(
+Statement/WhileStatement/Statement/descendant::*/PrimaryExpression[PrimarySuffix/Arguments[@ArgumentCount=0]]/PrimaryPrefix/Name/@Image,".next"
+)]]]></value></property></properties><example><![CDATA[(1)public class ClassA{
   	void methodA() {
   		List queue = new ArrayList();
   		int size = queue.size();
