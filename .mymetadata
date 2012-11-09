@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="jcpa.git"
+  id="myeclipse.1350630538178"
+  context-root="/jcpa"
+  j2ee-spec="6.0"
+  archive="jcpa.git.war">
+  <attributes>
+    <attribute name="webrootdir" value="src/main/webapp" />
+  </attributes>
+</project-module>
+

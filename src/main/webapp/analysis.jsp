@@ -63,6 +63,9 @@
 				$("#codeTitle").show();
 				$("#codeUrl").html('<%=(String)session.getAttribute("codeUrl")%>');
 				$("#codeUser").html('<%=(String)session.getAttribute("codeUser")%>');
+				//显示选择分析结果还是从新分析
+				$("#analysis").hide();
+				$("#chooseAnalysis").show();
 			});
 		</script>
 	<%}%>
@@ -107,5 +110,18 @@
 		</div>
 	</div>
 </div>
+<%if(report!=null){%>
+<!-- 选择 -->
+<div id="chooseAnalysis" style="display:none;">
+	<hr class="space h60">
+	<div class="span-11 aCenter left f14 alert" title="Report of <%=(String)session.getAttribute("codeUrl")%>">
+		<a class="cHand" herf="javascript:;" onclick='$("#analysis").show();$("#chooseAnalysis").hide();'>Show last report</a>
+	</div>
+	<div class="span-11 aCenter right f14 info" title="Clear last report and start a new analysi">
+		<a class="cHand" herf="javascript:;" onclick='ReAnalysis(false);this.innerHTML="Preparing...";''>New analysis</a>
+	</div>
+	<hr class="space h80">
+</div>
+<%}%>
 <hr class="space h20"/>
 <%@ include file="footer.jsp" %>

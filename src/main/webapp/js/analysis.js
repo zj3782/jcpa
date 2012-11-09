@@ -1,11 +1,11 @@
 var flexTBR,flexTBE;
 $(document).ready(function() {
     var option = {
-        height: 510,
+        height: 310,
         colModel: [
                 { display: 'Package', name: 'package', width: 150, sortable: true,sorttype:'ascii', align: 'left' },
        	        { display: 'Class', name: 'class', width: 130, sortable: true,sorttype:'ascii', align: 'left' },
-       	        { display: 'Method', name: 'method', width: 150, sortable: false, align: 'left' },
+       	        { display: 'Method/Static', name: 'method', width: 150, sortable: false, align: 'left' },
        	        { display: 'Location', name: 'method', width: 150, sortable: false, align: 'left' },
        	        { display: 'Code', name: 'code', width: 200, sortable: false, align: 'left' },
     	        { display: 'Rule', name: 'rule', width: 220, sortable: true,sorttype:'ascii', align: 'left' },
@@ -14,7 +14,7 @@ $(document).ready(function() {
 		url:"Analysis.do?method=reportlist",
 		usepager: true,
 		useRp: true,
-		rp: 20, // results per page,每页默认的结果数
+		rp: 12, // results per page,每页默认的结果数
         rpOptions: [12, 20, 30, 50, 100], //可选择设定的每页结果数
         onAddRow:onAddRowData,
         striped:false,
@@ -42,11 +42,11 @@ $(document).ready(function() {
 
 /**检查数据*/
 function onAddRowData(row){
+	row.cell[4]=htm2specil(row.cell[4]);//code
 	for(var i=0;i<row.cell.length;i++){
 		row.cell[i]=decodeURIComponent(row.cell[i]);//解码
 	}
 	row.cell[3]="<a href='javascript:;' onclick='viewReportById("+row.id+")'>"+row.cell[3]+"</a>";
-	row.cell[4]=htm2specil(row.cell[4]);
 	row.cell[5]="<a href='"+row.cell[7]+"' target='_blank'>"+row.cell[5]+"</a>";
 	row.style="color:"+getPriorityColor(row.cell[6]);
 	return row;
@@ -80,7 +80,7 @@ function viewReport(cell){
 	$("#viewClass").html(cell[1]);
 	$("#viewMethod").html(cell[2]);
 	$("#viewLocation").html(cell[3]);
-	$("#viewCode").html(strHtmFmt(cell[4]));
+	$("#viewCode").html(tab2space(rn2br(cell[4])));
 	$("#viewRule").html(cell[5]);
 	$("#viewPriority").html(cell[6]);
 	artDialog({content:ID('viewReport'),title:'View Report',lock:true,id:'viewReport'});
@@ -162,8 +162,8 @@ function IntervalGetStep(){
 /**
  * 重新分析
  */
-function ReAnalysis(){
-	if(!confirm("Do you want to go back?"))return;
+function ReAnalysis(ask){
+	if(ask!=false && !confirm("Do you want to go back?"))return;
 	$.post("Analysis.do",{"method":"ClearReport"},function(result){
 		document.location.reload();
 	});

@@ -2,7 +2,7 @@ X<%@ page language="java" import="java.util.*,com.jcpa.dao.sql.PatternDaoImpl,co
 <%pageTitle="Help"; %>
 <%@ include file="header.jsp" %>
 <style>
-#cat {position:fixed;position:absolute\0;+position:absolute;}
+#cat {/*position:fixed;position:absolute\0;+position:absolute;*/}
 #cat h1{font-size:17px;}
 #cat h2{font-size:15px;margin-left: 15px;}
 #cat h3{font-size:13px;margin-left: 30px;}
@@ -93,6 +93,7 @@ function showTxt(cat){
 				<h3 cat="usageEnvironment" txt="usageEnvironment" class="cat-h"><a href="#usageEnvironment">Environment</a></h3>
 				<h3 cat="usageCompile" txt="usageCompile" class="cat-h"><a href="#usageCompile">Compile</a></h3>
 				<h3 cat="usageRelease" txt="usageRelease" class="cat-h"><a href="#usageRelease">Release</a></h3>
+				<h3 cat="usageCustomize" txt="usageCustomize" class="cat-h"><a href="#usageCustomize">Customize</a></h3>
 			</div>
 			<h2 cat="usagePlugin" txt="usagePlugin" class="cat-h"><a href="#usagePlugin">Eclipse plugin usage</a></h2>
 		</div>
@@ -333,6 +334,21 @@ function showTxt(cat){
 					<h3>Release</h3>
 					<p>Copy the compiled war package to the webapps directory of tomcat and start tomcat service, the website will release automatically. You can input the URL "http://%TOMCAT_URL%/jcpa" directly to access it.</p>
 				</div>
+				<div id="usageCustomize">
+					<h3>Customize</h3>
+					<h4>Project encoding：utf8</h4>
+					<p>Project files are all encode by utf8.So if you want to customize the code,be careful.</p>
+					<h4>Main Menu</h4>
+					<p>If you want to modify the menu, you need to open the file "%TOMCAT_HOME%/webapps/jpca/header.jsp.". <br/>
+					Modify the classname of the div item which id equals menu to change the style and location of the main menu:<br/>
+					1、Level menu<br>
+					&lt;div id='menu' class="cssmenus hmenu"&gt;...&lt;/div&gt;<br>
+					2、Vertical to the right<br>
+					&lt;div id='menu' class="cssmenus vrmenu"&gt;...&lt;/div&gt;<br>
+					3、Vertical to the left<br>
+					&lt;div id='menu' class="cssmenus vlmenu"&gt;...&lt;/div&gt;<br>
+					</p>
+				</div>				
 			</div>
 			<div id="usagePlugin">
 				<h2>Eclipse plugin usage</h2>

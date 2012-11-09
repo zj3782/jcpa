@@ -20,6 +20,8 @@ $(document).ready(function() {
         title: "Cases",
         usepager: true,
         useRp: true,
+        rp: 12, // results per page,每页默认的结果数
+        rpOptions: [12, 20, 30, 50, 100], //可选择设定的每页结果数
         showCheckbox: true,
         onAddRow:onAddRowData,
         onRowProp:contextmenu
@@ -76,13 +78,17 @@ $(document).ready(function() {
 
 //运行case
 function runCase(rows){
+	if(!rows || rows.length<=0){
+		alert("Please select one or more cases to run!");
+		return;
+	}
 	var htm="",row,names="";
 	for(var i=0;i<rows.length;i++){
 		row=rows[i];
 		htm+="<div id='case_"+row.cell[1]+"'>";
 		htm+="<input type='hidden' value='"+row.id+"' />";
 		htm+="<h4>ID:"+row.cell[0]+"</h4>";
-		htm+="<div>"+tab2space(rn2br(row.cell[3]))+"</div>";
+		htm+="<div>"+tab2space(rn2br(row.cell[3],true))+"</div>";
 		htm+="</div>";
 		htm+="<hr class='bGreen'/>";
 		names+=row.cell[1]+",";
@@ -133,8 +139,8 @@ function RealRunCase(){
 function viewCase(cell)
 {
 	$("#ViewCaseName").html(cell[1]);
-	$("#ViewCaseDescript").html(tab2space(rn2br(cell[2])));
-	$("#ViewCaseResult").html(tab2space(rn2br(cell[3])));
+	$("#ViewCaseDescript").html(tab2space(rn2br(cell[2],true)));
+	$("#ViewCaseResult").html(tab2space(rn2br(cell[3],true)));
 	artDialog({
 		title:"View Case",
 		content:ID('ViewDiv'),

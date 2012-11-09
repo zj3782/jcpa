@@ -7,9 +7,5 @@
 
 #Folder#
 /target/
-/.settings/
 
-*.classpath
-*.mymetadata
-*.project
-*.gitignore
+

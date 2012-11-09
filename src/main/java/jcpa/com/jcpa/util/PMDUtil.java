@@ -1,5 +1,8 @@
 package com.jcpa.util;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -171,5 +174,34 @@ public class PMDUtil{
 		if(auxsStrLen>4)auxsStr=auxsStr.substring(0,auxsStrLen-4);
 		exp=exp.replaceAll("##AUX##",auxsStr);
 		return exp;
-	}
+	} 
+	/**
+     * 获取出错的代码
+     * @throws Exception 
+     * */
+    public static String getSource(String fn,int errorBeginLine,int errorEndLine) throws IOException{
+    	String snippet = "";
+		String str = null;
+		int startLine=errorBeginLine-3,endLine=errorEndLine+3,line = 1;
+		if(startLine<1)startLine=1;
+		
+		BufferedReader reader = new BufferedReader(new FileReader(fn));
+		str = reader.readLine();
+		while ( str != null){			
+			if (line >= startLine && line <= endLine){
+				if(line>=errorBeginLine && line<=errorEndLine){
+					snippet +=line+"&nbsp;&nbsp;%3cspan class='cRed'%3e"+str+"%3c/span%3e\r\n";
+				}else{
+					snippet +=line+"&nbsp;&nbsp;"+str+"\r\n";
+				}
+				if (line == endLine){
+					break;
+				}
+			}
+			str = reader.readLine();
+			line++;
+		}	
+		reader.close();
+		return snippet;
+    }
 }

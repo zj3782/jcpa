@@ -69,10 +69,14 @@ function strToInt(str,Default){
 	return num;
 }
 
-function rn2br(str){
+function rn2br(str,strrn){
 	if(typeof(str)!="string")return str;
 	str=str.replace(/\r\n/g,'<br>');
 	str=str.replace(/\n/g,'<br>');
+	if(strrn==true){
+		str=str.replace(/\\r\\n/g,'<br>');
+		str=str.replace(/\\n/g,'<br>');	
+	}
 	return str;
 }
 function br2rn(str){

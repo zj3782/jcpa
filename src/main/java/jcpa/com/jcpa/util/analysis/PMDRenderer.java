@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Iterator;
 
+import com.jcpa.util.PMDUtil;
 import com.jcpa.util.ToolUtil;
 
 import net.sourceforge.pmd.Report;
@@ -51,7 +52,7 @@ public class PMDRenderer extends AbstractIncrementingRenderer {
 		    report.setRulePriority(rv.getRule().getPriority().getPriority());
 		    report.setColumn(rv.getBeginColumn());
 		    report.setLine(rv.getBeginLine());
-		    report.setCode(ToolUtil.getFileConetent(rv.getFilename(), rv.getBeginLine()-3,rv.getEndLine()+3));
+		    report.setCode(PMDUtil.getSource(rv.getFilename(), rv.getBeginLine(),rv.getEndLine()));
 		    report.setExtInfoUrl(rv.getRule().getExternalInfoUrl());
 		    reports.add(report);
 		}

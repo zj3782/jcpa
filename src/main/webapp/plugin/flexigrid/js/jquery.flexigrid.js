@@ -456,7 +456,8 @@
         			}
         			div.push("'>");
         			if (idx == "-1") { //checkbox
-        				div.push("<input type='checkbox' id='chk_", row.id, "' class='itemchk' value='", row.id, "'/>");
+        				var checked=($("#chk_"+row.id,t).attr("checked")=="checked")?"checked='checked'":"";
+        				div.push("<input type='checkbox' id='chk_", row.id, "' class='itemchk' value='", row.id, "' ",checked," />");
         				if (tdclass != "") {
         					tdclass += " chboxtd";
         				} else {

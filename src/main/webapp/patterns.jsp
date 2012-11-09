@@ -27,22 +27,25 @@ initPage=<%=sPage%>;
 	</div>
 </div>
 <!-- 添加或者修改pattern -->
-<div id="patternAddEdit" class="box" style="display:none;">
+<style>
+#patternAddEdit .line span{height: 30px;line-height: 30px;}
+</style>
+<div id="patternAddEdit" class="" style="display:none;">
 	<div  class="line">
-		<span class="span-2">(*)Name:</span><input type="text" id="patternName" class="span-15"/>
+		<span class="span-2"><span class="cRed">(*)</span>Name:</span><input type="text" id="patternName" class="span-15"/>
 	</div>
 	<div  class="line">
-		<span class="span-2">(*)Expression:</span><textarea id="patternExpression" class="span-15 h100"></textarea>
+		<span class="span-2"><span class="cRed">(*)</span>Expression:</span><textarea id="patternExpression" class="span-15 h100"></textarea>
 	</div>
 	<div  class="line">
-		<span class="span-2">Auxiliary:</span><textarea id="patternAuxiliary" class="span-15 h30"></textarea>
+		<span class="span-2">Auxiliary:</span><textarea id="patternAuxiliary" class="span-15 h40"></textarea>
 	</div>
 	<div  class="line">
-		<span class="span-2">(*)Warning:</span><textarea id="patternWarning" class="span-15 h80"></textarea>
+		<span class="span-2"><span class="cRed">(*)</span>Warning:</span><textarea id="patternWarning" class="span-15 h60"></textarea>
 	</div>
 	<div  class="line">
-		<span class="span-2">(*)Category:</span>
-		<select id="patternCategory" class="span-15">
+		<span class="span-2"><span class="cRed">(*)</span>Category:</span>
+		<select id="patternCategory" class="span-4">
 			<option value="ExcessiveSynchronization">ExcessiveSynchronization</option>
 			<option value="RedundantStatement">RedundantStatement</option>
 			<option value="RedundantInvocation">RedundantInvocation</option>
@@ -50,20 +53,15 @@ initPage=<%=sPage%>;
 			<option value="UnsafeDataAccess">UnsafeDataAccess</option>
 			<option value="Other" selected="selected">Other</option>
 		</select>
-	</div>
-	<div  class="line">
-		<span class="span-2">(*)Scope:</span>
-		<select id="patternScope" class="span-15">
+		
+		<span class="span-2"><span class="cRed">(*)</span>Scope:</span>
+		<select id="patternScope" class="span-4">
 			<option value="inner-class" selected>inner-class</option>
 			<option value="inter-class">inter-class</option>
 		</select>
-	</div>
-	<div  class="line">
-		<span class="span-2">(*)Example:</span><textarea id="patternExample" class="span-15 h100"></textarea>
-	</div>
-	<div  class="line">
-		<span class="span-2">(*)Priority:</span>
-		<select id="patternPriority" class="span-15">
+		
+		<span class="span-2"><span class="cRed">(*)</span>Priority:</span>
+		<select id="patternPriority" class="span-2">
 			<option value="1">1</option>
 			<option value="2">2</option>
 			<option value="3" selected>3</option>
@@ -71,37 +69,42 @@ initPage=<%=sPage%>;
 			<option value="5">5</option>
 		</select>
 	</div>
+	<div  class="line">
+		<span class="span-2"><span class="cRed">(*)</span>Example:</span><textarea id="patternExample" class="span-15 h80"></textarea>
+	</div>
 </div>
 <!-- 查看pattern -->
-<div id="patternDetail" class="box" style="display:none;">
+<style>
+#patternDetail  .line div{color:green;}
+</style>
+<div id="patternDetail" class="" style="display:none;">
 	<div  class="line">
 		<span class="span-2">Name:</span><div id="patternNameDiv" class="span-15 oHidden"></div>
 	</div>
 	<div  class="line">
-		<span class="span-2">Expression:</span><div id="patternExpressionDiv" class="span-15  oAuto"></div>
+		<span class="span-2">Expression:</span><div id="patternExpressionDiv" class="span-15  h100 oAuto"></div>
 	</div>
 	<div  class="line">
-		<span class="span-2">Auxiliary:</span><div id="patternAuxiliaryDiv" class="span-15  oAuto"></div>
+		<span class="span-2">Auxiliary:</span><div id="patternAuxiliaryDiv" class="span-15  h40 oAuto"></div>
 	</div>
 	<div  class="line">
-		<span class="span-2">Warning:</span><div id="patternWarningDiv" class="span-15  oAuto"></div>
+		<span class="span-2">Warning:</span><div id="patternWarningDiv" class="span-15 h60  oAuto"></div>
 	</div>
 	<div  class="line">
-		<span class="span-2">Category:</span><div id="patternCategoryDiv" class="span-15 oHidden"></div>
+		<span class="span-2">Category:</span>
+		<div id="patternCategoryDiv" class="span-5 oHidden"></div>
+		<span class="span-2">Scope:</span>
+		<div id="patternScopeDiv" class="span-4 oHidden"></div>
+		<span class="span-2">Priority:</span>
+		<div id="patternPriorityDiv" class="span-2 oHidden"></div>
 	</div>
 	<div  class="line">
-		<span class="span-2">Scope:</span><div id="patternScopeDiv" class="span-15 oHidden"></div>
-	</div>
-	<div  class="line">
-		<span class="span-2">Example:</span><div id="patternExampleDiv" class="span-15  oAuto"></div>
-	</div>
-	<div  class="line">
-		<span class="span-2">Priority:</span><div id="patternPriorityDiv" class="span-15 oHidden"></div>
+		<span class="span-2">Example:</span><div id="patternExampleDiv" class="span-15  h80 oAuto"></div>
 	</div>
 </div>
 <!-- 管理ruleset -->
+<style>#rulesets #rulesetsTB td{border-collapse: collapse; border:1px dotted #A8D8EB;background:#F5FFEF;padding:5px;}</style>
 <div id="rulesets" style="display:none;" class="h300 w400 oAuto">
-	<style>#rulesetsTB td{border-collapse: collapse; border:1px dotted #A8D8EB;background:#F5FFEF;padding:5px;}</style>
 	<div>
 		<a href="javascript:;" onclick="AddRuleSet();">Generate</a>
 		<a href="javascript:;" onclick="UpRuleSet();">Upload</a>

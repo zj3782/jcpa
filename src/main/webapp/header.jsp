@@ -38,7 +38,7 @@ pageUrl=URLEncoder.encode(pageUrl);
 				<%}%>
 			</div>
 		</div>
-		<div id='menu' class="cssmenus vrmenu">
+		<div id='menu' class="cssmenus hmenu">
 			<%if(!user.equals("guest")){%>
 			<div class='cssmenu'><a href="patterns.jsp" title='Pattern List'>Pattern List</a></div>
 		   	<%}%>

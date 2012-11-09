@@ -13,8 +13,8 @@ public class CallSameFunctionTwiceOrMoreInMethod {
     }
 
     public long correctCallFunctions() {
-        long part1 = f(5);
-        long part2 = f(4);
+        long part1 = f(4);
+        long part2 = f(5);
         return part1 + part2;
     }
 

@@ -27,8 +27,8 @@ $(document).ready(function() {
         title: "Patterns",
         usepager: true,
         useRp: true,
-        rp: 15, // results per page,每页默认的结果数
-        rpOptions: [15, 25, 50, 100], //可选择设定的每页结果数
+        rp: 12, // results per page,每页默认的结果数
+        rpOptions: [12, 20, 30, 50, 100], //可选择设定的每页结果数
         showCheckbox: true,
         onAddRow:onAddRowData,
         onRowProp:contextmenu
@@ -102,7 +102,7 @@ $(document).ready(function() {
 //删除pattern
 function delPattern(rows){
 	if(!rows || !rows.length){
-		alert("Please Select The Row(s) You Want To Delete!");
+		alert("Please select one pattern or more ones to delete.");
 		return;
 	}
 	var strPattern="";
@@ -116,7 +116,7 @@ function delPattern(rows){
 	
 	artDialog({
 		title:"Question",
-		content:"Are You Sure To Delete Selected Pattern(s) ?<br>"+strPattern,
+		content:"Are you sure to delete selected pattern(s) ?<br>"+strPattern,
 		button: [
 	        {
 	            name: 'OK',
@@ -124,9 +124,9 @@ function delPattern(rows){
 	    			$.post("Pattern.do",{"method":"delete","ids":strIds},function(result){
 	    				if(result.status){
 	    					flexTB.flexDelRowsByIds(ids);
-	    					artDialog({title:"Delete Success",content:result.info,icon:"succeed",time:2});
+	    					artDialog({title:"Delete success",content:result.info,icon:"succeed",time:2});
 	    				}else{
-	    					artDialog({title:"Delete Fail",content:result.info,icon:"error"});
+	    					artDialog({title:"Delete fail",content:result.info,icon:"error"});
 	    				}
 	    			},"json");
 	    		}
@@ -167,16 +167,20 @@ function AddPattern()
 	            		if(data.name=="" || data.expression=="" || data.warning=="" || 
 	            				data.example=="" || data.category=="" || data.scope=="" || data.priority=="")
 	    				{
-	    					artDialog({content:"Some Item(s) is empty,can save!",time:3});
+	    					artDialog({content:"Some item(s) is empty,can save!",time:3});
 	    					return false;
 	    				}
 	    				$.post("Pattern.do",data,function(result){
 		    				if(result.status){
-		    					flexTB.flexAddRowsData([result.data]);
+		    					/*flexTB.flexAddRowsData([result.data]);
 		    					art.dialog({id: 'addpattern'}).close();
-		    					artDialog({title:"Add Success",content:result.info,icon:"succeed",time:2});
+		    					artDialog({title:"Add success",content:result.info,icon:"succeed",time:2});*/
+		    					//document.location.reload();
+		    					flexTB.flexReload();
+		    					art.dialog({id: 'addpattern'}).close();
+		    					artDialog({title:"Add success",content:result.info,icon:"succeed",time:2});
 		    				}else{
-		    					artDialog({title:"Add Fail",content:result.info,icon:"error"});
+		    					artDialog({title:"Add fail",content:result.info,icon:"error"});
 		    				}
 		    			},"json");
 	    				return false;
@@ -223,16 +227,16 @@ function editPattern(id,fromView){
 			            		if(data.name=="" || data.expression=="" || data.warning=="" || 
 			            				data.example=="" || data.category=="" || data.scope=="" || data.priority=="")
 			    				{
-			    					artDialog({content:"Some Item(s) is empty,can save!",time:3});
+			    					artDialog({content:"Some item(s) is empty,can save!",time:3});
 			    					return false;
 			    				}
 			    				$.post("Pattern.do",data,function(result){
 				    				if(result.status){
 				    					flexTB.flexUpdateRowData(result.data);
 				    					art.dialog({id: 'editPattern'}).close();
-				    					artDialog({title:"Save Success",content:result.info,icon:"succeed",time:2});
+				    					artDialog({title:"Save success",content:result.info,icon:"succeed",time:2});
 				    				}else{
-				    					artDialog({title:"Save Fail",content:result.info,icon:"error"});
+				    					artDialog({title:"Save fail",content:result.info,icon:"error"});
 				    				}
 				    			},"json");
 			    				return false;
@@ -298,7 +302,7 @@ function viewPattern(cell){
  * */
 function ManageRulesets(){
 	var dlg=artDialog({
-		title:'RuleSets Loading...',
+		title:'RuleSets loading...',
 		cancle:true,
 		lock:true,
 		id:'ManageRulesets'
@@ -324,7 +328,7 @@ function delRuleset(ruleFile){
 		$("#rulesets").unmask();
 		if(result.status){
 			$("#rulesetsTB tr[title='"+ruleFile+"']").remove();
-			art.dialog(ruleFile+" Delete Success.").time(3);
+			art.dialog(ruleFile+" Delete success.").time(3);
 		}else{
 			art.dialog(result.info);
 		}
@@ -367,9 +371,9 @@ function addRuleToTB(filename){
 	td=tr.insertCell(0);
 	td.innerHTML="<div class='w240'>"+filename+"</div>";
 	td=tr.insertCell(1);
-	var htm="<a href='pattern.do?method=viewRuleset&file="+filename+"' target='_blank'>view</a>&nbsp;&nbsp;";
-	htm+="<a href='pattern.do?method=downRuleset&file="+filename+"' target='_blank'>download</a>&nbsp;&nbsp;";
-	htm+="<a href='javascript:;' onclick='delRuleset(\""+filename+"\")'>delete</a>";
+	var htm="<a href='pattern.do?method=viewRuleset&file="+filename+"' target='_blank'>View</a>&nbsp;&nbsp;";
+	htm+="<a href='pattern.do?method=downRuleset&file="+filename+"' target='_blank'>Download</a>&nbsp;&nbsp;";
+	htm+="<a href='javascript:;' onclick='delRuleset(\""+filename+"\")'>Delete</a>";
 	td.innerHTML=htm;
 }
 /**

@@ -24,7 +24,7 @@ public class LegacyUsage {
     }
 
     public void wrongIterate() {
-        String[] strs = { "A", "B", "C", "D" };
+        String[] strs = { "E", "F", "G", "H" };
         for (int i = 0; i < strs.length; i++) {
             assert (strs[i] != null);
         }
@@ -35,9 +35,9 @@ public class LegacyUsage {
         }
 
         Set<String> strSet = new HashSet<String>(strList);
-        it = strSet.iterator();
-        while (it.hasNext()) {
-            assert (it.next() != null);
+        Iterator<String> itr = strSet.iterator();
+        while (itr.hasNext()) {
+            assert (itr.next() != null);
         }
     }
 }

@@ -20,9 +20,9 @@ public class ReclaimMemorySpace {
 
     public String wrongSetNull() {
         String question = "?";
-        Scanner in = new Scanner(System.in);
-        String what = in.nextLine() + question;
+        Scanner ini = new Scanner(System.in);
+        String whati = ini.nextLine() + question;
         question = null;
-        return what;
+        return whati;
     }
 }

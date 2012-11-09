@@ -152,19 +152,22 @@ public class LockTester extends Case {
 		}
 
 		if(!LockTester.bInterrupt){
-			double time1 = this.t1/(thrds*repeats);
-			double time2 = this.t2/(thrds*repeats);
-			double time3 = this.t3/(thrds*repeats);
-			double time4 = this.t4/(thrds*repeats);
+			long time1 = (long)( this.t1/(thrds*repeats) );
+			long time2 = (long)( this.t2/(thrds*repeats) );
+			long time3 = (long)( this.t3/(thrds*repeats) );
+			long time4 = (long)( this.t4/(thrds*repeats) );
+			long throug1 = (long)( 1.0*1000000000/time1 );
+			long throug2 = (long)( 1.0*1000000000/time2 );
+			long throug3 = (long)( 1.0*1000000000/time3 );
+			long throug4 = (long)( 1.0*1000000000/time4 );
 			double io = 1.0*iorate/(100-iorate);
 			result.add("Threads:"+thrds);
 			result.add("Repeats per Thread:"+repeats);
 			result.add("ReadWrite Rate:"+String.format("%.2f",ToolUtil.getRound(io)));
-			//String str2 = "per thread, per repeat, need time: ";
-			result.add("read for Lock: latency="+time1+"ns, throughput="+1.0*1000000000/time1+"op/s");
-			result.add("write for Lock: latency="+time2+"ns, throughput="+1.0*1000000000/time2+"op/s");
-			result.add("read for Collections.synchronizedMap(new HashMap<String, Data>()): latency="+time3+"ns, throughput="+1.0*1000000000/time3+"op/s");
-			result.add("write for Collections.synchronizedMap(new HashMap<String, Data>()): latency="+time4+"ns, throughput="+1.0*1000000000/time4+"op/s");
+			result.add("read for Lock: latency="+time1+"ns, throughput="+throug1+"op/s");
+			result.add("write for Lock: latency="+time2+"ns, throughput="+throug2+"op/s");
+			result.add("read for Collections.synchronizedMap(new HashMap<String, Data>()): latency="+time3+"ns, throughput="+throug3+"op/s");
+			result.add("write for Collections.synchronizedMap(new HashMap<String, Data>()): latency="+time4+"ns, throughput="+throug4+"op/s");
 		}
 	}
 

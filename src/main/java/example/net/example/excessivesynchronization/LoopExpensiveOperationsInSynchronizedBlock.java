@@ -24,7 +24,7 @@ public class LoopExpensiveOperationsInSynchronizedBlock {
     
     public void includeExpensiveOperation() {
         synchronized (strList) {
-            strList.add("E");
+            strList.add("F");
             costMethod();
         }
     }

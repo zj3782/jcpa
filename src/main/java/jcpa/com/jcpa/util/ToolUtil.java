@@ -3,7 +3,6 @@ package com.jcpa.util;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
@@ -207,29 +206,6 @@ public class ToolUtil {
     }
 
     /**
-     * 获取文件指定行数之间的内容
-     * @throws Exception 
-     * */
-    public static String getFileConetent(String fn,int startLine,int endLine) throws IOException{
-    	String snippet = "";
-		String str = null;
-		BufferedReader reader = new BufferedReader(new FileReader(fn));
-		if(startLine<1)startLine=1;
-		int line = 1;
-		str = reader.readLine();
-		while ( str != null){			
-			if (line >= startLine && line <= endLine){
-				snippet += str + "\r\n";
-				if (line == endLine){
-					break;
-				}
-			}
-			str = reader.readLine();
-			line++;
-		}	
-		reader.close();
-		return snippet;
-    }/**
      * 获取文件内容
      * @throws Exception 
      * */

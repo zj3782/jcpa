@@ -15,26 +15,27 @@ initPage=<%=sPage%>;
 </script>
 <div id="benchmark">
    	<hr class="space" />
-	<h2 class="aCenter">Performance benchmark</h2>
+	<h2 class="aCenter">Performance Benchmark</h2>
 	<div id="cases">
 		<table id="casesTB">
 		</table>
 	</div>
 </div>
-<div id="RunDiv" class="box w640" style="display:none;">
+<!-- Run -->
+<div id="RunDiv" class="w640" style="display:none;">
 	<div class="info">
-		<label>ThreadNum<span class="cRed">(*)</span>:<input type="text" id="ThreadNum" value="" class="w80"/></label>
-		<label>RepeatNum<span class="cRed">(*)</span>:<input type="text" id="RepeatNum" value="" class="w80"/></label>
-		<label>Read Rate<span class="cRed">(*)</span>:<input type="text" id="RWRate" value="" class="w80" title='0~100'/>%</label>
+		<label><span class="cRed">(*)</span>ThreadNum:<input type="text" id="ThreadNum" value="" class="w80"/></label>
+		<label><span class="cRed">(*)</span>RepeatNum:<input type="text" id="RepeatNum" value="" class="w80"/></label>
+		<label><span class="cRed">(*)</span>Read Rate:<input type="text" id="RWRate" value="" class="w80" title='0~100'/>%</label>
 		<input type="button" id="RunCaseBtn" value="Run" onclick="RealRunCase()"/>
 		<input type="hidden" id="RunCaseNames" value=""/>
 	</div>
-	<div id="RunCaseResult" class="info h400 oAuto">
-	</div>
+	<div id="RunCaseResult" class="info h300 oAuto"></div>
 </div>
+<!-- View -->
 <div id="ViewDiv" class="box w640" style="display:none;">
-	<h2 id="ViewCaseName"></h2>
-	<div id="ViewCaseDescript" class="success oAuto"></div>
-	<div id="ViewCaseResult" class="info oAuto"></div>
+	<h3 id="ViewCaseName"></h3>
+	<div id="ViewCaseDescript" class="success h80 oAuto"></div>
+	<div id="ViewCaseResult" class="info h200 oAuto"></div>
 </div>
 <%@ include file="footer.jsp"%> 
