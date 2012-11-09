@@ -175,6 +175,7 @@ public class ToolUtil {
     	htmChars.put('\r',"");
     	htmChars.put('\n',"<br>");
     	htmChars.put('\t',"&nbsp;&nbsp;&nbsp;&nbsp;");
+    	htmChars.put(' ',"&nbsp;");
     }
     /**
      * 将字符串变量进行处理以便能够直接在js中当作变量处理

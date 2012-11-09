@@ -90,6 +90,11 @@ function tab2space(str){
 	str=str.replace(/\t/g,'&nbsp;&nbsp;&nbsp;&nbsp;');
 	return str;
 }
+function blank2space(str){
+	if(typeof(str)!="string")return str;
+	str=str.replace(/ /g,'&nbsp;');
+	return str;
+}
 function htm2specil(str){
 	if(typeof(str)!="string")return str;
 	str=str.replace(/>/g,'&gt;');
@@ -107,6 +112,7 @@ function strHtmFmt(str){
 	str=htm2specil(str);
 	str=rn2br(str);
 	str=tab2space(str);
+	str=blank2space(str);
 	return str;
 }
 /**

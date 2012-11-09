@@ -42,11 +42,11 @@ $(document).ready(function() {
 
 /**检查数据*/
 function onAddRowData(row){
-	row.cell[4]=htm2specil(row.cell[4]);//code
 	for(var i=0;i<row.cell.length;i++){
 		row.cell[i]=decodeURIComponent(row.cell[i]);//解码
 	}
 	row.cell[3]="<a href='javascript:;' onclick='viewReportById("+row.id+")'>"+row.cell[3]+"</a>";
+	row.cell[4]=htm2specil(row.cell[4]);//code
 	row.cell[5]="<a href='"+row.cell[7]+"' target='_blank'>"+row.cell[5]+"</a>";
 	row.style="color:"+getPriorityColor(row.cell[6]);
 	return row;
