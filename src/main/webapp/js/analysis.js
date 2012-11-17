@@ -80,7 +80,7 @@ function viewReport(cell){
 	$("#viewClass").html(cell[1]);
 	$("#viewMethod").html(cell[2]);
 	$("#viewLocation").html(cell[3]);
-	$("#viewCode").html(blank2space(tab2space(rn2br(cell[4]))));
+	$("#viewCode").html(tab2space(rn2br(cell[4])));
 	$("#viewRule").html(cell[5]);
 	$("#viewPriority").html(cell[6]);
 	artDialog({content:ID('viewReport'),title:'View Report',lock:true,id:'viewReport'});
@@ -96,8 +96,8 @@ var STEP_PMDING=5;//pmd处理过程中
 var STEP_PMDOK=6;//pmd处理成功
 var STEP_SUCCESSEND=7;//成功结束
 var STEP_FAILEND=8;//失败结束
-var steps=['Starting','Svn Logining','Svn Login Ok','Svn CheckOuting',
-           'Svn CheckOut Ok','Pmd Analysing','Pmd Analyse Ok','Code Analyse Ok','Code Analyse Fail'];
+var steps=['Starting','Svn logining','Svn login ok','Svn checking out',
+           'Svn check out ok','Pmd analysing','Pmd analyse ok','Code analyse ok','Code analyse fail'];
 
 var TimerID=null;
 /**
@@ -167,4 +167,27 @@ function ReAnalysis(ask){
 	$.post("Analysis.do",{"method":"ClearReport"},function(result){
 		document.location.reload();
 	});
+}
+/**
+ *获取ruleset 
+ */
+function getRulesets(){
+	$.post("pattern.do",{method:'rulesets'},function(result){
+		if(result.status){
+			var rules=result.data.rules;
+			var descs=result.data.desc;
+			var desc,htm="";
+			for(var i=0;i<rules.length;i++){
+				desc=rules[i];
+				for(var j=0;j<descs.length;j++){
+					if(descs[j].f==rules[i]){
+						desc=descs[j].d;
+						break;
+					}
+				}
+				htm+="<option value='"+rules[i]+"' title='"+desc+"'>"+rules[i]+"</option>";
+			}
+			$("#rule").html(htm);
+		}
+	},'json');
 }

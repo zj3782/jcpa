@@ -173,7 +173,7 @@ public class Report {
 
     public void addRuleViolation(RuleViolation violation) {
 
-        // NOPMD suppress
+        
         int line = violation.getBeginLine();
         if (linesToSuppress.containsKey(line)) {
             suppressedRuleViolations.add(new SuppressedViolation(violation, true, linesToSuppress.get(line)));

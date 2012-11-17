@@ -114,20 +114,36 @@ initPage=<%=sPage%>;
 <!-- 添加ruleset -->
 <div id="addruleset" style="display:none;">
 <div class="line">
-	<label>FileName:<input type="text" id="AddFileName" class="w200"/></label>
+	<span class="span-2"><label>FileName:</label></span>
+	<span class="span-9"><input type="text" id="AddFileName" class="w320"/></span>
 </div>
 <div class="line">
-	<label>Patterns:</label>
-	<label><input type="checkbox" id="AddPatternAll" checked="checked" onclick="$('#AddPattCond').toggle();">All Patterns</label><br>	
-	<textarea id="AddPattCond" class="w100p h60" style="display:none;" 
-	title="Here to fill in the SQL where statements, for example:ID &gt 10 and scope = 'function'"></textarea>
+	<span class="span-2"><label>Description:</label></span>
+	<span class="span-9"><textarea id="AddDescription" class="w320 h100"></textarea></span>
+</div>
+<div class="line">
+	<span class="span-2"><label>Patterns:</label></span>
+	<span class="span-9">
+		<label><input type="radio" id="AddPatternAll" checked="checked" name="addPatterns" onclick="$('#AddPattCond').hide();">All patterns</label>
+		<label><input type="radio" id="AddPatternSelect"  name="addPatterns" onclick="$('#AddPattCond').hide();">Selected patterns</label>
+		<label><input type="radio" id="AddPatternCond"  name="addPatterns" onclick="$('#AddPattCond').show();">Custom patterns</label>
+		<br>
+		<textarea id="AddPattCond" class="w320 h60" style="display:none;" 
+		title="Here to fill in the SQL where statements, for example:ID &gt 10 and scope = 'function'"></textarea>
+	</span>
 </div>
 </div>
 <!-- 上传ruleset -->
 <div id="upruleset" style="display:none;">
 	<form name="form" action="" method="POST" enctype="multipart/form-data">
-		<input id="fileToUpload" type="file" name="fileToUpload"/>
-		<input id="buttonUpload" type="button" onclick="ajaxUpRuleSet();" value="Upload"/>
+		<div class="line">
+			<input id="fileToUpload" type="file" name="fileToUpload" class="w240"/>
+			<input id="buttonUpload" type="button" onclick="ajaxUpRuleSet();" value="Upload" class="w80"/>
+		</div>
+		<div class="line">
+			<span class="span-2"><label>Description:</label></span>
+			<span class="span-7"><textarea id="upDescription" class="w240 h50"></textarea></span>
+		</div>
 	</form>
 </div>
 <%@ include file="footer.jsp"%>

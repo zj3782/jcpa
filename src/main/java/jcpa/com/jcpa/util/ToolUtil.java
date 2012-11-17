@@ -3,9 +3,13 @@ package com.jcpa.util;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -235,5 +239,52 @@ public class ToolUtil {
     		}
     	}catch(Exception e){}
     	return false;
+    }
+    /**
+     * 判断文件是否存在
+     * */
+    public static boolean ifFileExist(String path,boolean bCreate,String initText,String charset){
+    	try {
+			File f = new File(path);
+			if (f.exists()){
+				return true;
+			}
+			if (bCreate){
+				if(!f.createNewFile())return false;
+				if(initText!=null && !initText.equals("")){
+					OutputStream out = new FileOutputStream(f);
+					OutputStreamWriter fw = new OutputStreamWriter(out,charset);
+					fw.write(initText);
+					fw.flush();
+					fw.close();
+				}
+				return true;
+			}
+		} catch (Exception e) {}
+		return false;
+    }
+    /**
+     * 获取当前时间
+     * */
+    public static String getTimeString() {
+    	  String TimeString = "";
+    	  Calendar c = Calendar.getInstance();
+
+    	  int yyyy = c.get(Calendar.YEAR);
+    	  int mm = c.get(Calendar.MONTH) + 1;
+    	  int dd = c.get(Calendar.DAY_OF_MONTH);
+    	  int hh = c.get(Calendar.HOUR) + 8;//中国属于东八区，时间加8小时
+    	  int MM = c.get(Calendar.MINUTE);
+    	  int SS = c.get(Calendar.SECOND);
+
+    	  String sMonth = mm < 10 ? "0" + mm : "" + mm;
+    	  String sDay = dd < 10 ? "0" + dd : "" + dd;
+    	  String sHour = hh < 10 ? "0" + hh : "" + hh;
+    	  String sMinute = MM < 10 ? "0" + MM : "" + MM;
+    	  String sSecond = SS < 10 ? "0" + SS : "" + SS;
+
+    	  TimeString = yyyy + "." + sMonth + "." + sDay + " " + sHour + ":"+ sMinute + ":" + sSecond;
+
+    	  return TimeString;
     }
 }

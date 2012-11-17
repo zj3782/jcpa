@@ -311,8 +311,17 @@ function ManageRulesets(){
 	$.post("pattern.do",{method:'rulesets'},function(result){
 		if(result.status){
 			var rules=result.data.rules;
+			var descs=result.data.desc;
+			var desc;
 			for(var i=0;i<rules.length;i++){
-				addRuleToTB(rules[i]);
+				desc=rules[i];
+				for(var j=0;j<descs.length;j++){
+					if(descs[j].f==rules[i]){
+						desc=descs[j].d;
+						break;
+					}
+				}
+				addRuleToTB(rules[i],desc);
 			}
 			dlg.content(ID('rulesets')).title("RuleSets");
 		}
@@ -345,13 +354,29 @@ function AddRuleSet(){
 		cancel:true,
 		ok:function(){
 			var filename=$("#AddFileName").val();
-			var all=(ID("AddPatternAll").checked)?1:0;
-			var cond=$("#AddPattCond").val();
+			if(filename.slice(filename.length-4)!='.xml')filename+=".xml";
+			var desc=$("#AddDescription").val();
+			var type=(ID("AddPatternAll").checked)?"all":(ID("AddPatternSelect").checked)?"selected":"custom";
+			var cond="";
+			if(type=="selected"){
+				var rows=flexTB.flexGetCheckedRows();
+				if(rows.length<=0){
+					alert("There is no pattern selected.");
+					return;
+				}
+				cond+="ID in ( "+rows[0].id;
+				for(var i=1;i<rows.length;i++){
+					cond+=","+rows[i].id;
+				}
+				cond+=")";
+			}else{
+				cond=$("#AddPattCond").val();
+			}
 			$("#addruleset").mask("Adding...");
-			$.post("pattern.do",{method:'addruleset',fn:filename,'all':all,'cond':cond},function(result){
+			$.post("pattern.do",{method:'addruleset',fn:filename,'type':type,'cond':cond,'desc':desc},function(result){
 				$("#addruleset").unmask();
 				if(result.status){
-					addRuleToTB(filename);
+					addRuleToTB(filename,desc);
 					art.dialog({id:'addruleset'}).close();
 				}else{
 					alert(result.info);
@@ -362,19 +387,37 @@ function AddRuleSet(){
 		id:'addruleset'
 	});
 	var today=new Date();
-	$("#AddFileName").val(today.getFullYear()+"_"+(today.getMonth()+1)+"_"+today.getDate()+".xml").focus().select();
+	$("#AddFileName").val(today.getFullYear()+"_"+(today.getMonth()+1)+"_"+today.getDate()+"_"+today.getTime()+".xml").focus().select();
 }
-function addRuleToTB(filename){
+function addRuleToTB(filename,desc){
 	var tb=ID("rulesetsTB"),tr,td;
 	tr=tb.insertRow(tb.rows.length);
 	tr.title=filename;
 	td=tr.insertCell(0);
-	td.innerHTML="<div class='w240'>"+filename+"</div>";
+	td.innerHTML="<div class='w240' title='"+desc+"'>"+filename+"</div>";
 	td=tr.insertCell(1);
 	var htm="<a href='pattern.do?method=viewRuleset&file="+filename+"' target='_blank'>View</a>&nbsp;&nbsp;";
-	htm+="<a href='pattern.do?method=downRuleset&file="+filename+"' target='_blank'>Download</a>&nbsp;&nbsp;";
+	htm+="<a href='javascript:;' onclick='downRuleset(\""+filename+"\")'>Download</a>&nbsp;&nbsp;";
 	htm+="<a href='javascript:;' onclick='delRuleset(\""+filename+"\")'>Delete</a>";
 	td.innerHTML=htm;
+}
+/**
+ * 下载ruleset
+ * */
+function downRuleset(filename){
+	var htm="";
+	htm+="<span class='info' title='You can import it to eclipse pmd plugin latter.'>";
+		htm+="<a href='pattern.do?method=downRuleset&file="+filename+"&plugin=yes' target='_blank'>As plugin use</a>";
+	htm+="</span>";
+	htm+="<span class='alert' title='You can upload to another server to analye code with it'>";
+		htm+="<a href='pattern.do?method=downRuleset&file="+filename+"' target='_blank'>As normal use</a>";
+	htm+="</span>";
+	artDialog({
+		content:htm,
+		title:"Download RuleSet ["+filename+"]",
+		lock:true,
+		id:'downruleset'
+	});
 }
 /**
  *上传ruleset 
@@ -384,7 +427,6 @@ function UpRuleSet(){
 		content:ID("upruleset"),
 		title:"Upload RuleSet",
 		lock:true,
-		cancel:true,
 		id:'upruleset'
 	});
 }
@@ -396,7 +438,7 @@ function ajaxUpRuleSet(){
 	});
 
 	$.ajaxFileUpload({
-		url:'pattern.do?method=upRuleset',
+		url:'pattern.do?method=upRuleset&desc='+encodeURIComponent($("#upDescription").val()),
 		secureuri:false,
 		fileElementId:'fileToUpload',
 		dataType: 'json',
@@ -405,7 +447,6 @@ function ajaxUpRuleSet(){
 			$("#upruleset").unmask();
 			if(data.status){
 				art.dialog({id:'upruleset'}).close();
-				//addRuleToTB(data.data.filename[0]);
 				ManageRulesets();//重新加载
 			}else{
 				alert(data.info);

@@ -156,23 +156,28 @@ public class PMDUtil{
 		if(auxStr==null || auxStr.equals(""))return exp;
 		if(auxStr.startsWith("##"))auxStr=auxStr.substring(2);
 		
-		String itemStr="",auxsStr="";
+		String itemEqStr="",auxsEqStr="",itemEndStr="",auxsEndStr="";
 		String auxs[]=auxStr.split("##");
 		for(int j=0;j<auxs.length;j++){
 			String items[]=auxs[j].split(",");
-			itemStr="";
+			itemEqStr="";itemEndStr="";
 			if(items.length>0){
-				itemStr+="@Image=\""+items[0]+"\"";
+				itemEqStr+="@Image=\""+items[0]+"\"";
+				itemEndStr+="ends-with(@Image,\""+items[0]+"\")";
 			}
 			for(int i=1;i<items.length;i++){
-				itemStr+=" or @Image=\""+items[i]+"\"";
+				itemEqStr+=" or @Image=\""+items[i]+"\"";
+				itemEndStr+=" or ends-with(@Image,\""+items[i]+"\")";
 			}
-			exp=exp.replaceAll("##AUX"+j+"##",itemStr);
-			auxsStr+=itemStr+" or ";
+			exp=exp.replaceAll("##AUX_EQ_"+j+"##",itemEqStr);
+			exp=exp.replaceAll("##AUX_END_"+j+"##",itemEndStr);
+			auxsEqStr+=itemEqStr+" or ";
+			auxsEndStr+=itemEndStr+" or ";
 		}
-		int auxsStrLen=auxsStr.length();
-		if(auxsStrLen>4)auxsStr=auxsStr.substring(0,auxsStrLen-4);
-		exp=exp.replaceAll("##AUX##",auxsStr);
+		if(auxsEqStr.length()>4)auxsEqStr=auxsEqStr.substring(0,auxsEqStr.length()-4);
+		if(auxsEndStr.length()>4)auxsEndStr=auxsEndStr.substring(0,auxsEndStr.length()-4);
+		exp=exp.replaceAll("##AUX_EQ##",auxsEqStr);
+		exp=exp.replaceAll("##AUX_END##",auxsEndStr);
 		return exp;
 	} 
 	/**

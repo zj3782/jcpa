@@ -2,12 +2,19 @@ package com.jcpa.action;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
@@ -26,18 +33,37 @@ import com.jcpa.util.json.JsonLeafNode;
 import com.jcpa.util.json.JsonObjectNode;
 
 public class PatternAction extends Action{
+	private static Map<String,Integer> MethodsPriority = new HashMap<String,Integer>();
+    static {
+    	MethodsPriority.put("add",1);
+    	MethodsPriority.put("delete",1);
+    	MethodsPriority.put("update",1);
+    	MethodsPriority.put("get",2);
+    	MethodsPriority.put("page",2);
+    	MethodsPriority.put("rulesets",2);
+    	MethodsPriority.put("delruleset",1);
+    	MethodsPriority.put("addruleset",1);
+    	MethodsPriority.put("upRuleset",1);
+    	MethodsPriority.put("viewRuleset",2);
+    	MethodsPriority.put("downRuleset",2);
+    }
 	/**
 	 * 执行动作之前的准备工作
 	 */
 	protected void _prepare() throws Exception{
 		String user=(String)session.getAttribute("user");
-		if(user==null || user.equals("guest"))throw new Exception("You have no power to access this page!");
+		
+		if(user==null || user.equals("guest")){
+			Integer priority=MethodsPriority.get(MethodName);
+			if(priority!=null && priority<2){
+				throw new Exception("You have no power to access this page!");
+			}
+		}
 	}
 	/**
 	 * 执行完动作之后的清理工作
 	 */
 	protected void _cleanup() throws Exception{}
-	
 	/**
 	 * 添加pattern
 	 * */
@@ -187,6 +213,8 @@ public class PatternAction extends Action{
 		while(it.hasNext()){
 			rules.addItem(new JsonLeafNode("",it.next()));
 		}
+		//描述信息
+		data.addChild(getRulesetDescJsonArr());
 		echo(j.toString());
 	}
 	/**
@@ -198,6 +226,7 @@ public class PatternAction extends Action{
 			File ruleFile = new File((String)application.getAttribute("Ruleset")+rule);
 			if(ruleFile.delete()){
 				success("delete success");
+				delRulesetDesc(rule);
 			}else{
 				error("file delete fail");
 			}
@@ -209,23 +238,32 @@ public class PatternAction extends Action{
 	 * 生成patterns的xml文件
 	 * */
 	public void addruleset() throws Exception{
+		String shortfn,fn,type,cond,desc;
 		try {
 			//生成的文件名
-			String fn = request.getParameter("fn");
-			if(fn==null || fn.equals("")){
+			shortfn = request.getParameter("fn");
+			if(shortfn==null || shortfn.equals("")){
 				error("Please Input FileName!");
 				return;
 			}
-			if(!fn.endsWith(".xml"))fn+=".xml";
-			fn = (String)application.getAttribute("Ruleset")+fn;
-			String all = request.getParameter("all");
-			String cond = request.getParameter("cond");
-			if(all=="1")cond="";
+			if(!shortfn.endsWith(".xml"))shortfn+=".xml";
+			fn = (String)application.getAttribute("Ruleset")+shortfn;
+			//patterns
+			type = request.getParameter("type");
+			if(type.equals("all")){
+				cond="";
+			}else{
+				cond = request.getParameter("cond");
+			}
+			//description
+			desc=request.getParameter("desc");
+			if(desc==null || desc.equals(""))desc="jcpa pmd rules";
+			desc+=" -- generate by "+(String)session.getAttribute("user")+" at the time of "+ToolUtil.getTimeString();
 			//写入xml头部
 			OutputStream out = new FileOutputStream(fn);
 			OutputStreamWriter fw = new OutputStreamWriter(out, "UTF-8");
 			fw.write("<?xml version=\"1.0\"?> <ruleset name=\"jcpa pmd rules\" xmlns=\"http://pmd.sourceforge.net/ruleset/2.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd\" xsi:noNamespaceSchemaLocation=\"http://pmd.sourceforge.net/ruleset_2_0_0.xsd\">");
-			fw.write("<description>jcpa pmd ruleset</description>");
+			fw.write("<description>"+desc+"</description>");
 			//分页取出数据写入xml
 			final int ONE_PAGE_COUNT = 100;
 			PatternDao dao = new PatternDaoImpl();
@@ -259,6 +297,7 @@ public class PatternAction extends Action{
 			return;
 		}
 		success("ok");
+		addRulesetDesc(shortfn,desc);
 	}
 	/**
 	 * 查看某个ruleset文件
@@ -287,8 +326,15 @@ public class PatternAction extends Action{
 			//文件名
 			String file = request.getParameter("file");
 			String fn = (String)application.getAttribute("Ruleset") + file;
+			String plugin=request.getParameter("plugin");
 			//读取文件内容
 			String txt=ToolUtil.getFileConetent(fn,"UTF-8");
+			//是否当作导入plugin使用
+			if(plugin!=null && plugin.equals("yes")){
+				txt=txt.replaceAll(" class=\"net.sourceforge.pmd.lang.rule.XPathRule\" externalInfoUrl="," class=\"net.sourceforge.pmd.rules.XPathRule\" externalInfoUrl=");
+				if(file.endsWith(".xml"))file=file.substring(0,file.length()-4);
+				file+=".plugin.xml";
+			}
 			// 设置HTTP头：
 			response.reset();
 			response.setContentType("application/octet-stream");
@@ -303,6 +349,7 @@ public class PatternAction extends Action{
 	/**
 	 * 上传ruleset
 	 * */
+	@SuppressWarnings("deprecation")
 	public void upRuleset() throws Exception{
 		 /** 
          * form中的enctype必须是multipart/... 
@@ -310,7 +357,16 @@ public class PatternAction extends Action{
          * 在isMultipartContent方法中同时检测了是否是post提交 
          * 如果不是post提交则返回false 
          */  
-        if(ServletFileUpload.isMultipartContent(request)) {  
+        if(ServletFileUpload.isMultipartContent(request)) {  //description
+        	//description
+			String desc=request.getParameter("desc");
+			if(desc==null || desc.equals("")){
+				desc="jcpa pmd rules";
+			}else{
+				desc=URLDecoder.decode(desc);
+			}
+			desc+=" -- upload by "+(String)session.getAttribute("user")+" at the time of "+ToolUtil.getTimeString();
+			
         	String RulePath=(String)application.getAttribute("Ruleset");
             DiskFileItemFactory factory = new DiskFileItemFactory();
             factory.setRepository(new File(RulePath+"tmp"));//临时文件目录  
@@ -351,6 +407,7 @@ public class PatternAction extends Action{
                     BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File(RulePath+fileName)));  
                     Streams.copy(in, out, true);
                     files.addItem(new JsonLeafNode("",fileName));
+                    addRulesetDesc(fileName,desc);
                 }  
             }
             
@@ -359,5 +416,99 @@ public class PatternAction extends Action{
             error("enctype error!");  
         }  
 	}
-
+	/*******************************************************************************************************************************/
+	private final String DESC_SPLIT="#@SPLIT@#";
+	/**
+	 * 添加ruleset描述信息
+	 * */
+	private void addRulesetDesc(String filename,String desc){
+		try {
+			desc=desc.replaceAll("\r\n","\t");
+			desc=desc.replaceAll("\n","\t");
+			String fn=(String)application.getAttribute("Ruleset")+"desc.txt";
+			//读取
+			String txt="";
+			BufferedReader bufr = new BufferedReader(new InputStreamReader(new FileInputStream(new File(fn)), "UTF-8"));
+			String r = bufr.readLine(),f;int index;
+			while (r != null) {
+				f="";
+				index=r.indexOf(DESC_SPLIT);
+				if(index!=-1){
+					f=r.substring(0,index);
+					if(!f.equals(filename)){
+						txt+=r+"\r\n";
+					}
+				}
+				r = bufr.readLine();
+			}
+			bufr.close();
+			//新添加的记录写在后面
+			txt+=filename+DESC_SPLIT+desc+"\r\n";
+			//写入文件
+			OutputStream out = new FileOutputStream(fn);
+			OutputStreamWriter fw = new OutputStreamWriter(out, "UTF-8");
+			fw.write(txt);
+			fw.flush();
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 删除ruleset描述信息
+	 * */
+	private void delRulesetDesc(String filename){
+		try {
+			String fn = (String) application.getAttribute("Ruleset")+ "desc.txt";
+			//从文件读取
+			BufferedReader bufr = new BufferedReader(new InputStreamReader(new FileInputStream(new File(fn)), "UTF-8"));
+			int index;
+			String r = bufr.readLine(),f,txt="";
+			while (r != null) {
+				f="";
+				index=r.indexOf(DESC_SPLIT);
+				if(index!=-1){
+					f=r.substring(0,index);
+					if(!f.equals(filename)){
+						txt+=r+"\r\n";
+					}
+				}
+				r = bufr.readLine();
+			}
+			bufr.close();
+			//写入文件
+			OutputStream out = new FileOutputStream(fn);
+			OutputStreamWriter fw = new OutputStreamWriter(out, "UTF-8");
+			fw.write(txt);
+			fw.flush();
+			fw.close();
+		} catch (Exception e) {}
+	}
+	/**
+	 * 获取ruleset的描述
+	 * */
+	private JsonArrayNode getRulesetDescJsonArr(){
+		JsonArrayNode arr = new JsonArrayNode("desc");
+		try {
+			String fn = (String) application.getAttribute("Ruleset")+ "desc.txt";
+			BufferedReader bufr = new BufferedReader(new InputStreamReader(new FileInputStream(new File(fn)), "UTF-8"));
+			int index;
+			String r = bufr.readLine(),f,d;
+			while (r != null) {
+				f="";d="";
+				index=r.indexOf(DESC_SPLIT);
+				if(index!=-1){
+					f=r.substring(0,index);
+					d=r.substring(index+DESC_SPLIT.length());
+					JsonObjectNode desc=new JsonObjectNode("");
+					desc.addChild(new JsonLeafNode("f",f));
+					desc.addChild(new JsonLeafNode("d",d));
+					arr.addItem(desc);
+				}
+				r = bufr.readLine();
+			}
+			bufr.close();
+		} catch (Exception e) {}
+		return arr;
+	}
 }

@@ -32,14 +32,7 @@
 				</span>
 				<span class="left w360">
 					<label for="rule">RuleSetFile:</label><select id="rule" class="w240">
-					<% 
-						List<String> files=ToolUtil.getFileFromPath((String)application.getAttribute("Ruleset"),"xml");
-						Iterator<String> it=files.iterator();String op;
-						while(it.hasNext()){
-							op=it.next();
-							out.println("<option value='"+op+"'>"+op+"</option>");
-						}
-					%>
+						<option value="">loading...</option>
 					</select>
 				</span>
 			</div>
@@ -56,18 +49,6 @@
 			<button class="round cWhite h70 w80 f14 fB bGreen bdNone cHand" id="submit" onclick="Analysis()">Analysis</button>
 		</div>
 	</div>
-	<%}else{%>
-		<script type="text/javascript">
-			$(document).ready(function(){
-				StartIntervalGetStep();
-				$("#codeTitle").show();
-				$("#codeUrl").html('<%=(String)session.getAttribute("codeUrl")%>');
-				$("#codeUser").html('<%=(String)session.getAttribute("codeUser")%>');
-				//显示选择分析结果还是从新分析
-				$("#analysis").hide();
-				$("#chooseAnalysis").show();
-			});
-		</script>
 	<%}%>
 	<hr class="space">
 	<!-- report -->
@@ -113,9 +94,10 @@
 <%if(report!=null){%>
 <!-- 选择 -->
 <div id="chooseAnalysis" style="display:none;">
-	<hr class="space h60">
+	<hr class="space h40">
+	<h3 class="aCenter cGreen">You had grenated a report before,you can choose to see it or start new code scan.</h3>
 	<div class="span-11 aCenter left f14 alert" title="Report of <%=(String)session.getAttribute("codeUrl")%>">
-		<a class="cHand" herf="javascript:;" onclick='$("#analysis").show();$("#chooseAnalysis").hide();'>Show last report</a>
+		<a class="cHand" herf="javascript:;" onclick='$("#analysis").show();$("#chooseAnalysis").hide();'>Show report</a>
 	</div>
 	<div class="span-11 aCenter right f14 info" title="Clear last report and start a new analysi">
 		<a class="cHand" herf="javascript:;" onclick='ReAnalysis(false);this.innerHTML="Preparing...";''>New analysis</a>
@@ -124,4 +106,19 @@
 </div>
 <%}%>
 <hr class="space h20"/>
+<script type="text/javascript">
+$(document).ready(function(){
+	<%if(report!=null){%>
+	StartIntervalGetStep();
+	$("#codeTitle").show();
+	$("#codeUrl").html('<%=(String)session.getAttribute("codeUrl")%>');
+	$("#codeUser").html('<%=(String)session.getAttribute("codeUser")%>');
+	//显示选择分析结果还是从新分析
+	$("#analysis").hide();
+	$("#chooseAnalysis").show();
+	<%}else{%>
+	getRulesets();
+	<%}%>
+});
+</script>
 <%@ include file="footer.jsp" %>

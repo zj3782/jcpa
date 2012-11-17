@@ -48,6 +48,8 @@ public class WebappListener implements ServletContextListener {
 			ToolUtil.ifFolderExist((String)application.getAttribute("JcpaSource"), true);
 			ToolUtil.ifFolderExist((String)application.getAttribute("Ruleset"), true);
 			ToolUtil.ifFolderExist((String)application.getAttribute("Ruleset")+"tmp/", true);
+			ToolUtil.ifFileExist((String)application.getAttribute("Ruleset")+"desc.txt",true,"","UTF-8");
+			ToolUtil.ifFileExist((String)application.getAttribute("WebRoot")+"WEB-INF/user.dat",true,"admin\tadmin","UTF-8");
 		} catch (Exception e) {
 			System.out.println("Error While checkFolder:"+e.getMessage());
 			e.printStackTrace();

@@ -2,6 +2,7 @@ package com.jcpa.action;
 
 
 import java.io.File;
+import java.net.URLDecoder;
 import java.util.Iterator;
 
 import org.tmatesoft.svn.core.wc.SVNUpdateClient;
@@ -170,7 +171,7 @@ public class AnalysisAction extends Action{
 				txt+="<tr><td>"+index+"</td><td>"+r.getPackageName()+"</td><td>"+r.getClassName()+"</td>";
 				txt+="<td>"+r.getMethodName()+"</td>";
 				txt+="<td>Line:["+r.getLine()+"]Column:["+r.getColumn()+"]</td>";
-				txt+="<td>"+r.getCode()+"</td>";
+				txt+="<td>"+URLDecoder.decode(r.getCode(),"UTF-8").replaceAll("\r\n","<br>")+"</td>";
 				txt+="<td>"+r.getRuleName()+"</td>";
 				txt+="<td>"+r.getRulePriority()+"</td></tr>";
 				index++;
