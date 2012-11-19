@@ -19,17 +19,21 @@ public class LoopExpensiveOperationsInSynchronizedBlock {
         synchronized (strList) {
             strList.add("E");
         }
-        costMethod();
+        excludecostMethod();
     }
     
     public void includeExpensiveOperation() {
         synchronized (strList) {
             strList.add("F");
-            costMethod();
+            includecostMethod();
         }
     }
     
-    public void costMethod() {
+    public void excludecostMethod() {
+        
+    }
+    
+    public void includecostMethod() {
         
     }
 }

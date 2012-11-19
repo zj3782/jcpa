@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd>
     <useProjectRuleSet>false</useProjectRuleSet>
-    <ruleSetFile>D:\WorkSpace\MyEclipse\jcpa.git\2012_11_15_all.plugin.xml</ruleSetFile>
+    <ruleSetFile>C:\Users\Code\Downloads\2012_11_19_test.plugin.xml</ruleSetFile>
     <rules>
         <rule>
             <name>CallCombinativeFunctionTwiceOrMore</name>

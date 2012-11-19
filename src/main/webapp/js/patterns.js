@@ -387,7 +387,8 @@ function AddRuleSet(){
 		id:'addruleset'
 	});
 	var today=new Date();
-	$("#AddFileName").val(today.getFullYear()+"_"+(today.getMonth()+1)+"_"+today.getDate()+"_"+today.getTime()+".xml").focus().select();
+	$("#AddFileName").val(today.getFullYear()+"_"+(today.getMonth()+1)+"_"+today.getDate()+"_"+
+			today.getHours()+"_"+today.getMinutes()+"_"+today.getSeconds()+".xml").focus().select();
 }
 function addRuleToTB(filename,desc){
 	var tb=ID("rulesetsTB"),tr,td;
