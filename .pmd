@@ -1,65 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd>
-    <useProjectRuleSet>false</useProjectRuleSet>
+    <useProjectRuleSet>true</useProjectRuleSet>
     <ruleSetFile>C:\Users\Code\Downloads\2012_11_19_test.plugin.xml</ruleSetFile>
-    <rules>
-        <rule>
-            <name>CallCombinativeFunctionTwiceOrMore</name>
-            <ruleset>jcpa pmd rules</ruleset>
-        </rule>
-        <rule>
-            <name>CallSameFunctionTwiceOrMoreInClass</name>
-            <ruleset>jcpa pmd rules</ruleset>
-        </rule>
-        <rule>
-            <name>CallSameFunctionTwiceOrMoreInMethod</name>
-            <ruleset>jcpa pmd rules</ruleset>
-        </rule>
-        <rule>
-            <name>ComputationalComplexityProblem</name>
-            <ruleset>jcpa pmd rules</ruleset>
-        </rule>
-        <rule>
-            <name>ExpensiveOperationsInSynchronizedBlock</name>
-            <ruleset>jcpa pmd rules</ruleset>
-        </rule>
-        <rule>
-            <name>LegacyUsageForLoop</name>
-            <ruleset>jcpa pmd rules</ruleset>
-        </rule>
-        <rule>
-            <name>OperateUnsynchronizedCollection</name>
-            <ruleset>jcpa pmd rules</ruleset>
-        </rule>
-        <rule>
-            <name>ProbeSizeOfArrayOrCollectionBeforeForStatement</name>
-            <ruleset>jcpa pmd rules</ruleset>
-        </rule>
-        <rule>
-            <name>ReclaimMemorySpace</name>
-            <ruleset>jcpa pmd rules</ruleset>
-        </rule>
-        <rule>
-            <name>SuboptimalLogicalExpression</name>
-            <ruleset>jcpa pmd rules</ruleset>
-        </rule>
-        <rule>
-            <name>SynchronizeCollectionWithLockVariable</name>
-            <ruleset>jcpa pmd rules</ruleset>
-        </rule>
-        <rule>
-            <name>UnnecessaryLogicalJudgement</name>
-            <ruleset>jcpa pmd rules</ruleset>
-        </rule>
-        <rule>
-            <name>UnspecifyTargetTypeInArrayConversion</name>
-            <ruleset>jcpa pmd rules</ruleset>
-        </rule>
-        <rule>
-            <name>UseSynchronizedSet</name>
-            <ruleset>jcpa pmd rules</ruleset>
-        </rule>
-    </rules>
     <includeDerivedFiles>false</includeDerivedFiles>
     <violationsAsErrors>false</violationsAsErrors>
 </pmd>

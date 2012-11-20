@@ -309,6 +309,13 @@ function showTxt(cat){
 				<h3>The page alerts that "Code Analysis Error:Couldn't find the class net.sourceforget.pmd.rules.XPathRule" when I scan code.</h3>
 				<p>That is because the ruleset file you use is only for plugin usage.Go back and select another ruleset.</p>
 			</div>
+			<div class="problem">	
+				<h3>When I scan code with the eclipse pmd plugin,it generate error and says that "An internal error occurred during ReviewCode Implementing class"</h3>
+				<img src="image/reviewcode_error.png">
+				<p>This error is caused by some source files,we haven't find out what kind of file can cause this problem,maybe it's a bug of pmd plugin.<br>
+				In this situation,you can scan your code package by package,and you can find out which file causes this problem.
+				</p>
+			</div>
 		</div>
 		</div>
 		<div id="usage">
