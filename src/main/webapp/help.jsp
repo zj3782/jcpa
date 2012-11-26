@@ -168,20 +168,31 @@ function showTxt(cat){
 					<p><span style="color:red;">Attention:</span>If you meet the following situation--you want to find the line which call some function such as 'method1'、'method2'.</p>
 					<p>You can write the expression like this:<span style="color:green;">//PrimarySuffix[@Image='method1' or @Image='method2']</span>.</p>
 					<p>You can also write like this:<br>
-						Expression: <span style="color:green;">//PrimarySuffix[##AUX##]</span><br>
+						Expression: <span style="color:green;">//PrimarySuffix[##AUX_EQ##]</span><br>
 						Auxiliary: <span style="color:green;">method1,method2</span><br>
-						That means you can write "##AUX##" in the expression to occupy the position and auxiliary will take its position latter.
+						That means you can write "##AUX_EQ##" in the expression to occupy the position and auxiliary will take its position latter.
 					</p>
-					<p>What if I need more than one "##AUX##" in the expression ? </p>
-					<p>For example:I want to replace the first position with "method1,method2" 
-						and replace the second position with "method3,method4" 
-						and replace the second position with "method1,method2,method3,method4":<br>
-						Expression: <span style="color:green;">//PrimarySuffix[##AUX0##]..........[##AUX1##]......[##AUX##]</span><br>
+					<p>What if I need more than one "##AUX_EQ##" in the expression ? </p>
+					<p>For example:</p>
+					<p>(1)I want to replace the first position with '@Image="method1" or @Image="method2"' 
+						and replace the second position with '@Image="method3" or @Image="method4"'
+						and replace the second position with '@Image="method1" or @Image="method2" or @Image="method3" or @Image="method4"':<br>
+						Expression: <span style="color:green;">//PrimarySuffix[##AUX_EQ_0##]..........[##AUX_EQ_1##]......[##AUX_EQ##]</span><br>
 						Auxiliary: <span style="color:green;">method1,method2##method3,method4##</span><br>
 						We use "##" to split the auxiliary filed to many parts.<br>
-						"##AUX0##"means that position should be replaced by the first part of the auxiliary filed,<br>
-						"##AUX1##"means that position should be replaced by the second part of the auxiliary filed and so on.<br>
-						"##AUX##" means this position should be replaced by all of the auxiliary filed.
+						"##AUX_EQ_0##"means that position should be replaced by the first part of the auxiliary filed,<br>
+						"##AUX_EQ_1##"means that position should be replaced by the second part of the auxiliary filed and so on.<br>
+						"##AUX_EQ##" means this position should be replaced by all of the auxiliary filed.
+					</p>
+					<p>(2)I want to replace the first position with 'ends-with(@Image,"fix1") or ends-with(@Image,"fix2")' 
+						and replace the second position with 'ends-with(@Image,"fix3") or ends-with(@Image,"fix4")' 
+						and replace the second position with "ends-with(@Image,"fix1") or ends-with(@Image,"fix2") or ends-with(@Image,"fix3") or ends-with(@Image,"fix4")":<br>
+						Expression: <span style="color:green;">//PrimarySuffix[##AUX_END0##]..........[##AUX_END_1##]......[##AUX_EQ##]</span><br>
+						Auxiliary: <span style="color:green;">fix1,fix2##fix3,fix4##</span><br>
+						We use "##" to split the auxiliary filed to many parts.<br>
+						"##AUX_END_0##"means that position should be replaced by the first part of the auxiliary filed,<br>
+						"##AUX_END_1##"means that position should be replaced by the second part of the auxiliary filed and so on.<br>
+						"##AUX_END##" means this position should be replaced by all of the auxiliary filed.
 					</p>
 					<p>(2) delete pattern</p>
 					<p>If you want to delete a single pattern in the pattern line, you can use the right-click menu to delete.</p>
