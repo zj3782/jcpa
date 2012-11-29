@@ -69,7 +69,7 @@ $(document).ready(function() {
     /**检查数据*/
     function onAddRowData(row){
     	for(var i=0;i<row.cell.length;i++){
-    		row.cell[i]=decodeURIComponent(row.cell[i]);//解码
+    		row.cell[i]=safeDecodeURI(row.cell[i]);//解码
     		row.cell[i]=htm2specil(row.cell[i]);
     	}
     	return row;

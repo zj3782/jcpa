@@ -1,5 +1,6 @@
 package com.jcpa.util.json;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
  * Array节点类
  * */
 public class JsonArrayNode extends JsonNode{
-	private List<JsonNode> items = new LinkedList<JsonNode>();
+	private List<JsonNode> items =Collections.synchronizedList(new LinkedList<JsonNode>());
 	/**
 	 * 构造方法
 	 * */

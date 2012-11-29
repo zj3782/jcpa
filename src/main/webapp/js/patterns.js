@@ -90,7 +90,7 @@ $(document).ready(function() {
     /**检查数据*/
     function onAddRowData(row){
     	for(var i=0;i<row.cell.length;i++){
-    		row.cell[i]=decodeURIComponent(row.cell[i]);//解码
+    		row.cell[i]=safeDecodeURI(row.cell[i]);//解码
     		row.cell[i]=htm2specil(row.cell[i]);
     	}
     	row.cell[1]="<a href='javascript:;' onclick='viewPatternById("+row.id+");'>"+row.cell[1]+"</a>";
@@ -198,14 +198,14 @@ function editPattern(id,fromView){
 	$.post("pattern.do?method=get",{'id':id},function(result){
 		waitDlg.close();
 		if(result.status){
-			$("#patternName").val(decodeURIComponent(result.data.name));
-			$("#patternExpression").val(decodeURIComponent(result.data.expression));
-			$("#patternAuxiliary").val(decodeURIComponent(result.data.aux));
-			$("#patternWarning").val(decodeURIComponent(result.data.warning));
-			$("#patternCategory").val(decodeURIComponent(result.data.category));
-			$("#patternScope").val(decodeURIComponent(result.data.scope));
-			$("#patternExample").val(decodeURIComponent(result.data.example));
-			$("#patternPriority").val(decodeURIComponent(result.data.priority));
+			$("#patternName").val(safeDecodeURI(result.data.name));
+			$("#patternExpression").val(safeDecodeURI(result.data.expression));
+			$("#patternAuxiliary").val(safeDecodeURI(result.data.aux));
+			$("#patternWarning").val(safeDecodeURI(result.data.warning));
+			$("#patternCategory").val(safeDecodeURI(result.data.category));
+			$("#patternScope").val(safeDecodeURI(result.data.scope));
+			$("#patternExample").val(safeDecodeURI(result.data.example));
+			$("#patternPriority").val(safeDecodeURI(result.data.priority));
 			artDialog({
 				title:"Edit Pattern",
 				content:ID('patternAddEdit'),

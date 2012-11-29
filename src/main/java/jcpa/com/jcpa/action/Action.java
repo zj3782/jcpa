@@ -52,7 +52,7 @@ public class Action {
 			_cleanup();
 		} catch (Exception e) {
 			e.printStackTrace();
-			echo(e.getMessage());
+			echo(e.toString());
 		}
 	}
 	

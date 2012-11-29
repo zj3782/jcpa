@@ -1,7 +1,6 @@
 package com.jcpa.action;
 
 
-import java.util.Iterator;
 import java.util.List;
 
 import com.jcpa.beans.Benchmark;
@@ -39,9 +38,9 @@ public class BenchmarkAction extends Action{
 			j.addChild(new JsonLeafNode("page",String.valueOf(page)));
 			j.addChild(new JsonLeafNode("total",String.valueOf(Count)));
 			JsonArrayNode rows=new JsonArrayNode("rows");
-			Iterator<Benchmark> it = list.iterator();
-			while(it.hasNext()){
-				rows.addItem(it.next().getTBJsonNode());
+
+			for(Benchmark b:list){
+				rows.addItem(b.getTBJsonNode());
 			}
 			j.addChild(rows);
 			echo(j.toString());

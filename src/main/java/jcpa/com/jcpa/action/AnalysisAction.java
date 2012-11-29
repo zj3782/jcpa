@@ -2,8 +2,7 @@ package com.jcpa.action;
 
 
 import java.io.File;
-import java.net.URLDecoder;
-import java.util.Iterator;
+import java.util.List;
 
 import org.tmatesoft.svn.core.wc.SVNUpdateClient;
 
@@ -50,6 +49,7 @@ public class AnalysisAction extends Action{
 		String url=request.getParameter("url");
 		String user=request.getParameter("user");
 		String pwd=request.getParameter("pwd");
+		if(url!=null && !url.equals(""))url=url.replaceAll("\\\\","/");
 		session.setAttribute("codeUser",user);
 		session.setAttribute("codeUrl",url);
 		//判断是否是svn
@@ -141,6 +141,28 @@ public class AnalysisAction extends Action{
 		}
 	}
 	/**
+	 * 删除某个/些report
+	 * */
+	public void RemoveReport() throws Exception{
+		String SIds=request.getParameter("ids");
+		CodeReports report=(CodeReports)session.getAttribute("AnalysisReport");
+		if(report==null){
+			error("Session is empty");
+		}else if(SIds==null || SIds.equals("")){
+			error("args is empty");
+		}else{
+			int delCount=0;
+			String[] SArrIds=SIds.split(",");
+			for(String SId:SArrIds){
+				int id=ToolUtil.strToInt(SId,-1);
+				if(id>=0 && report.remove(id)){
+					delCount++;
+				}
+			}
+			success(delCount+" reports delete success");
+		}
+	}
+	/**
 	 * 清除session中的report
 	 * */
 	public void ClearReport() throws Exception{
@@ -165,29 +187,26 @@ public class AnalysisAction extends Action{
 			txt+="<tr><th></th><th>Package</th><th>Class</th><th>Method</th><th>Location</th><th>Code</th><th>Rule</th><th>Priority</th></tr>";
 			
 			int index=1;
-			Iterator<CodeReport> itr = report.reportIterator();
-			while(itr.hasNext()){
-				CodeReport r = itr.next();
+			List<CodeReport> RList = report.getReports();
+			for(CodeReport r:RList){
 				txt+="<tr><td>"+index+"</td><td>"+r.getPackageName()+"</td><td>"+r.getClassName()+"</td>";
 				txt+="<td>"+r.getMethodName()+"</td>";
 				txt+="<td>Line:["+r.getLine()+"]Column:["+r.getColumn()+"]</td>";
-				txt+="<td>"+URLDecoder.decode(r.getCode(),"UTF-8").replaceAll("\r\n","<br>")+"</td>";
+				txt+="<td>"+ToolUtil.strHtmlFmt(r.getCode()).replaceAll("\r\n","<br>")+"</td>";
 				txt+="<td>"+r.getRuleName()+"</td>";
 				txt+="<td>"+r.getRulePriority()+"</td></tr>";
 				index++;
 			}
 			txt+="</table>";
 	
-			Iterator<CodeReportError> ite = report.reportErrorIterator();
-			if(ite.hasNext()){
-				txt+="<table border='1' align='center' cellspacing='0' cellpadding='3' width='100%'>";
-				txt+="<tr><th>File</th><th>ErrorMsg</th></tr>";
-				while(ite.hasNext()){
-					CodeReportError e = ite.next();
-					txt+="<tr><td>"+e.getFile()+"</td><td>"+e.getMsg()+"</td></tr>";
-				}
-				txt+="</table>";
+			List<CodeReportError> EList = report.getErrors();
+			txt+="<table border='1' align='center' cellspacing='0' cellpadding='3' width='100%'>";
+			txt+="<tr><th>File</th><th>ErrorMsg</th></tr>";
+			for(CodeReportError e:EList){
+				txt+="<tr><td>"+e.getFile()+"</td><td>"+e.getMsg()+"</td></tr>";
 			}
+			txt+="</table>";
+			
 			txt+="</div></body></html>";
 			// 设置HTTP头：
 			response.reset();

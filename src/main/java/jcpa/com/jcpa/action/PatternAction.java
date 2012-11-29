@@ -12,7 +12,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URLDecoder;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -189,9 +188,8 @@ public class PatternAction extends Action{
 			j.addChild(new JsonLeafNode("page",String.valueOf(page)));
 			j.addChild(new JsonLeafNode("total",String.valueOf(Count)));
 			JsonArrayNode rows=new JsonArrayNode("rows");
-			Iterator<Pattern> it = list.iterator();
-			while(it.hasNext()){
-				rows.addItem(it.next().getTBJsonNode());
+			for(Pattern p:list){
+				rows.addItem(p.getTBJsonNode());
 			}
 			
 			j.addChild(rows);
@@ -209,9 +207,8 @@ public class PatternAction extends Action{
 		JsonArrayNode rules=new JsonArrayNode("rules");
 		data.addChild(rules);
 		List<String> files=ToolUtil.getFileFromPath((String)application.getAttribute("Ruleset"),"xml");
-		Iterator<String> it=files.iterator();
-		while(it.hasNext()){
-			rules.addItem(new JsonLeafNode("",it.next()));
+		for(String f:files){
+			rules.addItem(new JsonLeafNode("",f));
 		}
 		//描述信息
 		data.addChild(getRulesetDescJsonArr());
@@ -271,9 +268,7 @@ public class PatternAction extends Action{
 			long pages = ToolUtil.getSplitCount(Count, ONE_PAGE_COUNT);//总页数
 			for (int i = 0; i < pages; i++) {
 				List<Pattern> list = dao.list(i, ONE_PAGE_COUNT, cond,"");
-				Iterator<Pattern> it = list.iterator();
-				while (it.hasNext()) {
-					Pattern p = it.next();
+				for(Pattern p:list) {
 					fw.write("<rule name=\""+ p.getName()
 							+ "\" language=\"java\" since=\"5.0\" scope=\""+p.getScope()
 							+"\" message=\"\" class=\"net.sourceforge.pmd.lang.rule.XPathRule\" externalInfoUrl=\"pattern.jsp?id="+p.getId()+"\">");
@@ -349,7 +344,7 @@ public class PatternAction extends Action{
 	/**
 	 * 上传ruleset
 	 * */
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public void upRuleset() throws Exception{
 		 /** 
          * form中的enctype必须是multipart/... 
@@ -394,21 +389,21 @@ public class PatternAction extends Action{
             JsonArrayNode files=new JsonArrayNode("filename");
             data.addChild(files);
             
-            Iterator<FileItem> iter = (items==null)?null:items.iterator();  
-            while(iter != null && iter.hasNext()) {  
-                FileItem item = (FileItem)iter.next();   
-                //文件域  
-                if(!item.isFormField()) {   
-                    String fileName = item.getName();
-                    int index=fileName.lastIndexOf("\\");if(index<0)index=0;
-                    fileName=fileName.substring(index); 
-                    if(!fileName.endsWith(".xml"))fileName+=".xml";
-                    BufferedInputStream in = new BufferedInputStream(item.getInputStream());  
-                    BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File(RulePath+fileName)));  
-                    Streams.copy(in, out, true);
-                    files.addItem(new JsonLeafNode("",fileName));
-                    addRulesetDesc(fileName,desc);
-                }  
+            if(items!=null){
+            	for(FileItem item:items){
+            		//文件域  
+                    if(!item.isFormField()) {   
+                        String fileName = item.getName();
+                        int index=fileName.lastIndexOf("\\");if(index<0)index=0;
+                        fileName=fileName.substring(index); 
+                        if(!fileName.endsWith(".xml"))fileName+=".xml";
+                        BufferedInputStream in = new BufferedInputStream(item.getInputStream());  
+                        BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File(RulePath+fileName)));  
+                        Streams.copy(in, out, true);
+                        files.addItem(new JsonLeafNode("",fileName));
+                        addRulesetDesc(fileName,desc);
+                    } 
+            	}
             }
             
             echo(j.toString());

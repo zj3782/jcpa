@@ -115,6 +115,12 @@ function strHtmFmt(str){
 	str=blank2space(str);
 	return str;
 }
+function safeDecodeURI(str){
+	try{
+		return decodeURIComponent(str);
+	}catch(e){}
+	return str;
+}
 /**
  * jquery.loadmask.min.js
  * Copyright (c) 2009 Sergiy Kovalchuk (serg472@gmail.com)

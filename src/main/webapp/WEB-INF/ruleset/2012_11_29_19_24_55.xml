@@ -1,25 +1,4 @@
-<?xml version="1.0"?> <ruleset name="jcpa pmd rules" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd" xsi:noNamespaceSchemaLocation="http://pmd.sourceforge.net/ruleset_2_0_0.xsd"><description>all patterns -- generate by admin at the time of 2012.11.24 09:57:05</description><rule name="ProbeSizeOfArrayOrCollectionBeforeForStatement" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=1"><description>It is unnecessary to evaluate the size.</description><priority>3</priority><properties><property name="xpath"><value><![CDATA[//BlockStatement
-[
-descendant::*/IfStatement/descendant::*[RelationalExpression]/descendant::*/Literal[@Image="0"]
-]
-[
-ends-with(descendant::*/IfStatement/descendant::*/Name/@Image,'.length')
-]
-[starts-with(
-descendant::*/IfStatement/descendant::*/Name/@Image,
-concat(preceding-sibling::*
-[./LocalVariableDeclaration/Type/ReferenceType[@Array="true"]]
-[count(./LocalVariableDeclaration/*/*/ArrayInitializer/*)=0]
-/LocalVariableDeclaration/*/VariableDeclaratorId/@Image, ".")
-)]
-[
-not(preceding-sibling::*[descendant::*/AssignmentOperator]) or
-not(starts-with(
-descendant::*/RelationalExpression/descendant::*/Name/@Image,
-preceding-sibling::*[descendant::*/AssignmentOperator]/descendant::*/PrimaryPrefix/Name/@Image))
-]
-|
-//BlockStatement
+<?xml version="1.0"?> <ruleset name="jcpa pmd rules" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd" xsi:noNamespaceSchemaLocation="http://pmd.sourceforge.net/ruleset_2_0_0.xsd"><description>all -- generate by admin at the time of 2012.11.29 15:25:01</description><rule name="ProbeSizeOfArrayOrCollectionBeforeForStatement" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=1"><description>It is unnecessary to evaluate the size.</description><priority>3</priority><properties><property name="xpath"><value><![CDATA[//BlockStatement
 [
 descendant::*/IfStatement/descendant::*[RelationalExpression]/descendant::*/Literal[@Image="0"]
 ]
@@ -74,42 +53,55 @@ descendant::*/IfStatement/descendant::*/ForStatement/descendant::*/Name/@Image, 
      }
 }]]></example></rule><rule name="UnnecessaryLogicalJudgement" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=2"><description>It is unnecessary to evaluate logical expression.</description><priority>3</priority><properties><property name="xpath"><value><![CDATA[//BlockStatement
 [
-Statement/IfStatement/descendant::*[EqualityExpression]/descendant::*/Literal/NullLiteral
-]
-[
-descendant::*/IfStatement/descendant::*[EqualityExpression]/descendant::*/PrimaryPrefix/Name/@Image=
-preceding-sibling::*[descendant::*/AllocationExpression]/descendant::*/VariableDeclaratorId/@Image 
-]
-[
-not(preceding-sibling::*[descendant::*/AssignmentOperator]) or
-not(descendant::*/IfStatement/descendant::*[EqualityExpression]/descendant::*/Name/@Image=
-preceding-sibling::*[descendant::*/AssignmentOperator]/descendant::*/PrimaryPrefix/Name/@Image)
-]
-|
-//BlockStatement
-[
-Statement/IfStatement/descendant::*/EqualityExpression[@Image="=="]
-[descendant::*/Literal/NullLiteral]/PrimaryExpression/PrimaryPrefix/Name/@Image=
-preceding-sibling::*/LocalVariableDeclaration/VariableDeclarator[descendant::*/Literal/NullLiteral]/VariableDeclaratorId/@Image
-]
-[
-not(preceding-sibling::*[descendant::*/AssignmentOperator]) or
-not(descendant::*/IfStatement/descendant::*[EqualityExpression]/descendant::*/Name/@Image=
-preceding-sibling::*[descendant::*/AssignmentOperator]/descendant::*/PrimaryPrefix/Name/@Image)
+descendant::*/ForStatement/Expression
+/RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image=
+preceding-sibling::*/LocalVariableDeclaration/VariableDeclarator
+[ends-with(VariableInitializer/Expression/PrimaryExpression/PrimaryPrefix/Name/@Image,".length")]
+[starts-with(VariableInitializer/Expression/PrimaryExpression/PrimaryPrefix/Name/@Image,concat(
+ancestor::BlockStatement/preceding-sibling::*/LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="String"]]/VariableDeclarator/VariableDeclaratorId/@Image,"."))]
+[starts-with(VariableInitializer/Expression/PrimaryExpression/PrimaryPrefix/Name/@Image,concat(
+ancestor::BlockStatement/following-sibling::*/descendant::*/ForStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix
+[following-sibling::*[position()=1 and self::PrimarySuffix]/Expression/PrimaryExpression/PrimaryPrefix/Name/@Image=
+ancestor::Statement/preceding-sibling::*[position()=1 and self::ForUpdate]/descendant::*/PrimaryPrefix/Name/@Image]
+/Name/@Image,"."))]
+/VariableDeclaratorId/@Image
 ]
 |
 //BlockStatement
 [
-Statement/IfStatement/Expression/EqualityExpression[@Image="!="][PrimaryExpression/PrimaryPrefix/Literal/NullLiteral]/PrimaryExpression/PrimaryPrefix/Name/@Image=
-preceding-sibling::*/LocalVariableDeclaration/VariableDeclarator[not(descendant::*/PrimaryExpression/PrimaryPrefix[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments]/Name)]
-[
-not(descendant::*/Literal/NullLiteral)]/VariableDeclaratorId/@Image
+starts-with(descendant::*/ForStatement/Expression
+/RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image,
+previous-sibiling/LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="String"]]/VariableDeclarator/VariableDeclaratorId/@Image)
 ]
 [
-not(preceding-sibling::*[descendant::*/AssignmentOperator]) or
-not(descendant::*/IfStatement/descendant::*[EqualityExpression]/descendant::*/Name/@Image=
-preceding-sibling::*[descendant::*/AssignmentOperator]/descendant::*/PrimaryPrefix/Name/@Image)
-]]]></value></property></properties><example><![CDATA[public class UnnecessaryLogicalJudgement {
+starts-with(descendant::*/ForStatement/Expression
+/RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image,
+descendant::*/ForStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix/Name/@Image)
+]
+[
+ends-with(descendant::*/ForStatement/Expression
+/RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image,".length")
+]
+[
+descendant::*/ForStatement[starts-with(Expression/
+RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image,
+concat(Statement/descendant::*/PrimaryExpression/PrimaryPrefix
+[following-sibling::*[position()=1 and self::PrimarySuffix]/Expression/PrimaryExpression/PrimaryPrefix/Name/@Image=
+ancestor::Statement/preceding-sibling::*[position()=1 and self::ForUpdate]/descendant::*/PrimaryPrefix/Name/@Image]
+/Name/@Image,"."))]
+]
+|
+//BlockStatement
+[ends-with(
+Statement/WhileStatement/descendant::*/PrimaryExpression/PrimaryPrefix[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount=0]]/Name/@Image,".hasNext"
+)]
+[starts-with(
+Statement/WhileStatement/descendant::*/PrimaryExpression/PrimaryPrefix[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount=0]]/Name/@Image,
+preceding-sibling/LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="Iterator"]]/VariableDeclarator/VariableDeclaratorId/@Image
+)]
+[ends-with(
+Statement/WhileStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount=0]]/Name/@Image,".next"
+)]]]></value></property></properties><example><![CDATA[public class UnnecessaryLogicalJudgement {
      public String correctTestVariable() {
          String signal = null;
          Scanner in = new Scanner(System.in);
@@ -146,7 +138,8 @@ preceding-sibling::*[descendant::*/AssignmentOperator]/descendant::*/PrimaryPref
 }]]></example></rule><rule name="ReclaimMemorySpace" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=3"><description>Local variable is explicitly reclaimed.</description><priority>3</priority><properties><property name="xpath"><value><![CDATA[//BlockStatement
 [Statement/StatementExpression/AssignmentOperator/following-sibling::*[self::Expression and position()=1]/PrimaryExpression/PrimaryPrefix/Literal/NullLiteral]
 [not(ancestor::*/following-sibling::*/descendant::*/PrimaryPrefix/Name/@Image=descendant::*/PrimaryPrefix/Name/@Image)]
-[not(following-sibling::*/descendant::*/PrimaryPrefix/Name/@Image=descendant::*/PrimaryPrefix/Name/@Image)]]]></value></property></properties><example><![CDATA[public class ReclaimMemorySpace {
+[not(following-sibling::*/descendant::*/PrimaryPrefix/Name/@Image=descendant::*/PrimaryPrefix/Name/@Image)]
+[not(ancestor::ClassOrInterfaceBodyDeclaration/ConstructorDeclaration/FormatParameters/@ParameterCount="0")]]]></value></property></properties><example><![CDATA[public class ReclaimMemorySpace {
      public String correctSetNull() {
          String question = "?";
          Scanner in = new Scanner(System.in);
@@ -434,13 +427,19 @@ following-sibling::*[MethodDeclaration]
          unsafeMap.put("K", "V");
      }
 }]]></example></rule><rule name="LegacyUsageForLoop" language="java" since="5.0" scope="inner-class" message="" class="net.sourceforge.pmd.lang.rule.XPathRule" externalInfoUrl="pattern.jsp?id=7"><description>Old version's usage is not recommended.</description><priority>2</priority><properties><property name="xpath"><value><![CDATA[//BlockStatement
-[starts-with(
-descendant::*/ForStatement/descendant::*/BlockStatement/descendant::*/PrimaryPrefix/Name/@Image,
-concat(preceding-sibling::*/LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image='List' or @Image='Set']]/VariableDeclarator/VariableDeclaratorId/@Image, ".")
-)]/descendant::*/ForStatement
 [
-ForUpdate/descendant::*/PrimaryPrefix/Name/@Image=
-Statement/descendant::*/PrimaryExpression/PrimarySuffix/descendant::*/Name/@Image
+descendant::*/ForStatement/Expression
+/RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image=
+preceding-sibling::*/LocalVariableDeclaration/VariableDeclarator
+[ends-with(VariableInitializer/Expression/PrimaryExpression/PrimaryPrefix/Name/@Image,".length")]
+[starts-with(VariableInitializer/Expression/PrimaryExpression/PrimaryPrefix/Name/@Image,concat(
+ancestor::BlockStatement/preceding-sibling::*/LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="String"]]/VariableDeclarator/VariableDeclaratorId/@Image,"."))]
+[starts-with(VariableInitializer/Expression/PrimaryExpression/PrimaryPrefix/Name/@Image,concat(
+ancestor::BlockStatement/following-sibling::*/descendant::*/ForStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix
+[following-sibling::*[position()=1 and self::PrimarySuffix]/Expression/PrimaryExpression/PrimaryPrefix/Name/@Image=
+ancestor::Statement/preceding-sibling::*[position()=1 and self::ForUpdate]/descendant::*/PrimaryPrefix/Name/@Image]
+/Name/@Image,"."))]
+/VariableDeclaratorId/@Image
 ]
 |
 //BlockStatement
@@ -457,6 +456,14 @@ descendant::*/ForStatement/Statement/descendant::*/PrimaryExpression/PrimaryPref
 [
 ends-with(descendant::*/ForStatement/Expression
 /RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image,".length")
+]
+[
+descendant::*/ForStatement[starts-with(Expression/
+RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image,
+concat(Statement/descendant::*/PrimaryExpression/PrimaryPrefix
+[following-sibling::*[position()=1 and self::PrimarySuffix]/Expression/PrimaryExpression/PrimaryPrefix/Name/@Image=
+ancestor::Statement/preceding-sibling::*[position()=1 and self::ForUpdate]/descendant::*/PrimaryPrefix/Name/@Image]
+/Name/@Image,"."))]
 ]
 |
 //BlockStatement

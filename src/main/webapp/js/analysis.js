@@ -11,12 +11,16 @@ $(document).ready(function() {
     	        { display: 'Rule', name: 'rule', width: 220, sortable: true,sorttype:'ascii', align: 'left' },
        	        { display: 'Priority', name: 'priority', width: 50, sortable: true,sorttype:'num', align: 'left' }
 		],
+		buttons: [
+	              { name: 'Delete', displayname: "Delete",  onpress: toolbarItem_onclick },
+	    ],
 		url:"Analysis.do?method=reportlist",
 		usepager: true,
 		useRp: true,
 		rp: 12, // results per page,每页默认的结果数
         rpOptions: [12, 20, 30, 50, 100], //可选择设定的每页结果数
         onAddRow:onAddRowData,
+        showCheckbox: true,
         striped:false,
         autoload:false
     };
@@ -39,12 +43,17 @@ $(document).ready(function() {
     };
     flexTBE=$("#errorTB").flexigrid(option);
 });
-
+/**工具栏按钮*/
+function toolbarItem_onclick(cmd, grid) {
+   if (cmd == "Delete") {
+    	delReports(flexTBR.flexGetCheckedRows());
+    }
+}
 /**检查数据*/
 function onAddRowData(row){
 	row.cell[4]=htm2specil(row.cell[4]);//code
 	for(var i=0;i<row.cell.length;i++){
-		row.cell[i]=decodeURIComponent(row.cell[i]);//解码
+			row.cell[i]=safeDecodeURI(row.cell[i]);//解码
 	}
 	row.cell[3]="<a href='javascript:;' onclick='viewReportById("+row.id+")'>"+row.cell[3]+"</a>";
 	row.cell[5]="<a href='"+row.cell[7]+"' target='_blank'>"+row.cell[5]+"</a>";
@@ -64,9 +73,52 @@ function getPriorityColor(priority){
 }
 function onAddErrorRowData(row){
 	for(var i=0;i<row.cell.length;i++){
-		row.cell[i]=decodeURIComponent(row.cell[i]);//解码
+		row.cell[i]=safeDecodeURI(row.cell[i]);//解码
 	}
 	return row;
+}
+/**
+ * 删除reports
+ * */
+function delReports(rows){
+	if(!rows || !rows.length){
+		alert("Please select one report or more ones to delete.");
+		return;
+	}
+	var strReports="<table cellpadding='2' cellspacing='2' style='border: dotted 1px;padding: 5px;'>";
+	var strIds="";
+	var ids=[];
+	for(var i=0;i<rows.length;i++){
+		strReports+="<tr><td>"+rows[i].cell[0]+"</td><td>"+rows[i].cell[1]+"</td><td>"+rows[i].cell[3]+"</td><td>"+rows[i].cell[5]+"</td>";
+		strIds+=","+rows[i].id;
+		ids.push(rows[i].id);
+	}
+	strReports+="</table>";
+	
+	artDialog({
+		title:"Question",
+		content:"Are you sure to delete selected report(s) ?<br>"+strReports,
+		button: [
+	        {
+	            name: 'OK',
+	            callback: function(){
+	    			$.post("Analysis.do",{"method":"RemoveReport","ids":strIds},function(result){
+	    				if(result.status){
+	    					flexTBR.flexDelRowsByIds(ids);
+	    					artDialog({title:"Delete success",content:result.info,icon:"succeed",time:2});
+	    				}else{
+	    					artDialog({title:"Delete fail",content:result.info,icon:"error"});
+	    				}
+	    			},"json");
+	    		}
+	        },
+	        {
+	            name: 'Cancel'
+	        }
+	    ],
+		lock:true,
+		icon:"question"
+	});
 }
 /**
  * 查看单个report

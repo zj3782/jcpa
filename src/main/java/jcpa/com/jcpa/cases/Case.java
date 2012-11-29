@@ -1,6 +1,5 @@
 package com.jcpa.cases;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,9 +19,8 @@ public abstract class Case {
 	 * */
 	public String getResult(){
 		String str="";
-		Iterator<String> it=result.iterator();
-		while(it.hasNext()){
-			str+=it.next()+"\r\n";
+		for(String s:result){
+			str+=s+"\r\n";
 		}
 		return str;
 	}

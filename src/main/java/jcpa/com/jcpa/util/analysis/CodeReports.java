@@ -1,6 +1,5 @@
 package com.jcpa.util.analysis;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -59,6 +58,26 @@ public class CodeReports {
 		}
 	}
 	/**
+	 * 删除report
+	 * */
+	public boolean remove(int id){
+		boolean ret=false;
+		synchronized(reports){
+			CodeReport r=null;
+			int i=0,size=reports.size();
+			for(i=0;i<size;i++){
+				r=reports.get(i);
+				if(r.getId()==id){
+					reports.remove(i);
+					reportCount--;
+					ret=true;
+					break;
+				}
+			}
+		}
+		return ret;
+	}
+	/**
 	 * 添加error
 	 * */
 	public void addError(CodeReportError error){
@@ -108,16 +127,12 @@ public class CodeReports {
 	public int errorCount(){
 		return errors.size();
 	}
-	/**
-	 * 返回reports的迭代对象
-	 * */
-	public Iterator<CodeReport> reportIterator(){
-		return reports.iterator();
-	}/**
-	 * 返回report errors的迭代对象
-	 * */
-	public Iterator<CodeReportError> reportErrorIterator(){
-		return errors.iterator();
+	
+	public List<CodeReport> getReports() {
+		return reports;
+	}
+	public List<CodeReportError> getErrors() {
+		return errors;
 	}
 	/**
 	 * 取得step
