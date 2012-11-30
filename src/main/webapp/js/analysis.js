@@ -12,7 +12,7 @@ $(document).ready(function() {
        	        { display: 'Priority', name: 'priority', width: 50, sortable: true,sorttype:'num', align: 'left' }
 		],
 		buttons: [
-	              { name: 'Delete', displayname: "Delete",  onpress: toolbarItem_onclick },
+	              { name: 'Ignore', displayname: "Ignore",  onpress: toolbarItem_onclick },
 	    ],
 		url:"Analysis.do?method=reportlist",
 		usepager: true,
@@ -45,8 +45,8 @@ $(document).ready(function() {
 });
 /**工具栏按钮*/
 function toolbarItem_onclick(cmd, grid) {
-   if (cmd == "Delete") {
-    	delReports(flexTBR.flexGetCheckedRows());
+   if (cmd == "Ignore") {
+    	IgnoreReports(flexTBR.flexGetCheckedRows());
     }
 }
 /**检查数据*/
@@ -80,9 +80,9 @@ function onAddErrorRowData(row){
 /**
  * 删除reports
  * */
-function delReports(rows){
+function IgnoreReports(rows){
 	if(!rows || !rows.length){
-		alert("Please select one report or more ones to delete.");
+		alert("Please select one report or more ones to ignore.");
 		return;
 	}
 	var strReports="<table cellpadding='2' cellspacing='2' style='border: dotted 1px;padding: 5px;'>";
@@ -97,7 +97,7 @@ function delReports(rows){
 	
 	artDialog({
 		title:"Question",
-		content:"Are you sure to delete selected report(s) ?<br>"+strReports,
+		content:"Are you sure to ignore selected report(s) ?<br>"+strReports,
 		button: [
 	        {
 	            name: 'OK',
@@ -105,9 +105,9 @@ function delReports(rows){
 	    			$.post("Analysis.do",{"method":"RemoveReport","ids":strIds},function(result){
 	    				if(result.status){
 	    					flexTBR.flexDelRowsByIds(ids);
-	    					artDialog({title:"Delete success",content:result.info,icon:"succeed",time:2});
+	    					artDialog({title:"Ignore success",content:result.info,icon:"succeed",time:2});
 	    				}else{
-	    					artDialog({title:"Delete fail",content:result.info,icon:"error"});
+	    					artDialog({title:"Ignore fail",content:result.info,icon:"error"});
 	    				}
 	    			},"json");
 	    		}

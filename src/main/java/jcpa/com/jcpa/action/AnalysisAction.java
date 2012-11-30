@@ -180,10 +180,20 @@ public class AnalysisAction extends Action{
 	public void DownReport() throws Exception{
 		CodeReports report=(CodeReports)session.getAttribute("AnalysisReport");
 		if(report!=null){
-			String txt="<html><head><title>Code Analysis Report</title></head><body><div>";
+			String txt="<html><head><title>Code Analysis Report</title>";
+			txt+="<script type=\"text/javascript\">";
+				txt+="window.onload=function(){";
+					txt+="var tb=document.getElementById('reportTB');";
+					txt+="for(var i=0;i<tb.rows.length;i++){";
+						txt+="var td=tb.rows[i].cells[5];";
+						txt+="try{td.innerHTML=decodeURIComponent(td.innerHTML);}catch(e){}";
+					txt+="}";
+				txt+="}";
+			txt+="</script>";
+			txt+="</head><body><div>";
 			txt+="<h3>SourceUrl:&nbsp;&nbsp;&nbsp;<span style='color:green'>"+(String)session.getAttribute("codeUrl")+"</span></h3>";
 			txt+="<h3>UserName:&nbsp;&nbsp;&nbsp;<span style='color:green'>"+(String)session.getAttribute("codeUser")+"</span></h3>";
-			txt+="<table border='1' align='center' cellspacing='0' cellpadding='3' width='100%'>";
+			txt+="<table border='1' align='center' cellspacing='0' cellpadding='3' id='reportTB'>";
 			txt+="<tr><th></th><th>Package</th><th>Class</th><th>Method</th><th>Location</th><th>Code</th><th>Rule</th><th>Priority</th></tr>";
 			
 			int index=1;
@@ -200,7 +210,7 @@ public class AnalysisAction extends Action{
 			txt+="</table>";
 	
 			List<CodeReportError> EList = report.getErrors();
-			txt+="<table border='1' align='center' cellspacing='0' cellpadding='3' width='100%'>";
+			txt+="<table border='1' align='center' cellspacing='0' cellpadding='3' id='errorTB'>";
 			txt+="<tr><th>File</th><th>ErrorMsg</th></tr>";
 			for(CodeReportError e:EList){
 				txt+="<tr><td>"+e.getFile()+"</td><td>"+e.getMsg()+"</td></tr>";
