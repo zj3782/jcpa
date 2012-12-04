@@ -2,6 +2,7 @@ package net.example.redundantstatement;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /*
  * Wrong occurrences: 2
@@ -9,6 +10,16 @@ import java.util.Collection;
 public class ProbeSizeOfArrayOrCollectionBeforeForStatement {
     String[] sampleArr = { "A", "B", "C", "D", "E" };
     Collection<String> sampleCollection = Arrays.asList(sampleArr);
+
+    public void correctTestifyLength() {
+        String[] parts = "en_US".split("_");
+        List<String> partsList = null;
+        if (parts.length > 0) {
+            partsList = Arrays.asList(parts);
+        }
+        assert (partsList != null);
+
+    }
 
     public void correctIterateArray() {
         if (sampleArr != null) {

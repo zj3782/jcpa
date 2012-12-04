@@ -187,13 +187,22 @@ function showTxt(cat){
 					<p>(2)I want to replace the first position with 'ends-with(@Image,"fix1") or ends-with(@Image,"fix2")' 
 						and replace the second position with 'ends-with(@Image,"fix3") or ends-with(@Image,"fix4")' 
 						and replace the second position with "ends-with(@Image,"fix1") or ends-with(@Image,"fix2") or ends-with(@Image,"fix3") or ends-with(@Image,"fix4")":<br>
-						Expression: <span style="color:green;">//PrimarySuffix[##AUX_END0##]..........[##AUX_END_1##]......[##AUX_EQ##]</span><br>
+						Expression: <span style="color:green;">//PrimarySuffix[##AUX_END_0##]..........[##AUX_END_1##]......[##AUX_END##]</span><br>
 						Auxiliary: <span style="color:green;">fix1,fix2##fix3,fix4##</span><br>
 						We use "##" to split the auxiliary filed to many parts.<br>
 						"##AUX_END_0##"means that position should be replaced by the first part of the auxiliary filed,<br>
 						"##AUX_END_1##"means that position should be replaced by the second part of the auxiliary filed and so on.<br>
 						"##AUX_END##" means this position should be replaced by all of the auxiliary filed.
 					</p>
+					<p>(3)I want to replace the first position with 'contains(@Image,"fix1") or contains(@Image,"fix2")' 
+						and replace the second position with 'contains(@Image,"fix3") or contains(@Image,"fix4")' 
+						and replace the second position with "contains(@Image,"fix1") or contains(@Image,"fix2") or contains(@Image,"fix3") or contains(@Image,"fix4")":<br>
+						Expression: <span style="color:green;">//PrimarySuffix[##AUX_CON_0##]..........[##AUX_CON_1##]......[##AUX_CON##]</span><br>
+						Auxiliary: <span style="color:green;">fix1,fix2##fix3,fix4##</span><br>
+						We use "##" to split the auxiliary filed to many parts.<br>
+						"##AUX_CON_0##"means that position should be replaced by the first part of the auxiliary filed,<br>
+						"##AUX_CON_1##"means that position should be replaced by the second part of the auxiliary filed and so on.<br>
+						"##AUX_CON##" means this position should be replaced by all of the auxiliary filed.</p>
 					<p>(2) delete pattern</p>
 					<p>If you want to delete a single pattern in the pattern line, you can use the right-click menu to delete.</p>
 					<p>If you want to delete many patterns in the pattern line, you can click the Delete button on the top left of the list to delete the patterns selected.</p>

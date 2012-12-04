@@ -1,12 +1,28 @@
 package net.example.redundantstatement;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import java.util.Scanner;
 
 /*
  * Wrong occurrences: 2;
  */
 public class UnnecessaryLogicalJudgement {
-    public String correctTestVariable() {
+    public InputStream correctTestVariable() {
+        Properties prop = new Properties();
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(
+            "resources/messages.properties");
+        if (is != null) {
+            try {
+                prop.load(is);
+            } catch (IOException e) {
+            }
+        }
+        return is;
+    }
+
+    public String correctTestConstant() {
         String signal = null;
         Scanner in = new Scanner(System.in);
         String what = in.nextLine();
@@ -16,7 +32,7 @@ public class UnnecessaryLogicalJudgement {
         return signal;
     }
 
-    public String wrongTestVariable1() {
+    public String wrongTestConstant1() {
         String signal = null;
         Scanner in = new Scanner(System.in);
         String what = in.nextLine();
@@ -28,7 +44,7 @@ public class UnnecessaryLogicalJudgement {
         return signal;
     }
 
-    public String wrongTestVariable2() {
+    public String wrongTestConstant2() {
         String signal = "Yes";
         Scanner in = new Scanner(System.in);
         String what = in.nextLine();

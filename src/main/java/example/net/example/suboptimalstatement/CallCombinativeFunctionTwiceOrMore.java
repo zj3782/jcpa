@@ -1,7 +1,7 @@
 package net.example.suboptimalstatement;
 
 /*
- * Wrong occurrences: 1;
+ * Wrong occurrences: 2;
  */
 public class CallCombinativeFunctionTwiceOrMore {
     public void correctCallMethods() {
@@ -18,6 +18,26 @@ public class CallCombinativeFunctionTwiceOrMore {
     }
 
     void cominativeMethod(String[] s) {
+
+    }
+    
+    public void correctCallMethods2() {
+        cominativeMethod(new String[][] { {"A", "B"},{"C","D"}});
+    }
+    
+    void cominativeMethod(String[][] s) {
+
+    }
+    
+    public void wrongCallMethods2() {
+        cominativeMethod2("A","B");
+        cominativeMethod2("C","D");
+    }
+
+    void cominativeMethod2(String s1,String s2) {
+
+    }
+    void cominativeMethod2(String[] s1,String[] s2) {
 
     }
 }
