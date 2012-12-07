@@ -22,6 +22,4 @@ public class CallExpensiveStatementTwiceOrMoreInClass {
     String WrongGetGray() {
         return MethodFactory.getInstance().getColor(false);
     }
-
-
 }

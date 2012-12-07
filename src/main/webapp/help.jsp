@@ -163,8 +163,9 @@ function showTxt(cat){
 					<img src="image/patterns0.png" />
 					<p>Only login users can access this page. The guest users don’t have permission to access this page, who can check the introduction of the user login and access control to log in.</p>
 					<p>(1) add pattern</p>
-					<p>Click the Add button on the top left of the list.</p>
-					<img src="image/patterns1.png" />
+					<p>Click the Add button on the top left of the list.You can choose what type of patterns you want to add.</p>
+					<p><B>a.xpath pattern</B></p>
+					<img src="image/patterns1-0.png" />
 					<p><span style="color:red;">Attention:</span>If you meet the following situation--you want to find the line which call some function such as 'method1'、'method2'.</p>
 					<p>You can write the expression like this:<span style="color:green;">//PrimarySuffix[@Image='method1' or @Image='method2']</span>.</p>
 					<p>You can also write like this:<br>
@@ -174,7 +175,7 @@ function showTxt(cat){
 					</p>
 					<p>What if I need more than one "##AUX_EQ##" in the expression ? </p>
 					<p>For example:</p>
-					<p>(1)I want to replace the first position with '@Image="method1" or @Image="method2"' 
+					<p>1)I want to replace the first position with '@Image="method1" or @Image="method2"' 
 						and replace the second position with '@Image="method3" or @Image="method4"'
 						and replace the second position with '@Image="method1" or @Image="method2" or @Image="method3" or @Image="method4"':<br>
 						Expression: <span style="color:green;">//PrimarySuffix[##AUX_EQ_0##]..........[##AUX_EQ_1##]......[##AUX_EQ##]</span><br>
@@ -184,7 +185,7 @@ function showTxt(cat){
 						"##AUX_EQ_1##"means that position should be replaced by the second part of the auxiliary filed and so on.<br>
 						"##AUX_EQ##" means this position should be replaced by all of the auxiliary filed.
 					</p>
-					<p>(2)I want to replace the first position with 'ends-with(@Image,"fix1") or ends-with(@Image,"fix2")' 
+					<p>2)I want to replace the first position with 'ends-with(@Image,"fix1") or ends-with(@Image,"fix2")' 
 						and replace the second position with 'ends-with(@Image,"fix3") or ends-with(@Image,"fix4")' 
 						and replace the second position with "ends-with(@Image,"fix1") or ends-with(@Image,"fix2") or ends-with(@Image,"fix3") or ends-with(@Image,"fix4")":<br>
 						Expression: <span style="color:green;">//PrimarySuffix[##AUX_END_0##]..........[##AUX_END_1##]......[##AUX_END##]</span><br>
@@ -194,7 +195,7 @@ function showTxt(cat){
 						"##AUX_END_1##"means that position should be replaced by the second part of the auxiliary filed and so on.<br>
 						"##AUX_END##" means this position should be replaced by all of the auxiliary filed.
 					</p>
-					<p>(3)I want to replace the first position with 'contains(@Image,"fix1") or contains(@Image,"fix2")' 
+					<p>3)I want to replace the first position with 'contains(@Image,"fix1") or contains(@Image,"fix2")' 
 						and replace the second position with 'contains(@Image,"fix3") or contains(@Image,"fix4")' 
 						and replace the second position with "contains(@Image,"fix1") or contains(@Image,"fix2") or contains(@Image,"fix3") or contains(@Image,"fix4")":<br>
 						Expression: <span style="color:green;">//PrimarySuffix[##AUX_CON_0##]..........[##AUX_CON_1##]......[##AUX_CON##]</span><br>
@@ -203,6 +204,9 @@ function showTxt(cat){
 						"##AUX_CON_0##"means that position should be replaced by the first part of the auxiliary filed,<br>
 						"##AUX_CON_1##"means that position should be replaced by the second part of the auxiliary filed and so on.<br>
 						"##AUX_CON##" means this position should be replaced by all of the auxiliary filed.</p>
+					<p><B>b.java pattern</B></p>
+					<img src="image/patterns1-1.png" />
+					<p>If you want to add a java pattern,you must choose which class to handle this pattern.And the class can access the auxiliary field.</p>
 					<p>(2) delete pattern</p>
 					<p>If you want to delete a single pattern in the pattern line, you can use the right-click menu to delete.</p>
 					<p>If you want to delete many patterns in the pattern line, you can click the Delete button on the top left of the list to delete the patterns selected.</p>
@@ -228,6 +232,10 @@ function showTxt(cat){
 					<p>You can also upload local rule set file.Click the upload button, the following dialog box will pop up.</p>
 					<img src="image/patterns7.png" />
 					<p>Select the file, then click upload button.</p>
+					<p>You can also download the ruleset file.Click the download link.</p>
+					<img src="image/patterns8.png" />
+					<p>If you want to download the file to import to the eclipse plugin,click "as plugin use".</p>
+					<p>If you just want to download it and want to upload this file to another server,click "as normal use".</p>
 				</div>
 				<div id="sysDetailLogin">
 					<h2>User Role</h2>
@@ -271,31 +279,42 @@ function showTxt(cat){
 							<div class="pattern">
 								<div  class="line">
 									<span class="span-2">Name:</span>
-									<div id="patternNameDiv" class="span-20 oHidden"><%=ToolUtil.strHtmlFmt(p.getName())%></div>
+									<div class="span-20 oHidden"><%=ToolUtil.strHtmlFmt(p.getName())%></div>
 								</div>
+								<div  class="line">
+									<span class="span-2">Type:</span>
+									<div class="span-20 oHidden"><%=ToolUtil.strHtmlFmt(p.getPatternType())%></div>
+								</div>
+								<%if(p.getPatternType()!=null && p.getPatternType().equals("java")) {%>
+								<div  class="line">
+									<span class="span-2">Class:</span>
+									<div class="span-20 oAuto"><%=ToolUtil.strHtmlFmt(p.getJavaClass()) %></div>
+								</div>
+								<%}else{ %>
 								<div  class="line">
 									<span class="span-2">Expression:</span>
-									<div id="patternExpressionDiv" class="span-20 oAuto"><%=ToolUtil.strHtmlFmt(p.getExpression()) %></div>
+									<div class="span-20 oAuto"><%=ToolUtil.strHtmlFmt(p.getExpression()) %></div>
 								</div>
+								<%} %>
 								<div  class="line">
 									<span class="span-2">Warning:</span>
-									<div id="patternWarningDiv" class="span-20 oAuto"><%=ToolUtil.strHtmlFmt(p.getWarning()) %></div>
+									<div class="span-20 oAuto"><%=ToolUtil.strHtmlFmt(p.getWarning()) %></div>
 								</div>
 								<div  class="line">
 									<span class="span-2">Category:</span>
-									<div id="patternCategoryDiv" class="span-20 oHidden"><%=ToolUtil.strHtmlFmt(p.getCategory()) %></div>
+									<div class="span-20 oHidden"><%=ToolUtil.strHtmlFmt(p.getCategory()) %></div>
 								</div>
 								<div  class="line">
 									<span class="span-2">Scope:</span>
-									<div id="patternScopeDiv" class="span-20 oHidden"><%=ToolUtil.strHtmlFmt(p.getScope()) %></div>
+									<div class="span-20 oHidden"><%=ToolUtil.strHtmlFmt(p.getScope()) %></div>
 								</div>
 								<div  class="line">
 									<span class="span-2">Example:</span>
-									<div id="patternExampleDiv" class="span-20 oAuto"><%=ToolUtil.strHtmlFmt(p.getExample()) %></div>
+									<div class="span-20 oAuto"><%=ToolUtil.strHtmlFmt(p.getExample()) %></div>
 								</div>
 								<div  class="line">
 									<span class="span-2">Priority:</span>
-									<div id="patternPriorityDiv" class="span-20 oAuto"><%=p.getPriority() %></div>
+									<div class="span-20 oAuto"><%=p.getPriority() %></div>
 								</div>
 							</div>	
 						<%}
@@ -385,6 +404,15 @@ function showTxt(cat){
 					3、Vertical to the left<br>
 					&lt;div id='menu' class="cssmenus vlmenu"&gt;...&lt;/div&gt;<br>
 					</p>
+					<h4>Create new Benchmark Program</h4>
+					<p>1、New a class extends com.jcpa.cases.Case.(the new class must be in the com.jcpa.cases package too.)</p>
+					<p>2、Login and visit the benchmark page.On the top left of the program list will be a button named "Add".Click it.</p>
+					<img src="image/customize_ben0.png"/>
+					<p>3、The name field must be the class name of step 1.</p>
+					<img src="image/customize_ben1.png"/>
+					<h4>How to add a java pattern.</h4>
+					<p>1、New a class extends com.jcpa.pattern.javaclass.JcpaAbstractJavaRule.(the new class must be in the com.jcpa.pattern.javaclass package too.)</p>
+					<p>2、Visit the pattern list page and click add button.</p>
 				</div>				
 			</div>
 			<div id="usagePlugin">

@@ -166,17 +166,17 @@ public class PMDUtil{
 				itemConStr+="contains(@Image,\""+items[0]+"\")";
 				itemEndStr+="ends-with(@Image,\""+items[0]+"\")";
 			}
-			for(int i=1;i<items.length;i++){
-				itemEqStr+=" or @Image=\""+items[i]+"\"";
-				itemConStr+=" or contains(@Image,\""+items[i]+"\")";
-				itemEndStr+=" or ends-with(@Image,\""+items[i]+"\")";
+			for(String item:items){
+				itemEqStr+=" or @Image=\""+item+"\"";
+				itemConStr+=" or contains(@Image,\""+item+"\")";
+				itemEndStr+=" or ends-with(@Image,\""+item+"\")";
 			}
 			exp=exp.replaceAll("##AUX_EQ_"+j+"##",itemEqStr);
 			exp=exp.replaceAll("##AUX_END_"+j+"##",itemEndStr);
 			exp=exp.replaceAll("##AUX_CON_"+j+"##",itemConStr);
 			auxsEqStr+=itemEqStr+" or ";
 			auxsEndStr+=itemEndStr+" or ";
-			auxsEndStr+=itemConStr+" or ";
+			auxsConStr+=itemConStr+" or ";
 		}
 		if(auxsEqStr.length()>4)auxsEqStr=auxsEqStr.substring(0,auxsEqStr.length()-4);
 		if(auxsEndStr.length()>4)auxsEndStr=auxsEndStr.substring(0,auxsEndStr.length()-4);

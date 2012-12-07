@@ -10,16 +10,16 @@
    <column length="256" name="name" not-null="true"/>
   </property>
   <property generated="never" lazy="false" name="expression" type="java.lang.String">
-   <column length="10240" name="expression" not-null="true"/>
+   <column length="51200" name="expression" not-null="true"/>
   </property>
   <property generated="never" lazy="false" name="warning" type="java.lang.String">
-   <column length="1024" name="warning" not-null="true"/>
+   <column length="10240" name="warning" not-null="true"/>
   </property>
   <property generated="never" lazy="false" name="category" type="java.lang.String">
    <column length="80" name="category" not-null="true"/>
   </property>
   <property generated="never" lazy="false" name="example" type="java.lang.String">
-   <column length="10240" name="example"/>
+   <column length="51200" name="example"/>
   </property>
   <property generated="never" lazy="false" name="scope" type="java.lang.String">
    <column default="'inner-class'" length="40" name="scope" not-null="true"/>
@@ -28,7 +28,13 @@
    <column default="3" name="priority" not-null="true"/>
   </property>
   <property generated="never" lazy="false" name="aux" type="java.lang.String">
-   <column length="10240" name="aux"/>
+   <column length="51200" name="aux"/>
+  </property>
+  <property generated="never" lazy="false" name="patternType" type="java.lang.String">
+   <column default="'xptah'" length="256" name="patternType" not-null="true"/>
+  </property>
+  <property generated="never" lazy="false" name="javaClass" type="java.lang.String">
+   <column default="''" length="1024" name="javaClass"/>
   </property>
  </class>
 </hibernate-mapping>

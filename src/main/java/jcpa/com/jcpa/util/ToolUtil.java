@@ -91,8 +91,8 @@ public class ToolUtil {
 		String[] children = dir.list();
 		if(children!=null){
 			//递归删除目录中的子目录和文件
-			for (int i=0; i<children.length; i++) {
-				ChildFile=new File(dir, children[i]);
+			for (String chid:children) {
+				ChildFile=new File(dir, chid);
 				if(ChildFile.isDirectory()){
 					deleteCount+=deleteDir(ChildFile);
 				}else{
@@ -104,12 +104,7 @@ public class ToolUtil {
 		if(dir.delete())deleteCount++;
 		return deleteCount;
 	}
-    /**
-     * 获取当前工程路径
-     * */
-    public static String getProjPath(Object obj){
-    	return obj.getClass().getResource("/").getPath();
-    }
+
     /**
      * 获取指定目录下指定格式的文件列表
      * */

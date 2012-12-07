@@ -31,75 +31,109 @@ initPage=<%=sPage%>;
 #patternAddEdit .line span{height: 30px;line-height: 30px;}
 </style>
 <div id="patternAddEdit" class="" style="display:none;">
-	<div  class="line">
+	<div  class="line" id="patternNameBlock">
 		<span class="span-2"><span class="cRed">(*)</span>Name:</span><input type="text" id="patternName" class="span-15"/>
 	</div>
 	<div  class="line">
+		<div class="span-6" id="patternTypeBlock">
+			<span class="span-2"><span class="cRed">(*)</span>Type:</span>
+			<select id="patternType" class="span-3" onchange="changePatternType(this.value);" onkeyup="this.blur();this.focus();">
+				<option value="xpath" selected="selected">xpath</option>
+				<option value="java">java</option>
+			</select>
+		</div>
+		<div class="span-10" id="patternClassBlock" style="display:none;">
+			<span class="span-2"><span class="cRed">(*)</span>Class:</span>
+			<select id="patternClass" class="span-7">
+				<option value="">loading...</option>
+			</select>
+		</div>
+	</div>
+	<div  class="line"  id="patternExpressionBlock">
 		<span class="span-2"><span class="cRed">(*)</span>Expression:</span><textarea id="patternExpression" class="span-15 h100"></textarea>
 	</div>
-	<div  class="line">
+	<div  class="line" id="patternAuxiliaryBlock">
 		<span class="span-2">Auxiliary:</span><textarea id="patternAuxiliary" class="span-15 h40"></textarea>
 	</div>
-	<div  class="line">
+	<div  class="line" id="patternWarningBlock">
 		<span class="span-2"><span class="cRed">(*)</span>Warning:</span><textarea id="patternWarning" class="span-15 h60"></textarea>
 	</div>
 	<div  class="line">
-		<span class="span-2"><span class="cRed">(*)</span>Category:</span>
-		<select id="patternCategory" class="span-4">
-			<option value="ExcessiveSynchronization">ExcessiveSynchronization</option>
-			<option value="RedundantStatement">RedundantStatement</option>
-			<option value="RedundantInvocation">RedundantInvocation</option>
-			<option value="SuboptimalStatement">SuboptimalStatement</option>
-			<option value="UnsafeDataAccess">UnsafeDataAccess</option>
-			<option value="Other" selected="selected">Other</option>
-		</select>
+		<div class="left"  id="patternCategoryBlock">
+			<span class="span-2"><span class="cRed">(*)</span>Category:</span>
+			<select id="patternCategory" class="span-4">
+				<option value="ExcessiveSynchronization">ExcessiveSynchronization</option>
+				<option value="RedundantStatement">RedundantStatement</option>
+				<option value="RedundantInvocation">RedundantInvocation</option>
+				<option value="SuboptimalStatement">SuboptimalStatement</option>
+				<option value="UnsafeDataAccess">UnsafeDataAccess</option>
+				<option value="Other" selected="selected">Other</option>
+			</select>
+		</div>
 		
-		<span class="span-2"><span class="cRed">(*)</span>Scope:</span>
-		<select id="patternScope" class="span-4">
-			<option value="inner-class" selected>inner-class</option>
-			<option value="inter-class">inter-class</option>
-		</select>
+		<div class="left"  id="patternScopeBlock">
+			<span class="span-2"><span class="cRed">(*)</span>Scope:</span>
+			<select id="patternScope" class="span-4">
+				<option value="inner-class" selected>inner-class</option>
+				<option value="inter-class">inter-class</option>
+			</select>
+		</div>
 		
-		<span class="span-2"><span class="cRed">(*)</span>Priority:</span>
-		<select id="patternPriority" class="span-2">
-			<option value="1">1</option>
-			<option value="2">2</option>
-			<option value="3" selected>3</option>
-			<option value="4">4</option>
-			<option value="5">5</option>
-		</select>
+		<div class="left"  id="patternPriorityBlock">
+			<span class="span-2"><span class="cRed">(*)</span>Priority:</span>
+			<select id="patternPriority" class="span-2">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3" selected>3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+			</select>
+		</div>
 	</div>
-	<div  class="line">
+	<div  class="line" id="patternExampleBlock">
 		<span class="span-2"><span class="cRed">(*)</span>Example:</span><textarea id="patternExample" class="span-15 h80"></textarea>
 	</div>
 </div>
 <!-- 查看pattern -->
-<style>
-#patternDetail  .line div{color:green;}
-</style>
 <div id="patternDetail" class="" style="display:none;">
-	<div  class="line">
-		<span class="span-2">Name:</span><div id="patternNameDiv" class="span-15 oHidden"></div>
+	<div  class="line" id="patternNameBlockDiv">
+		<span class="span-2">Name:</span><div id="patternNameDiv" class="span-15 oHidden cGreen"></div>
 	</div>
 	<div  class="line">
-		<span class="span-2">Expression:</span><div id="patternExpressionDiv" class="span-15  h100 oAuto"></div>
+		<div class="span-6" id="patternTypeBlockDiv">
+			<span class="span-2">Type:</span>
+			<div id="patternTypeDiv" class="span-3 oHidden cGreen"></div>
+		</div>
+		<div class="span-10" id="patternClassBlockDiv">
+			<span class="span-2">Class:</span>
+			<div id="patternClassDiv" class="span-7 oHidden cGreen"></div>
+		</div>
+	</div>
+	<div  class="line" id="patternExpressionBlockDiv">
+		<span class="span-2">Expression:</span><div id="patternExpressionDiv" class="span-15  h100 oAuto cGreen"></div>
+	</div>
+	<div  class="line" id="patternAuxiliaryBlockDiv">
+		<span class="span-2">Auxiliary:</span><div id="patternAuxiliaryDiv" class="span-15  h40 oAuto cGreen"></div>
+	</div>
+	<div  class="line" id="patternWarningBlockDiv">
+		<span class="span-2">Warning:</span><div id="patternWarningDiv" class="span-15 h60  oAuto cGreen"></div>
 	</div>
 	<div  class="line">
-		<span class="span-2">Auxiliary:</span><div id="patternAuxiliaryDiv" class="span-15  h40 oAuto"></div>
+		<div class="left" id="patternCategoryBlockDiv">
+			<span class="span-2">Category:</span>
+			<div id="patternCategoryDiv" class="span-5 oHidden cGreen"></div>
+		</div>
+		<div class="left" id="patternScopeBlockDiv">
+			<span class="span-2">Scope:</span>
+			<div id="patternScopeDiv" class="span-4 oHidden cGreen"></div>
+		</div>
+		<div class="left" id="patternPriorityBlockDiv">
+			<span class="span-2">Priority:</span>
+			<div id="patternPriorityDiv" class="span-2 oHidden cGreen"></div>
+		</div>
 	</div>
-	<div  class="line">
-		<span class="span-2">Warning:</span><div id="patternWarningDiv" class="span-15 h60  oAuto"></div>
-	</div>
-	<div  class="line">
-		<span class="span-2">Category:</span>
-		<div id="patternCategoryDiv" class="span-5 oHidden"></div>
-		<span class="span-2">Scope:</span>
-		<div id="patternScopeDiv" class="span-4 oHidden"></div>
-		<span class="span-2">Priority:</span>
-		<div id="patternPriorityDiv" class="span-2 oHidden"></div>
-	</div>
-	<div  class="line">
-		<span class="span-2">Example:</span><div id="patternExampleDiv" class="span-15  h80 oAuto"></div>
+	<div  class="line" id="patternExampleBlockDiv">
+		<span class="span-2">Example:</span><div id="patternExampleDiv" class="span-15  h80 oAuto cGreen"></div>
 	</div>
 </div>
 <!-- 管理ruleset -->

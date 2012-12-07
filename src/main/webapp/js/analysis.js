@@ -1,7 +1,7 @@
 var flexTBR,flexTBE;
 $(document).ready(function() {
     var option = {
-        height: 310,
+        height: 350,
         colModel: [
                 { display: 'Package', name: 'package', width: 150, sortable: true,sorttype:'ascii', align: 'left' },
        	        { display: 'Class', name: 'class', width: 130, sortable: true,sorttype:'ascii', align: 'left' },

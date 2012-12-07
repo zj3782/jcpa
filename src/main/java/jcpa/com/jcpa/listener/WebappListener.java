@@ -39,6 +39,7 @@ public class WebappListener implements ServletContextListener {
 		application.setAttribute("WebRoot",webroot);
 		application.setAttribute("JcpaSource",webroot+"WEB-INF/jcpasource/");
 		application.setAttribute("Ruleset",webroot+"WEB-INF/ruleset/");
+		application.setAttribute("Classes",this.getClass().getResource("/").getPath().replace('\\', '/'));
 	}
 	/**
 	 * 检查目录

@@ -6,15 +6,16 @@ $(document).ready(function() {
         height: mainheight-300, //flexigrid插件的高度，单位为px
         url: 'pattern.do?method=page', //ajax url,ajax方式对应的url地址
         colModel: [
-	        { display: 'ID', name: 'ID', width: 30, sortable: false,sorttype:'num', align: 'left' },
-	        { display: 'Name', name: 'Name', width: 220, sortable: false,sorttype:'ascii', align: 'left' },
-	        { display: 'Expression', name: 'Expression', width: 100, sortable: false, align: 'left' },
+	        { display: 'ID', name: 'ID', width: 30, sortable: true,sorttype:'num', align: 'left' },
+	        { display: 'Name', name: 'Name', width: 200, sortable: true,sorttype:'ascii', align: 'left' },
+	        { display: 'Type', name: 'Type', width: 45, sortable: true,sorttype:'ascii', align: 'left' },
+	        { display: 'Class/Expression', name: 'Expression', width: 100, sortable: false, align: 'left' },
 	        { display: 'Auxiliary', name: 'Auxiliary', width: 50, sortable: false, align: 'left' },
-	        { display: 'Warning', name: 'Warning', width: 100, sortable: false, align: 'left' },
-	        { display: 'Category', name: 'Category', width: 100, sortable: false, sorttype:'ascii',align: 'left' },
-	        { display: 'Scope', name: 'Scope', width: 80, sortable: true, align: 'left'},
-	        { display: 'Example', name: 'Example', width: 100, sortable: false, align: 'left' },
-	        { display: 'Priority', name: 'Priority', width: 50, sortable: false,sorttype:'num', align: 'left' }
+	        { display: 'Warning', name: 'Warning', width: 90, sortable: false, align: 'left' },
+	        { display: 'Category', name: 'Category', width: 90, sortable: false, sorttype:'ascii',align: 'left' },
+	        { display: 'Scope', name: 'Scope', width: 75, sortable: true, align: 'left'},
+	        { display: 'Example', name: 'Example', width: 90, sortable: false, align: 'left' },
+	        { display: 'Priority', name: 'Priority', width: 45, sortable: false,sorttype:'num', align: 'left' }
 	    ],
         buttons: [
               { name: 'Add', displayname: "Add", onpress: toolbarItem_onclick },
@@ -38,66 +39,101 @@ $(document).ready(function() {
     	$("#patterns .bbit-grid .nDiv").height(170);
     	setTimeout('flexTB.flexRefreshMenuPop()',5000);
     }
-    /**右键菜单*/
-    var menu = { width: 150, items: [
-         { text: "View", icon: "css/images/view.png", alias: "contextmenu-view", action: contextMenuItem_click },
-         { text: "Edit", icon: "css/images/edit.png", alias: "contextmenu-edit", action: contextMenuItem_click },
-         { text: "Delete", icon: "css/images/delete.png", alias: "contextmenu-delete", action: contextMenuItem_click },
-      ],onContextMenu:function(event,e){
-      		var target=event.currentTarget;
-      		var id = $(target).attr("id").substr(3);
-      		flexTB.flexUnCheck();
-      		flexTB.flexCheck(id);
-	        return true;
-	   }
-    };
-    function contextmenu(row) {
-        $(row).contextmenu(menu);
-    }
-    
-
-    /**工具栏按钮*/
-    function toolbarItem_onclick(cmd, grid) {
-        if (cmd == "Add") {
-            AddPattern();
-        }else if (cmd == "Delete") {
-        	delPattern(flexTB.flexGetCheckedRows());
-        }else if(cmd=="Rulesets"){
-        	ManageRulesets();
-        }
-    }
-    /**右键菜单*/
-    function contextMenuItem_click(target) {
-        var id = $(target).attr("id").substr(3);
-        var rows=flexTB.flexGetRowsByIds([id]);
-        var cell = rows[0].cell;
-        var cmd = this.data.alias;
-        if (cmd == "contextmenu-view") {
-        	viewPattern(cell);
-        }
-        else if (cmd == "contextmenu-edit") {
-        	editPattern(id,false);
-        }
-        else if (cmd == "contextmenu-delete") {
-        	delPattern(rows);
-        }
-        else {
-        	flexTB.flexReload();
-        }
-        flexTB.flexUnCheck();
-        flexTB.flexCheck(id);
-    }
-    /**检查数据*/
-    function onAddRowData(row){
-    	for(var i=0;i<row.cell.length;i++){
-    		row.cell[i]=safeDecodeURI(row.cell[i]);//解码
-    		row.cell[i]=htm2specil(row.cell[i]);
-    	}
-    	row.cell[1]="<a href='javascript:;' onclick='viewPatternById("+row.id+");'>"+row.cell[1]+"</a>";
-    	return row;
-    }
+   //载入javaClass列表
+    loadJavaClasses();
 });
 
+/**右键菜单*/
+var menu = { width: 150, items: [
+     { text: "View", icon: "css/images/view.png", alias: "contextmenu-view", action: contextMenuItem_click },
+     { text: "Edit", icon: "css/images/edit.png", alias: "contextmenu-edit", action: contextMenuItem_click },
+     { text: "Delete", icon: "css/images/delete.png", alias: "contextmenu-delete", action: contextMenuItem_click },
+  ],onContextMenu:function(event,e){
+  		var target=event.currentTarget;
+  		var id = $(target).attr("id").substr(3);
+  		flexTB.flexUnCheck();
+  		flexTB.flexCheck(id);
+        return true;
+   }
+};
+function contextmenu(row) {
+    $(row).contextmenu(menu);
+}
+/**工具栏按钮*/
+function toolbarItem_onclick(cmd, grid) {
+    if (cmd == "Add") {
+        AddPattern();
+    }else if (cmd == "Delete") {
+    	delPattern(flexTB.flexGetCheckedRows());
+    }else if(cmd=="Rulesets"){
+    	ManageRulesets();
+    }
+}
+/**右键菜单*/
+function contextMenuItem_click(target) {
+    var id = $(target).attr("id").substr(3);
+    var rows=flexTB.flexGetRowsByIds([id]);
+    var cell = rows[0].cell;
+    var cmd = this.data.alias;
+    if (cmd == "contextmenu-view") {
+    	viewPattern(cell);
+    }
+    else if (cmd == "contextmenu-edit") {
+    	editPattern(id,false);
+    }
+    else if (cmd == "contextmenu-delete") {
+    	delPattern(rows);
+    }
+    else {
+    	flexTB.flexReload();
+    }
+    flexTB.flexUnCheck();
+    flexTB.flexCheck(id);
+}
+/**检查数据*/
+function onAddRowData(row){
+	for(var i=0;i<row.cell.length;i++){
+		row.cell[i]=safeDecodeURI(row.cell[i]);//解码
+		row.cell[i]=htm2specil(row.cell[i]);
+	}
+	row.cell[1]="<a href='javascript:;' onclick='viewPatternById("+row.id+");'>"+row.cell[1]+"</a>";
+	return row;
+}
+
+//改变pattern的类型
+function changePatternType(type)
+{
+	if(type=='java'){
+		$("#patternExpressionBlock").hide();
+		$("#patternClassBlock").show();
+	}else{
+		$("#patternExpressionBlock").show();
+		$("#patternClassBlock").hide();
+	}
+}
+function changePatternTypeDiv(type)
+{
+	if(type=='java'){
+		$("#patternExpressionBlockDiv").hide();
+		$("#patternClassBlockDiv").show();
+	}else{
+		$("#patternExpressionBlockDiv").show();
+		$("#patternClassBlockDiv").hide();
+	}
+}
+//载入javaClass列表
+function loadJavaClasses(){
+	$.post("pattern.do",{method:'javaClasses'},function(result){
+		if(result.status){
+			var classes=result.data.classes;
+			var htm="";
+			for(var i=0;i<classes.length;i++){
+				htm+="<option value='"+classes[i]+"'>"+classes[i]+"</option>";
+			}
+			$("#patternClass").html(htm);
+		}
+	},'json');
+}
 
 //删除pattern
 function delPattern(rows){
@@ -157,6 +193,8 @@ function AddPattern()
 	            callback: function(){
 	    				var data={"method":"add"};
 	    				data.name=$("#patternName").val();
+	    				data.type=$("#patternType").val();
+	    				data.javaclass=$("#patternClass").val();
 	    				data.expression=$("#patternExpression").val();
 	    				data.aux=$("#patternAuxiliary").val();
 	    				data.warning=$("#patternWarning").val();
@@ -164,18 +202,21 @@ function AddPattern()
 	    				data.category=$("#patternCategory").val();
 	    				data.scope=$("#patternScope").val();
 	    				data.priority=$("#patternPriority").val();
-	            		if(data.name=="" || data.expression=="" || data.warning=="" || 
-	            				data.example=="" || data.category=="" || data.scope=="" || data.priority=="")
-	    				{
+	    				
+	    				var bOk=true;
+	            		if(data.name=="" ||  data.warning=="" || data.example=="" || data.category=="" || data.scope=="" || data.priority==""){
+	            			bOk=false;
+	    				}else{
+	    					if(data.type=='java' && data.javaclass=="")bOk=false;
+	    					else if(data.type!='java' && data.expression=="")bOk=false;
+	            		}
+	            		if(!bOk)
+	            		{
 	    					artDialog({content:"Some item(s) is empty,can save!",time:3});
 	    					return false;
 	    				}
 	    				$.post("Pattern.do",data,function(result){
 		    				if(result.status){
-		    					/*flexTB.flexAddRowsData([result.data]);
-		    					art.dialog({id: 'addpattern'}).close();
-		    					artDialog({title:"Add success",content:result.info,icon:"succeed",time:2});*/
-		    					//document.location.reload();
 		    					flexTB.flexReload();
 		    					art.dialog({id: 'addpattern'}).close();
 		    					artDialog({title:"Add success",content:result.info,icon:"succeed",time:2});
@@ -199,6 +240,8 @@ function editPattern(id,fromView){
 		waitDlg.close();
 		if(result.status){
 			$("#patternName").val(safeDecodeURI(result.data.name));
+			$("#patternType").val(safeDecodeURI(result.data.type));
+			$("#patternClass").val(safeDecodeURI(result.data.javaclass));
 			$("#patternExpression").val(safeDecodeURI(result.data.expression));
 			$("#patternAuxiliary").val(safeDecodeURI(result.data.aux));
 			$("#patternWarning").val(safeDecodeURI(result.data.warning));
@@ -206,6 +249,9 @@ function editPattern(id,fromView){
 			$("#patternScope").val(safeDecodeURI(result.data.scope));
 			$("#patternExample").val(safeDecodeURI(result.data.example));
 			$("#patternPriority").val(safeDecodeURI(result.data.priority));
+			
+			changePatternType(result.data.type);
+			
 			artDialog({
 				title:"Edit Pattern",
 				content:ID('patternAddEdit'),
@@ -217,6 +263,8 @@ function editPattern(id,fromView){
 			    				var data={"method":"update"};
 			    				data.id=id;
 			    				data.name=$("#patternName").val();
+			    				data.type=$("#patternType").val();
+			    				data.javaclass=$("#patternClass").val();
 			    				data.expression=$("#patternExpression").val();
 			    				data.aux=$("#patternAuxiliary").val();
 			    				data.warning=$("#patternWarning").val();
@@ -224,9 +272,16 @@ function editPattern(id,fromView){
 			    				data.category=$("#patternCategory").val();
 			    				data.scope=$("#patternScope").val();
 			    				data.priority=$("#patternPriority").val();
-			            		if(data.name=="" || data.expression=="" || data.warning=="" || 
-			            				data.example=="" || data.category=="" || data.scope=="" || data.priority=="")
-			    				{
+			    				
+			    				var bOk=true;
+			            		if(data.name=="" ||  data.warning=="" || data.example=="" || data.category=="" || data.scope=="" || data.priority==""){
+			            			bOk=false;
+			    				}else{
+			    					if(data.type=='java' && data.javaclass=="")bOk=false;
+			    					else if(data.type!='java' && data.expression=="")bOk=false;
+			            		}
+			            		if(!bOk)
+			            		{
 			    					artDialog({content:"Some item(s) is empty,can save!",time:3});
 			    					return false;
 			    				}
@@ -261,20 +316,30 @@ function viewPatternById(id){
 function viewPattern(cell){
 	var s=cell[1];
 	$("#patternNameDiv").html(s).attr("title",cell[1]);
-	s=strHtmFmt(cell[2]);
-	$("#patternExpressionDiv").html(s).attr("title",cell[2]);
-	s=strHtmFmt(cell[3]);
-	$("#patternAuxiliaryDiv").html(s).attr("title",cell[3]);
+	s=cell[2];
+	$("#patternTypeDiv").html(s).attr("title",cell[2]);
+	if(cell[2]=='java'){
+		s=cell[3];
+		$("#patternClassDiv").html(s).attr("title",cell[3]);
+	}else{
+		s=strHtmFmt(cell[3]);
+		$("#patternExpressionDiv").html(s).attr("title",cell[3]);	
+	}
 	s=strHtmFmt(cell[4]);
-	$("#patternWarningDiv").html(s).attr("title",cell[4]);
-	s=cell[5];
-	$("#patternCategoryDiv").html(s).attr("title",cell[5]);
+	$("#patternAuxiliaryDiv").html(s).attr("title",cell[4]);
+	s=strHtmFmt(cell[5]);
+	$("#patternWarningDiv").html(s).attr("title",cell[5]);
 	s=cell[6];
-	$("#patternScopeDiv").html(s).attr("title",cell[6]);
-	s=strHtmFmt(cell[7]);
-	$("#patternExampleDiv").html(s).attr("title",cell[7]);
-	s=cell[8];
-	$("#patternPriorityDiv").html(s).attr("title",cell[8]);
+	$("#patternCategoryDiv").html(s).attr("title",cell[6]);
+	s=cell[7];
+	$("#patternScopeDiv").html(s).attr("title",cell[7]);
+	s=strHtmFmt(cell[8]);
+	$("#patternExampleDiv").html(s).attr("title",cell[8]);
+	s=cell[9];
+	$("#patternPriorityDiv").html(s).attr("title",cell[9]);
+	
+	changePatternTypeDiv(cell[2]);
+	
 	artDialog({
 		title:"View Pattern",
 		content:ID('patternDetail'),

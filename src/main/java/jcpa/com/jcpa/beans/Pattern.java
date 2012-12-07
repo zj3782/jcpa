@@ -14,6 +14,8 @@ public class Pattern {
 	protected String scope;
 	protected int priority;
 	protected String aux;
+	protected String patternType;
+	protected String javaClass;
 	
 	public int getId() {
 		return id;
@@ -37,9 +39,6 @@ public class Pattern {
 		return expression;
 	}
 	public void setExpression(String expression) throws Exception{
-		if(expression==null || expression.equals("")){
-			throw new Exception("Arg Error[expression]");
-		}
 		this.expression = expression;
 	}
 	public String getWarning() {
@@ -90,6 +89,18 @@ public class Pattern {
 	public void setAux(String aux) {
 		this.aux = aux;
 	}
+	public String getPatternType() {
+		return patternType;
+	}
+	public void setPatternType(String patternType) {
+		this.patternType = patternType;
+	}
+	public String getJavaClass() {
+		return javaClass;
+	}
+	public void setJavaClass(String javaClass) {
+		this.javaClass = javaClass;
+	}
 	/**
 	 * 
 	 * */
@@ -99,7 +110,12 @@ public class Pattern {
 		JsonArrayNode cell=new JsonArrayNode("cell");
 		cell.addItem(new JsonLeafNode("",String.valueOf(id)));
 		cell.addItem(new JsonLeafNode("",name));
-		cell.addItem(new JsonLeafNode("",expression));
+		cell.addItem(new JsonLeafNode("",patternType));
+		if(patternType.equals("java")){
+			cell.addItem(new JsonLeafNode("",javaClass));
+		}else{
+			cell.addItem(new JsonLeafNode("",expression));
+		}
 		cell.addItem(new JsonLeafNode("",aux));
 		cell.addItem(new JsonLeafNode("",warning));
 		cell.addItem(new JsonLeafNode("",category));
@@ -115,6 +131,8 @@ public class Pattern {
 	public JsonObjectNode getObjectNode(String NodeName){
 		JsonObjectNode j=new JsonObjectNode(NodeName);
 		j.addChild(new JsonLeafNode("name",name));
+		j.addChild(new JsonLeafNode("type",patternType));
+		j.addChild(new JsonLeafNode("javaclass",javaClass));
 		j.addChild(new JsonLeafNode("expression",expression));
 		j.addChild(new JsonLeafNode("warning",warning));
 		j.addChild(new JsonLeafNode("category",category));

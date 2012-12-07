@@ -1,5 +1,6 @@
 var flexGrid;
 var initPage=1;
+var btns=[{ name: 'Run', displayname: "Run", onpress: toolbarItem_onclick }];
 $(document).ready(function() {
     var mainheight = document.documentElement.clientHeight;
     var option = {
@@ -11,9 +12,7 @@ $(document).ready(function() {
 	        { display: 'Descript', name: 'Descript', width: 200, sortable: false, align: 'left' },
 	        { display: 'Result', name: 'Result', width: 500, sortable: false, align: 'left' }
 	    ],
-	    buttons: [
-	        { name: 'Run', displayname: "Run", onpress: toolbarItem_onclick }
-	    ],
+	    buttons:btns,
         page:initPage,//初始页数
     	sortname: "ID",
         sortorder: "asc",
@@ -31,51 +30,52 @@ $(document).ready(function() {
     if($.browser.msie){
     	$("#cases .bbit-grid .nDiv").height(85);
     }
-    /**工具栏按钮*/
-    function toolbarItem_onclick(cmd, grid) {
-        if (cmd == "Run") {
-        	var rows=flexGrid.flexGetCheckedRows();
-            runCase(rows);
-        }
-    }
-    /**右键菜单*/
-    function contextmenu(row) {
-        var menu = { width: 150, items: [
-             { text: "Run", icon: "css/images/run.png", alias: "contextmenu-run", action: contextMenuItem_click },          
-             { text: "View", icon: "css/images/view.png", alias: "contextmenu-view", action: contextMenuItem_click }          
-        ],onContextMenu:function(event,e){
-        	var target=event.currentTarget;
-        	 var id = $(target).attr("id").substr(3);
-        	 flexGrid.flexUnCheck();
-             flexGrid.flexCheck(id);
-             return true;
-        }};
-        $(row).contextmenu(menu);
-    }
-    /**右键菜单*/
-    function contextMenuItem_click(target) {
-        var id = $(target).attr("id").substr(3);
-        var cmd = this.data.alias;
-        var rows=flexGrid.flexGetRowsByIds([id]);
-        var cell = rows[0].cell;
-        if (cmd == "contextmenu-run") {
-        	runCase(rows);
-        }else if(cmd == "contextmenu-view"){
-        	viewCase(cell);
-        }else {
-        	flexGrid.flexReload();
-        }
-    }
-    /**检查数据*/
-    function onAddRowData(row){
-    	for(var i=0;i<row.cell.length;i++){
-    		row.cell[i]=safeDecodeURI(row.cell[i]);//解码
-    		row.cell[i]=htm2specil(row.cell[i]);
-    	}
-    	return row;
-    }
 });
-
+/**工具栏按钮*/
+function toolbarItem_onclick(cmd, grid) {
+    if (cmd == "Run") {
+    	var rows=flexGrid.flexGetCheckedRows();
+        runCase(rows);
+    }else if(cmd=="Add"){
+    	AddCase();
+    }
+}
+/**右键菜单*/
+function contextmenu(row) {
+    var menu = { width: 150, items: [
+         { text: "Run", icon: "css/images/run.png", alias: "contextmenu-run", action: contextMenuItem_click },          
+         { text: "View", icon: "css/images/view.png", alias: "contextmenu-view", action: contextMenuItem_click }          
+    ],onContextMenu:function(event,e){
+    	var target=event.currentTarget;
+    	 var id = $(target).attr("id").substr(3);
+    	 flexGrid.flexUnCheck();
+         flexGrid.flexCheck(id);
+         return true;
+    }};
+    $(row).contextmenu(menu);
+}
+/**右键菜单*/
+function contextMenuItem_click(target) {
+    var id = $(target).attr("id").substr(3);
+    var cmd = this.data.alias;
+    var rows=flexGrid.flexGetRowsByIds([id]);
+    var cell = rows[0].cell;
+    if (cmd == "contextmenu-run") {
+    	runCase(rows);
+    }else if(cmd == "contextmenu-view"){
+    	viewCase(cell);
+    }else {
+    	flexGrid.flexReload();
+    }
+}
+/**检查数据*/
+function onAddRowData(row){
+	for(var i=0;i<row.cell.length;i++){
+		row.cell[i]=safeDecodeURI(row.cell[i]);//解码
+		row.cell[i]=htm2specil(row.cell[i]);
+	}
+	return row;
+}
 //运行case
 function runCase(rows){
 	if(!rows || rows.length<=0){
@@ -132,7 +132,7 @@ function RealRunCase(){
 			alert(result.info);
 		}
 		$("#RunDiv").unmask();
-		art.dialog({id: 'runcase'}).button({name:"OK",disabled:false},{name:"Stop",disabled:true});;
+		art.dialog({id: 'runcase'}).button({name:"OK",disabled:false},{name:"Stop",disabled:true});
 	},"json");
 }
 //查看case
@@ -157,4 +157,32 @@ function stopCase(caseNames)
 			alert(result.info);
 		}
 	},"json");	
+}
+
+//添加Case
+function AddCase(){
+	$("#AddCaseName").val();
+	$("#AddCaseDescript").val();
+	artDialog({
+		title:"Add Case",
+		content:ID('AddDiv'),
+		lock:true,
+		button:[
+	        {name:"Add",callback:function(){
+	        	$("AddDiv").mask("Adding...");
+	        	$.post("benchmark.do",{method:"add","name":$("#AddCaseName").val(),"desp":$("#AddCaseDescript").val()},function(result){
+	        		$("AddDiv").unmask();
+	        		if(result.status){
+	        			art.dialog({id: 'addcase'}).close();
+	        			flexGrid.flexReload();
+	        		}else{
+	        			alert(result.info);
+	        		}
+	        	},"json");	
+	        	return false;
+	        }},
+	        {name:"Cancel"}
+		],
+		id:'addcase'
+	});
 }

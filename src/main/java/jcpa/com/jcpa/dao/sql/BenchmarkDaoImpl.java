@@ -54,4 +54,13 @@ public class BenchmarkDaoImpl implements BenchmarkDao{
 		String sql = "update Benchmark set result='"+result+"' where name='"+name+"'";
 		return session.createQuery(sql).executeUpdate();
 	}
+
+	@Override
+	public boolean add(Benchmark b) {
+		Session s=HibernateUtil.getSession();
+		s.beginTransaction();
+		s.save(b);
+		s.getTransaction().commit();
+		return true;
+	}
 }

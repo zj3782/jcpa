@@ -45,6 +45,7 @@ public class PatternAction extends Action{
     	MethodsPriority.put("upRuleset",1);
     	MethodsPriority.put("viewRuleset",2);
     	MethodsPriority.put("downRuleset",2);
+    	MethodsPriority.put("javaClasses",1);
     }
 	/**
 	 * 执行动作之前的准备工作
@@ -70,6 +71,8 @@ public class PatternAction extends Action{
 		Pattern p=new Pattern();	
 		try {
 			p.setName(request.getParameter("name"));
+			p.setPatternType(request.getParameter("type"));
+			p.setJavaClass(request.getParameter("javaclass"));
 			p.setExpression(request.getParameter("expression"));
 			p.setAux(request.getParameter("aux"));
 			p.setWarning(request.getParameter("warning"));
@@ -130,6 +133,8 @@ public class PatternAction extends Action{
 		try {
 			p.setId(Integer.parseInt(request.getParameter("id")));
 			p.setName(request.getParameter("name"));
+			p.setPatternType(request.getParameter("type"));
+			p.setJavaClass(request.getParameter("javaclass"));
 			p.setExpression(request.getParameter("expression"));
 			p.setAux(request.getParameter("aux"));
 			p.setWarning(request.getParameter("warning"));
@@ -220,10 +225,13 @@ public class PatternAction extends Action{
 	public void delruleset() throws Exception{
 		try {
 			String rule = request.getParameter("rule");
-			File ruleFile = new File((String)application.getAttribute("Ruleset")+rule);
+			String fn=(String)application.getAttribute("Ruleset")+rule;
+			File ruleFile = new File(fn);
 			if(ruleFile.delete()){
 				success("delete success");
 				delRulesetDesc(rule);
+				File pRuleFile=new File(fn+".plugin");
+				pRuleFile.delete();
 			}else{
 				error("file delete fail");
 			}
@@ -235,32 +243,41 @@ public class PatternAction extends Action{
 	 * 生成patterns的xml文件
 	 * */
 	public void addruleset() throws Exception{
-		String shortfn,fn,type,cond,desc;
+		String shortxmlfn,xmlfn,pluginfn,type,cond,desc;
 		try {
 			//生成的文件名
-			shortfn = request.getParameter("fn");
-			if(shortfn==null || shortfn.equals("")){
+			shortxmlfn = request.getParameter("fn");
+			if(shortxmlfn==null || shortxmlfn.equals("")){
 				error("Please Input FileName!");
 				return;
 			}
-			if(!shortfn.endsWith(".xml"))shortfn+=".xml";
-			fn = (String)application.getAttribute("Ruleset")+shortfn;
-			//patterns
+			if(!shortxmlfn.endsWith(".xml")){
+				shortxmlfn+=".xml";
+			}
+			xmlfn = (String)application.getAttribute("Ruleset")+shortxmlfn;
+			pluginfn=xmlfn+".plugin";
+			//patterns条件
 			type = request.getParameter("type");
-			if(type.equals("all")){
+			if(type.equals("all")){//all patterns
 				cond="";
-			}else{
+			}else{//符合条件的pattern
 				cond = request.getParameter("cond");
 			}
-			//description
+			//ruleset的description
 			desc=request.getParameter("desc");
 			if(desc==null || desc.equals(""))desc="jcpa pmd rules";
 			desc+=" -- generate by "+(String)session.getAttribute("user")+" at the time of "+ToolUtil.getTimeString();
-			//写入xml头部
-			OutputStream out = new FileOutputStream(fn);
+			
+			OutputStream out = new FileOutputStream(xmlfn);
 			OutputStreamWriter fw = new OutputStreamWriter(out, "UTF-8");
-			fw.write("<?xml version=\"1.0\"?> <ruleset name=\"jcpa pmd rules\" xmlns=\"http://pmd.sourceforge.net/ruleset/2.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd\" xsi:noNamespaceSchemaLocation=\"http://pmd.sourceforge.net/ruleset_2_0_0.xsd\">");
-			fw.write("<description>"+desc+"</description>");
+			OutputStream pout = new FileOutputStream(pluginfn);
+			OutputStreamWriter pfw = new OutputStreamWriter(pout, "UTF-8");
+			String buff="",buff2="",tmp="";
+			//写入xml头部
+			buff="<?xml version=\"1.0\"?> <ruleset name=\"jcpa pmd rules\" xmlns=\"http://pmd.sourceforge.net/ruleset/2.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd\" xsi:noNamespaceSchemaLocation=\"http://pmd.sourceforge.net/ruleset_2_0_0.xsd\">";
+			fw.write(buff);pfw.write(buff);
+			buff="<description>"+desc+"</description>";
+			fw.write(buff);pfw.write(buff);
 			//分页取出数据写入xml
 			final int ONE_PAGE_COUNT = 100;
 			PatternDao dao = new PatternDaoImpl();
@@ -269,30 +286,47 @@ public class PatternAction extends Action{
 			for (int i = 0; i < pages; i++) {
 				List<Pattern> list = dao.list(i, ONE_PAGE_COUNT, cond,"");
 				for(Pattern p:list) {
-					fw.write("<rule name=\""+ p.getName()
+					buff="<rule name=\""+ p.getName()
 							+ "\" language=\"java\" since=\"5.0\" scope=\""+p.getScope()
-							+"\" message=\"\" class=\"net.sourceforge.pmd.lang.rule.XPathRule\" externalInfoUrl=\"pattern.jsp?id="+p.getId()+"\">");
-					fw.write("<description>" + p.getWarning()
-							+ "</description>");
-					fw.write("<priority>"+p.getPriority()+"</priority>");
-					fw.write("<properties><property name=\"xpath\"><value><![CDATA["
-							+ PMDUtil.ExpIntegrate(p.getExpression(),p.getAux())
-							+ "]]></value></property></properties>");
-					fw.write("<example><![CDATA[" + p.getExample()
-							+ "]]></example>");
-					fw.write("</rule>");
+							+"\" message=\"\" externalInfoUrl=\"pattern.jsp?id="+p.getId()+"\" ";
+					
+					if(p.getPatternType()!=null && p.getPatternType().equals("java")){
+						buff+="class=\"com.jcpa.pattern.javaclass."+p.getJavaClass()+"\">";
+						buff+="<properties><property name=\"aux\"><value><![CDATA["
+								+ p.getAux()+ "]]></value></property></properties>";
+						buff2=buff;
+					}else{
+						buff2=buff;
+						buff+="class=\"net.sourceforge.pmd.lang.rule.XPathRule\">";
+						buff2+="class=\"net.sourceforge.pmd.rules.XPathRule\">";
+						tmp="<properties><property name=\"xpath\"><value><![CDATA["
+								+ PMDUtil.ExpIntegrate(p.getExpression(),p.getAux())
+								+ "]]></value></property></properties>";
+						buff+=tmp;
+						buff2+=tmp;
+					}
+					fw.write(buff);pfw.write(buff2);
+					buff="<description>" + p.getWarning() + "</description>";
+					fw.write(buff);pfw.write(buff);
+					buff="<priority>"+p.getPriority()+"</priority>";
+					fw.write(buff);pfw.write(buff);
+					buff="<example><![CDATA[" + p.getExample() + "]]></example>";
+					fw.write(buff);pfw.write(buff);
+					buff="</rule>";
+					fw.write(buff);pfw.write(buff);
 				}
 			}
 			//写入xml尾部
-			fw.write("</ruleset>");
-			fw.flush();
-			fw.close();
+			buff="</ruleset>";
+			fw.write(buff);pfw.write(buff);
+			fw.flush();pfw.flush();
+			fw.close();pfw.close();
 		} catch (Exception e) {
 			error("xml file bulid error:"+e.getMessage());
 			return;
 		}
 		success("ok");
-		addRulesetDesc(shortfn,desc);
+		addRulesetDesc(shortxmlfn,desc);
 	}
 	/**
 	 * 查看某个ruleset文件
@@ -322,14 +356,21 @@ public class PatternAction extends Action{
 			String file = request.getParameter("file");
 			String fn = (String)application.getAttribute("Ruleset") + file;
 			String plugin=request.getParameter("plugin");
-			//读取文件内容
-			String txt=ToolUtil.getFileConetent(fn,"UTF-8");
+			String txt;
 			//是否当作导入plugin使用
 			if(plugin!=null && plugin.equals("yes")){
-				txt=txt.replaceAll(" class=\"net.sourceforge.pmd.lang.rule.XPathRule\" externalInfoUrl="," class=\"net.sourceforge.pmd.rules.XPathRule\" externalInfoUrl=");
+				if(ToolUtil.ifFileExist(fn+".plugin",false,"", "UTF-8")){//对应的plugin文件存在
+						txt=ToolUtil.getFileConetent(fn+".plugin","UTF-8");
+				}else{//对于的plugin文件不存在，取出来进行替换（如果ruleset文件是上传的，其对应的plugin文件是不存在的）
+						txt=ToolUtil.getFileConetent(fn,"UTF-8");
+						txt=txt.replaceAll("class=\"net.sourceforge.pmd.lang.rule.XPathRule\"","class=\"net.sourceforge.pmd.rules.XPathRule\"");
+				}
 				if(file.endsWith(".xml"))file=file.substring(0,file.length()-4);
 				file+=".plugin.xml";
+			}else{
+				txt=ToolUtil.getFileConetent(fn,"UTF-8");
 			}
+			
 			// 设置HTTP头：
 			response.reset();
 			response.setContentType("application/octet-stream");
@@ -410,6 +451,21 @@ public class PatternAction extends Action{
         } else {  
             error("enctype error!");  
         }  
+	}
+	/*列出javaClass列表*/
+	public void javaClasses() throws Exception{
+		Json j = new Json(1);
+		JsonObjectNode data = j.createData();
+		JsonArrayNode classes=new JsonArrayNode("classes");
+		data.addChild(classes);
+		String path=(String)application.getAttribute("Classes")+"/com/jcpa/pattern/javaclass/";
+		List<String> files=ToolUtil.getFileFromPath(path,"class");
+		for(String f:files){
+			if(!f.equals("JcpaAbstractJavaRule.class")){
+				classes.addItem(new JsonLeafNode("",f.substring(0,f.length()-6)));
+			}
+		}
+		echo(j.toString());
 	}
 	/*******************************************************************************************************************************/
 	private final String DESC_SPLIT="#@SPLIT@#";

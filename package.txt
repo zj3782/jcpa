@@ -1,0 +1,6 @@
+net.example.*
+	test code for our system to scan to see if our patterns can work ok.
+net.sourceforge.pmd.*
+	source of pmd.
+com.jcpa.*
+	our system source.

@@ -23,9 +23,20 @@
 			<div id="patternNameDiv" class="span-20 oHidden"><%=name%></div>
 		</div>
 		<div  class="line">
+			<span class="span-2">Type:</span>
+			<div id="patternTypeDiv" class="span-20 oHidden"><%=ToolUtil.strHtmlFmt(p.getPatternType())%></div>
+		</div>
+		<%if(p.getPatternType()!=null && p.getPatternType().equals("java")){%>
+		<div  class="line">
+			<span class="span-2">Class:</span>
+			<div id="patternClassDiv" class="span-20 oHidden"><%=ToolUtil.strHtmlFmt(p.getJavaClass()) %></div>
+		</div>
+		<%}else{%>
+		<div  class="line">
 			<span class="span-2">Expression:</span>
 			<div id="patternExpressionDiv" class="span-20 oAuto"><%=ToolUtil.strHtmlFmt(p.getExpression()) %></div>
 		</div>
+		<%}%>
 		<div  class="line">
 			<span class="span-2">Auxiliary:</span>
 			<div id="patternAuxiliaryDiv" class="span-20 oAuto"><%=ToolUtil.strHtmlFmt(p.getAux()) %></div>

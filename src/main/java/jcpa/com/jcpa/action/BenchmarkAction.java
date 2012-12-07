@@ -110,4 +110,32 @@ public class BenchmarkAction extends Action{
 			error("Stop Error:"+e.getMessage());
 		}
 	}
+	
+	/**
+	 * add
+	 * */
+	public void add() throws Exception{
+		try {
+			String user=(String)session.getAttribute("user");
+			if(user==null || user.equals("guest")){
+				throw new Exception("You have no power to addcase,please login.");
+			}
+			
+			Benchmark b=new Benchmark();
+			String name=request.getParameter("name");
+			b.setName(name);
+			b.setDescript(request.getParameter("desp"));
+
+			String fn=(String)application.getAttribute("Classes")+"/com/jcpa/cases/"+name+".class";
+			if(!ToolUtil.ifFileExist(fn,false,"","UTF-8")){
+				throw new Exception("Add Fail.Class com.jcpa.cases."+name+" not found.");
+			}
+			
+			BenchmarkDao dao=new BenchmarkDaoImpl();
+			dao.add(b);
+			success("Add Success");
+		} catch (Exception e) {
+			error(e.getMessage());
+		}
+	}
 }

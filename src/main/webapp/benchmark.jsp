@@ -38,4 +38,27 @@ initPage=<%=sPage%>;
 	<div id="ViewCaseDescript" class="success h80 oAuto"></div>
 	<div id="ViewCaseResult" class="info h200 oAuto"></div>
 </div>
+<!-- Add -->
+<div id="AddDiv" class="box w400" style="display:none;">
+	<div class="line">
+		<span class="span-2">Name:</span>
+		<span class="span-5">
+			<input type="text" id="AddCaseName" class="w280"/>
+		</span>
+	</div>
+	<div class="line">
+		<span class="span-2">Description:</span>
+		<span class="span-8">
+			<textarea id="AddCaseDescript" class="w280 h200"></textarea>
+		</span>
+	</div>
+	<div class="line">
+		<p class="cRed">Before Adding,make sure you already have a class has the same name as the 'name' field in the com.jcpa.cases package.</p>
+	</div>
+</div>
+<script type="text/javascript">
+<%if(!user.equals("guest")){%>
+btns.push({ name: 'Add', displayname: "Add", onpress: toolbarItem_onclick });
+<%}%>
+</script>
 <%@ include file="footer.jsp"%> 

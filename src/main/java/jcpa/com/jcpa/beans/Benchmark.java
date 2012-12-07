@@ -19,7 +19,10 @@ public class Benchmark {
 	public String getName() {
 		return name;
 	}
-	public void setName(String name) {
+	public void setName(String name) throws Exception{
+		if(name==null || name.equals("")){
+			throw new Exception("Arg name cannot be empty");
+		}
 		this.name = name;
 	}
 	public String getDescript() {
