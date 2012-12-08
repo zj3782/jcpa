@@ -4,7 +4,7 @@
   <groupId>jcpa</groupId>
   <artifactId>jcpa</artifactId>
   <packaging>war</packaging>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1</version>
   <name>jcpa Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <dependencies>
@@ -79,6 +79,41 @@
 			<configuration>
 				<encoding>UTF-8</encoding>
 			</configuration>
+		</plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-jar-plugin</artifactId>
+			<version>2.3</version>
+			<executions>
+				<execution>
+					<id>pmd-jcpa-jar</id>
+					<phase>package</phase>
+					<goals>
+						<goal>jar</goal>
+					</goals>
+					<configuration>
+						<classifier>jcpa-${project.version}</classifier>
+						<jarName>pmd</jarName>
+						<includes>
+							<include>**/net/sourceforge/pmd/**</include>
+						</includes>
+					</configuration>
+				</execution>
+				<execution>
+					<id>javarule-pmd-jcpa-jar</id>
+					<phase>package</phase>
+					<goals>
+						<goal>jar</goal>
+					</goals>
+					<configuration>
+						<classifier>pmd-jcpa-${project.version}</classifier>
+						<jarName>javarule</jarName>
+						<includes>
+							<include>**/com/jcpa/pattern/**</include>
+						</includes>
+					</configuration>
+				</execution>
+			</executions>
 		</plugin>
     </plugins>
   </build>

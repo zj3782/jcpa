@@ -453,6 +453,8 @@ function showTxt(cat){
 						(3)Select the checkbox named "Use the ruleset configured in a project file" on the bottom of the properties dialog.<br>
 						(4)Browse and select a rulse file.
 					</p>
+					<p class="cRed">Attention:If there are java patterns in the ruleset file,you must copy the javarule-pmd-jcpa-xxx.jar to eclipse pmd plugin path.
+					If not,the rulset cannot be imported because it cannot find the class handle the java patterns.</p>
 				</div>
 				<div id="usagePluginScan">
 					<h3>Scan code in eclipse</h3>
