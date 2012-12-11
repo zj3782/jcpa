@@ -1,7 +1,7 @@
 package net.example.redundantinvocation;
 
 /*
- * Wrong occurrences: 1;
+ * Wrong occurrences: 2;
  */
 public class CallExpensiveStatementTwiceOrMoreInClass {
 

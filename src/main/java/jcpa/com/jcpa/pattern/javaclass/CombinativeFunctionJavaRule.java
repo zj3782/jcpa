@@ -2,9 +2,7 @@ package com.jcpa.pattern.javaclass;
 
 import java.util.List;
 
-import org.jaxen.JaxenException;
-
-import com.jcpa.util.PMDUtil;
+import com.jcpa.util.AuxUtil;
 
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
@@ -17,8 +15,8 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 			String aux=(String) getProperty(getPropertyDescriptor("aux"));
 			String xpath1="//MethodDeclarator[##AUX_CON##][./descendant::*/ReferenceType[@Array = true() and @ArrayDepth = 1]]";
 			String xpath2="//PrimaryExpression[PrimaryPrefix/Name[##AUX_CON##]][./descendant::*/Arguments]";
-			xpath1=PMDUtil.ExpIntegrate(xpath1, aux);
-			xpath2=PMDUtil.ExpIntegrate(xpath2, aux);
+			xpath1=AuxUtil.ExpIntegrate(xpath1, aux);
+			xpath2=AuxUtil.ExpIntegrate(xpath2, aux);
 			
 			List<Node> lstComb = (List<Node>) node.findChildNodesWithXPath(xpath1);
 	        List<Node> lst = (List<Node>) node.findChildNodesWithXPath(xpath2);
@@ -39,7 +37,7 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 	}
 
     // suppose only one parameter
-    public static String getFormalArrayParameterElementType(Node node) throws JaxenException {
+    public static String getFormalArrayParameterElementType(Node node) throws Exception {
         List<Node> lst = (List<Node>) node.findChildNodesWithXPath("./descendant::*/ReferenceType[@Array = true()]");
 
         int len = lst.size();
@@ -49,7 +47,7 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
         return lst.get(0).jjtGetChild(0).getImage();
     }
 
-    public static boolean isActualParameterOfType(Node node, String typeString) throws JaxenException {
+    public static boolean isActualParameterOfType(Node node, String typeString) throws Exception {
         List<Node> lst = (List<Node>) node.findChildNodesWithXPath("./descendant::*/Arguments/ArgumentList/Expression[not(./descendant::*/AllocationExpression)]");
 
         if(lst.size() == 0) return false;

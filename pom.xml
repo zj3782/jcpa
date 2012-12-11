@@ -110,6 +110,7 @@
 						<jarName>javarule</jarName>
 						<includes>
 							<include>**/com/jcpa/pattern/**</include>
+							<include>**/com/jcpa/util/AuxUtil.class</include>
 						</includes>
 					</configuration>
 				</execution>

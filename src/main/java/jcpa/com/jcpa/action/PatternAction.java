@@ -24,7 +24,7 @@ import org.apache.commons.fileupload.util.Streams;
 import com.jcpa.beans.Pattern;
 import com.jcpa.dao.sql.PatternDaoImpl;
 import com.jcpa.dao.sql.interfaces.PatternDao;
-import com.jcpa.util.PMDUtil;
+import com.jcpa.util.AuxUtil;
 import com.jcpa.util.ToolUtil;
 import com.jcpa.util.json.Json;
 import com.jcpa.util.json.JsonArrayNode;
@@ -300,7 +300,7 @@ public class PatternAction extends Action{
 						buff+="class=\"net.sourceforge.pmd.lang.rule.XPathRule\">";
 						buff2+="class=\"net.sourceforge.pmd.rules.XPathRule\">";
 						tmp="<properties><property name=\"xpath\"><value><![CDATA["
-								+ PMDUtil.ExpIntegrate(p.getExpression(),p.getAux())
+								+ AuxUtil.ExpIntegrate(p.getExpression(),p.getAux())
 								+ "]]></value></property></properties>";
 						buff+=tmp;
 						buff2+=tmp;

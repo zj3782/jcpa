@@ -2,9 +2,7 @@ package com.jcpa.pattern.javaclass;
 
 import java.util.List;
 
-import org.jaxen.JaxenException;
-
-import com.jcpa.util.PMDUtil;
+import com.jcpa.util.AuxUtil;
 
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
@@ -14,7 +12,7 @@ public class CallExpensiveFunctionJavaRule extends JcpaAbstractJavaRule {
 		try {
 			String aux=(String) getProperty(getPropertyDescriptor("aux"));
 			String xpath="//PrimaryExpression[PrimarySuffix/Arguments][PrimaryPrefix/Name[##AUX_CON##]]";
-			xpath=PMDUtil.ExpIntegrate(xpath, aux);
+			xpath=AuxUtil.ExpIntegrate(xpath, aux);
 
 			List<?> lst = node.findChildNodesWithXPath(xpath);
 			int len = lst.size();
@@ -26,6 +24,7 @@ public class CallExpensiveFunctionJavaRule extends JcpaAbstractJavaRule {
 
 			        if(isTreeEqual(a, b)) {
 			        	addViolation(data, a);
+			        	addViolation(data, b);
 			        }
 			    }
 			}
@@ -35,7 +34,7 @@ public class CallExpensiveFunctionJavaRule extends JcpaAbstractJavaRule {
 		return data;
 	}
 	
-	public static boolean isTreeEqual(Node na, Node nb) throws JaxenException, ClassNotFoundException {
+	public static boolean isTreeEqual(Node na, Node nb) throws Exception, ClassNotFoundException {
         if(!isNodeEqual(na, nb)) return false;
 
         List<? extends Node> lsta = na.findChildNodesWithXPath("./*");
