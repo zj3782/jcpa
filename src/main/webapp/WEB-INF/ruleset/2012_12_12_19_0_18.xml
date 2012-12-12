@@ -1,4 +1,4 @@
-<?xml version="1.0"?> <ruleset name="jcpa pmd rules" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd" xsi:noNamespaceSchemaLocation="http://pmd.sourceforge.net/ruleset_2_0_0.xsd"><description>jcpa pmd rules -- generate by admin at the time of 2012.12.07 13:17:39</description><rule name="ProbeSizeOfArrayOrCollectionBeforeForStatement" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=1" class="net.sourceforge.pmd.rules.XPathRule"><properties><property name="xpath"><value><![CDATA[//BlockStatement
+<?xml version="1.0"?> <ruleset name="jcpa pmd rules" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd" xsi:noNamespaceSchemaLocation="http://pmd.sourceforge.net/ruleset_2_0_0.xsd"><description>jcpa pmd rules -- generate by admin at the time of 2012.12.12 15:00:20</description><rule name="ProbeSizeOfArrayOrCollectionBeforeForStatement" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=1" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[//BlockStatement
 [
 descendant::*/IfStatement/descendant::*[RelationalExpression]/descendant::*/Literal[@Image="0"]
 ]
@@ -61,7 +61,7 @@ descendant::*/IfStatement/descendant::*/ForStatement/descendant::*/Name/@Image, 
             }
         }
     }
-}]]></example></rule><rule name="UnnecessaryLogicalJudgement" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=2" class="net.sourceforge.pmd.rules.XPathRule"><properties><property name="xpath"><value><![CDATA[//BlockStatement
+}]]></example></rule><rule name="UnnecessaryLogicalJudgement" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=2" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[//BlockStatement
 [
 Statement/IfStatement/descendant::*[EqualityExpression]/descendant::*/Literal/NullLiteral
 ]
@@ -146,7 +146,7 @@ preceding-sibling::*[descendant::*/AssignmentOperator]/descendant::*/PrimaryPref
         }
         return signal;
     }
-}]]></example></rule><rule name="ReclaimMemorySpace" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=3" class="net.sourceforge.pmd.rules.XPathRule"><properties><property name="xpath"><value><![CDATA[//BlockStatement
+}]]></example></rule><rule name="ReclaimMemorySpace" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=3" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[//BlockStatement
 [Statement/StatementExpression/AssignmentOperator/following-sibling::*[self::Expression and position()=1]/PrimaryExpression/PrimaryPrefix/Literal/NullLiteral]
 [not(ancestor::*/following-sibling::*/descendant::*/PrimaryPrefix/Name/@Image=descendant::*/PrimaryPrefix/Name/@Image)]
 [not(following-sibling::*/descendant::*/PrimaryPrefix/Name/@Image=descendant::*/PrimaryPrefix/Name/@Image)]
@@ -177,7 +177,7 @@ preceding-sibling::*[descendant::*/AssignmentOperator]/descendant::*/PrimaryPref
         question = null;
         return what;
     }
-}]]></example></rule><rule name="CallExpensiveFunctionTwiceOrMoreInClass" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=4" class="com.jcpa.pattern.javaclass.CallExpensiveFunctionJavaRule"><properties><property name="aux"><value><![CDATA[factorial,MethodFactory.getInstance]]></value></property></properties><description>Function result is not preserved.</description><priority>2</priority><example><![CDATA[（1）public class CallExpensiveFunctionTwiceOrMoreInMethod {
+}]]></example></rule><rule name="CallExpensiveFunctionTwiceOrMoreInClass" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=4" class="com.jcpa.pattern.javaclass.CallExpensiveFunctionJavaRule"><properties><property name="aux"><value><![CDATA[factorial,MethodFactory.getInstance,.trim]]></value></property></properties><description>Function result is not preserved.</description><priority>2</priority><example><![CDATA[（1）public class CallExpensiveFunctionTwiceOrMoreInMethod {
 
     private long factorial(long n) {
         if (n == 1) {
@@ -219,7 +219,7 @@ preceding-sibling::*[descendant::*/AssignmentOperator]/descendant::*/PrimaryPref
     String WrongGetGray() {
         return MethodFactory.getInstance().getColor(false);
     }
-}]]></example></rule><rule name="SuboptimalLogicalExpression" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=5" class="net.sourceforge.pmd.rules.XPathRule"><properties><property name="xpath"><value><![CDATA[//Expression
+}]]></example></rule><rule name="SuboptimalLogicalExpression" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=5" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[//Expression
 [
     ConditionalAndExpression
     [
@@ -251,7 +251,7 @@ preceding-sibling::*[descendant::*/AssignmentOperator]/descendant::*/PrimaryPref
         boolean m = true;
         return (!l & !r & !m);
     }
-}]]></example></rule><rule name="OperateUnsynchronizedCollection" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=6" class="net.sourceforge.pmd.rules.XPathRule"><properties><property name="xpath"><value><![CDATA[//ClassOrInterfaceBodyDeclaration
+}]]></example></rule><rule name="OperateUnsynchronizedCollection" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=6" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[//ClassOrInterfaceBodyDeclaration
 [
 FieldDeclaration[descendant::*/ClassOrInterfaceType[@Image="Map"]]
 /VariableDeclarator[descendant::*/AllocationExpression/ClassOrInterfaceType[@Image="HashMap"]]/VariableDeclaratorId
@@ -444,14 +444,14 @@ following-sibling::*[MethodDeclaration]
         unsafeList.add("A");
         unsafeMap.put("K", "V");
     }
-}]]></example></rule><rule name="LegacyUsageForLoop" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=7" class="net.sourceforge.pmd.rules.XPathRule"><properties><property name="xpath"><value><![CDATA[//BlockStatement
+}]]></example></rule><rule name="LegacyUsageForLoop" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=7" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[//BlockStatement
 [
 descendant::*/ForStatement/Expression
 /RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image=
 preceding-sibling::*/LocalVariableDeclaration/VariableDeclarator
 [ends-with(VariableInitializer/Expression/PrimaryExpression/PrimaryPrefix/Name/@Image,".length")]
 [starts-with(VariableInitializer/Expression/PrimaryExpression/PrimaryPrefix/Name/@Image,concat(
-ancestor::BlockStatement/preceding-sibling::*/LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="String"]]/VariableDeclarator/VariableDeclaratorId/@Image,"."))]
+ancestor::BlockStatement/preceding-sibling::*/LocalVariableDeclaration[Type/ReferenceType/@Array="true"]/VariableDeclarator/VariableDeclaratorId/@Image,"."))]
 [starts-with(VariableInitializer/Expression/PrimaryExpression/PrimaryPrefix/Name/@Image,concat(
 ancestor::BlockStatement/following-sibling::*/descendant::*/ForStatement/Statement/descendant::*/BlockStatement
 [not(preceding-sibling::*/descendant::*/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Name/@Image=ancestor::*/ForUpdate/descendant::*/PrimaryPrefix/Name/@Image)]
@@ -488,8 +488,8 @@ ancestor::Statement/preceding-sibling::*[position()=1 and self::ForUpdate]/desce
 |
 //BlockStatement
 [
-starts-with(descendant::*/ForStatement/Expression/RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image,
-previous-sibiling/LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="String"]]/VariableDeclarator/VariableDeclaratorId/@Image)
+starts-with(descendant::*/ForStatement/Expression/RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image,concat(
+preceding-sibling::*/LocalVariableDeclaration[Type/ReferenceType/@Array="true"]/VariableDeclarator/VariableDeclaratorId/@Image,"."))
 ]
 [
 ends-with(descendant::*/ForStatement/Expression/RelationalExpression/PrimaryExpression[2]/PrimaryPrefix/Name/@Image,".length")
@@ -538,7 +538,9 @@ preceding-sibling/LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceTy
 )]
 [ends-with(
 Statement/WhileStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount=0]]/Name/@Image,".next"
-)]]]></value></property></properties><description>Old version's usage is not recommended.</description><priority>2</priority><example><![CDATA[public class LegacyUsageForLoop {
+)]
+[ends-with(preceding-sibling::BlockStatement
+/descendant::*/PrimaryExpression/PrimaryPrefix[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount=0]]/Name/@Image,".iterator")]]]></value></property></properties><description>Old version's usage is not recommended.</description><priority>2</priority><example><![CDATA[public class LegacyUsageForLoop {
     public void correctIncludeVariableInStatement() {
         List<String> strList = new ArrayList<String>();
         for (int i=0; i<10; i++) {
@@ -587,7 +589,7 @@ Statement/WhileStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix
             assert (itr.next() != null);
         }
     }
-}]]></example></rule><rule name="UnspecifyTargetTypeInArrayConversion" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=8" class="net.sourceforge.pmd.rules.XPathRule"><properties><property name="xpath"><value><![CDATA[//CastExpression[Type/ReferenceType/ClassOrInterfaceType[@Image != "Object"]]//PrimaryExpression
+}]]></example></rule><rule name="UnspecifyTargetTypeInArrayConversion" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=8" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[//CastExpression[Type/ReferenceType/ClassOrInterfaceType[@Image != "Object"]]//PrimaryExpression
 [
 PrimaryPrefix/Name[ends-with(@Image, '.toArray')]
 and
@@ -612,17 +614,17 @@ count(PrimarySuffix) = 1
 
         return (String[]) strList.toArray();
     }
-}]]></example></rule><rule name="ExpensiveOperationsInSynchronizedBlock" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=9" class="net.sourceforge.pmd.rules.XPathRule"><properties><property name="xpath"><value><![CDATA[//ClassOrInterfaceBodyDeclaration
+}]]></example></rule><rule name="ExpensiveOperationsInSynchronizedBlock" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=9" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[//ClassOrInterfaceBodyDeclaration
 [
 descendant::*/BlockStatement/Statement/SynchronizedStatement
 [
-descendant::*/BlockStatement/descendant::*/PrimaryExpression/PrimarySuffix[preceding-sibling::*[position()=1 and self::PrimaryPrefix]/Name[contains(@Image,"costMethod") or contains(@Image,"excludecostMethod") or contains(@Image,"includecostMethod") or contains(@Image,"processItem")]]/Arguments[@ArgumentCount>=0]
+descendant::*/BlockStatement/descendant::*/PrimaryExpression/PrimarySuffix[preceding-sibling::*[position()=1 and self::PrimaryPrefix]/Name[contains(@Image,"costMethod") or contains(@Image,"costMethod") or contains(@Image,"excludecostMethod") or contains(@Image,"includecostMethod") or contains(@Image,"processItem")]]/Arguments[@ArgumentCount>=0]
 ]
 /Expression/PrimaryExpression/PrimaryPrefix/Name/@Image=
 preceding-sibling::*/FieldDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="Map" or @Image="Set" or @Image="List"]/TypeArguments]/VariableDeclarator/VariableDeclaratorId/@Image
 ]
 /descendant::*/BlockStatement/Statement/SynchronizedStatement/descendant::*/BlockStatement/descendant::*/PrimaryExpression/PrimaryPrefix
-[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount>=0]]/Name[contains(@Image,"costMethod") or contains(@Image,"excludecostMethod") or contains(@Image,"includecostMethod") or contains(@Image,"processItem")]]]></value></property></properties><description>Expensive operation(s) is in synchronized block.</description><priority>1</priority><example><![CDATA[public class ExpensiveOperationsInSynchronizedBlock {
+[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount>=0]]/Name[contains(@Image,"costMethod") or contains(@Image,"costMethod") or contains(@Image,"excludecostMethod") or contains(@Image,"includecostMethod") or contains(@Image,"processItem")]]]></value></property></properties><description>Expensive operation(s) is in synchronized block.</description><priority>1</priority><example><![CDATA[public class ExpensiveOperationsInSynchronizedBlock {
     List<String> strList = new ArrayList<String>();
     {
 
@@ -652,7 +654,7 @@ preceding-sibling::*/FieldDeclaration[Type/ReferenceType/ClassOrInterfaceType[@I
     public void includecostMethod() {
         
     }
-}]]></example></rule><rule name="SynchronizeCollectionWithLockVariable" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=10" class="net.sourceforge.pmd.rules.XPathRule"><properties><property name="xpath"><value><![CDATA[//ClassOrInterfaceBodyDeclaration
+}]]></example></rule><rule name="SynchronizeCollectionWithLockVariable" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=10" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[//ClassOrInterfaceBodyDeclaration
 [
 starts-with(MethodDeclaration/descendant::*/BlockStatement
 [ends-with(preceding-sibling::*/descendant::*/PrimaryExpression/PrimaryPrefix[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments]/Name/@Image,'.lock')]
@@ -724,7 +726,7 @@ public class SynchronizeCollectionWithLockVariable {
         }
 
     }
-}]]></example></rule><rule name="UseSynchronizedSet" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=11" class="net.sourceforge.pmd.rules.XPathRule"><properties><property name="xpath"><value><![CDATA[//BlockStatement/descendant::*/PrimaryExpression/PrimaryPrefix
+}]]></example></rule><rule name="UseSynchronizedSet" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=11" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[//BlockStatement/descendant::*/PrimaryExpression/PrimaryPrefix
 [starts-with(Name/@Image,'Collections.')]
 [ends-with(Name/@Image,'.synchronizedSet')]
 [following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount="1"]/ArgumentList/descendant::*/
@@ -738,10 +740,10 @@ AllocationExpression[ClassOrInterfaceType[@Image="HashSet"]]/Arguments[@Argument
     public Set<String> wrongGetSafeSet() {
         return Collections.synchronizedSet(new HashSet<String>());
     }
-}]]></example></rule><rule name="CallCombinativeFunctionTwiceOrMoreInLoop" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=12" class="net.sourceforge.pmd.rules.XPathRule"><properties><property name="xpath"><value><![CDATA[//Statement[ForStatement]
+}]]></example></rule><rule name="CallCombinativeFunctionTwiceOrMoreInLoop" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=12" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[//Statement[ForStatement]
 [
 descendant::*/Statement[descendant::*/BlockStatement/descendant::*/PrimaryExpression/PrimarySuffix
-[preceding-sibling::*[position()=1 and self::PrimaryPrefix]/Name[contains(@Image,"cominativeMethod") or contains(@Image,"serviceA.call") or contains(@Image,"processRow") or contains(@Image,"Configuration.getInstance") or contains(@Image,"ServiceSessionManager.getInstance") or contains(@Image,"ServiceManagerFactory.getServiceManager") or contains(@Image,"SPIContextManager.getSPIContext")]]
+[preceding-sibling::*[position()=1 and self::PrimaryPrefix]/Name[contains(@Image,"cominativeMethod") or contains(@Image,"cominativeMethod") or contains(@Image,"serviceA.call") or contains(@Image,"processRow") or contains(@Image,"Configuration.getInstance") or contains(@Image,"ServiceSessionManager.getInstance") or contains(@Image,"ServiceManagerFactory.getServiceManager") or contains(@Image,"SPIContextManager.getSPIContext")]]
 /Arguments[@ArgumentCount="1"]/ArgumentList/descendant::*/PrimaryPrefix/Name/@Image=
 ancestor::*/ForStatement/LocalVariableDeclaration/VariableDeclarator/VariableDeclaratorId/@Image]
 ]]]></value></property></properties><description>Combinative functions in loop are not combined.</description><priority>1</priority><example><![CDATA[public class CallCombinativeFunctionTwiceOrMoreInLoop {
@@ -758,7 +760,7 @@ ancestor::*/ForStatement/LocalVariableDeclaration/VariableDeclarator/VariableDec
 		// TODO Auto-generated method stub
 		
 	}
-}]]></example></rule><rule name="ComputationalComplexityProblem" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=13" class="net.sourceforge.pmd.rules.XPathRule"><properties><property name="xpath"><value><![CDATA[//BlockStatement
+}]]></example></rule><rule name="ComputationalComplexityProblem" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=13" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[//BlockStatement
 [count(
 Statement[ForStatement or WhileStatement or DoStatement]
 /descendant::*/Statement[ForStatement or WhileStatement or DoStatement]
@@ -771,7 +773,7 @@ Statement[ForStatement or WhileStatement or DoStatement]
                 sum += i * j;
             }
     }
-}]]></example></rule><rule name="CallCombinativeFunctionTwiceOrMore" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=18" class="com.jcpa.pattern.javaclass.CombinativeFunctionJavaRule"><properties><property name="aux"><value><![CDATA[cominativeMethod,cominativeMethod2]]></value></property></properties><description>Combinative functions are not combined.</description><priority>1</priority><example><![CDATA[public class CallCombinativeFunctionTwiceOrMore {
+}]]></example></rule><rule name="CallCombinativeFunctionTwiceOrMore" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=14" class="com.jcpa.pattern.javaclass.CombinativeFunctionJavaRule"><properties><property name="aux"><value><![CDATA[cominativeMethod,cominativeMethod2,serviceA.call,processRow,Configuration.getInstance,ServiceSessionManager.getInstance,ServiceManagerFactory.getServiceManager,SPIContextManager.getSPIContext]]></value></property></properties><description>Combinative functions are not combined.</description><priority>1</priority><example><![CDATA[public class CallCombinativeFunctionTwiceOrMore {
     public void correctCallMethods() {
         cominativeMethod(new String[] { "A", "B" });
     }

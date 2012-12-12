@@ -243,7 +243,7 @@ public class PatternAction extends Action{
 	 * 生成patterns的xml文件
 	 * */
 	public void addruleset() throws Exception{
-		String shortxmlfn,xmlfn,pluginfn,type,cond,desc;
+		String shortxmlfn,xmlfn,type,cond,desc;
 		try {
 			//生成的文件名
 			shortxmlfn = request.getParameter("fn");
@@ -255,7 +255,6 @@ public class PatternAction extends Action{
 				shortxmlfn+=".xml";
 			}
 			xmlfn = (String)application.getAttribute("Ruleset")+shortxmlfn;
-			pluginfn=xmlfn+".plugin";
 			//patterns条件
 			type = request.getParameter("type");
 			if(type.equals("all")){//all patterns
@@ -270,14 +269,12 @@ public class PatternAction extends Action{
 			
 			OutputStream out = new FileOutputStream(xmlfn);
 			OutputStreamWriter fw = new OutputStreamWriter(out, "UTF-8");
-			OutputStream pout = new FileOutputStream(pluginfn);
-			OutputStreamWriter pfw = new OutputStreamWriter(pout, "UTF-8");
-			String buff="",buff2="",tmp="";
+			String buff="",tmp="";
 			//写入xml头部
 			buff="<?xml version=\"1.0\"?> <ruleset name=\"jcpa pmd rules\" xmlns=\"http://pmd.sourceforge.net/ruleset/2.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd\" xsi:noNamespaceSchemaLocation=\"http://pmd.sourceforge.net/ruleset_2_0_0.xsd\">";
-			fw.write(buff);pfw.write(buff);
+			fw.write(buff);
 			buff="<description>"+desc+"</description>";
-			fw.write(buff);pfw.write(buff);
+			fw.write(buff);
 			//分页取出数据写入xml
 			final int ONE_PAGE_COUNT = 100;
 			PatternDao dao = new PatternDaoImpl();
@@ -294,33 +291,29 @@ public class PatternAction extends Action{
 						buff+="class=\"com.jcpa.pattern.javaclass."+p.getJavaClass()+"\">";
 						buff+="<properties><property name=\"aux\"><value><![CDATA["
 								+ p.getAux()+ "]]></value></property></properties>";
-						buff2=buff;
 					}else{
-						buff2=buff;
 						buff+="class=\"net.sourceforge.pmd.lang.rule.XPathRule\">";
-						buff2+="class=\"net.sourceforge.pmd.rules.XPathRule\">";
 						tmp="<properties><property name=\"xpath\"><value><![CDATA["
 								+ AuxUtil.ExpIntegrate(p.getExpression(),p.getAux())
 								+ "]]></value></property></properties>";
 						buff+=tmp;
-						buff2+=tmp;
 					}
-					fw.write(buff);pfw.write(buff2);
+					fw.write(buff);
 					buff="<description>" + p.getWarning() + "</description>";
-					fw.write(buff);pfw.write(buff);
+					fw.write(buff);
 					buff="<priority>"+p.getPriority()+"</priority>";
-					fw.write(buff);pfw.write(buff);
+					fw.write(buff);
 					buff="<example><![CDATA[" + p.getExample() + "]]></example>";
-					fw.write(buff);pfw.write(buff);
+					fw.write(buff);
 					buff="</rule>";
-					fw.write(buff);pfw.write(buff);
+					fw.write(buff);
 				}
 			}
 			//写入xml尾部
 			buff="</ruleset>";
-			fw.write(buff);pfw.write(buff);
-			fw.flush();pfw.flush();
-			fw.close();pfw.close();
+			fw.write(buff);
+			fw.flush();
+			fw.close();
 		} catch (Exception e) {
 			error("xml file bulid error:"+e.getMessage());
 			return;
@@ -355,22 +348,7 @@ public class PatternAction extends Action{
 			//文件名
 			String file = request.getParameter("file");
 			String fn = (String)application.getAttribute("Ruleset") + file;
-			String plugin=request.getParameter("plugin");
-			String txt;
-			//是否当作导入plugin使用
-			if(plugin!=null && plugin.equals("yes")){
-				if(ToolUtil.ifFileExist(fn+".plugin",false,"", "UTF-8")){//对应的plugin文件存在
-						txt=ToolUtil.getFileConetent(fn+".plugin","UTF-8");
-				}else{//对于的plugin文件不存在，取出来进行替换（如果ruleset文件是上传的，其对应的plugin文件是不存在的）
-						txt=ToolUtil.getFileConetent(fn,"UTF-8");
-						txt=txt.replaceAll("class=\"net.sourceforge.pmd.lang.rule.XPathRule\"","class=\"net.sourceforge.pmd.rules.XPathRule\"");
-				}
-				if(file.endsWith(".xml"))file=file.substring(0,file.length()-4);
-				file+=".plugin.xml";
-			}else{
-				txt=ToolUtil.getFileConetent(fn,"UTF-8");
-			}
-			
+			String txt=ToolUtil.getFileConetent(fn,"UTF-8");
 			// 设置HTTP头：
 			response.reset();
 			response.setContentType("application/octet-stream");

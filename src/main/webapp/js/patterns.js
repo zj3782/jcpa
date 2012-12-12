@@ -463,28 +463,11 @@ function addRuleToTB(filename,desc){
 	td.innerHTML="<div class='w240' title='"+desc+"'>"+filename+"</div>";
 	td=tr.insertCell(1);
 	var htm="<a href='pattern.do?method=viewRuleset&file="+filename+"' target='_blank'>View</a>&nbsp;&nbsp;";
-	htm+="<a href='javascript:;' onclick='downRuleset(\""+filename+"\")'>Download</a>&nbsp;&nbsp;";
+	htm+="<a href='pattern.do?method=downRuleset&file="+filename+"' target='_blank'>Download</a>&nbsp;&nbsp;";
 	htm+="<a href='javascript:;' onclick='delRuleset(\""+filename+"\")'>Delete</a>";
 	td.innerHTML=htm;
 }
-/**
- * 下载ruleset
- * */
-function downRuleset(filename){
-	var htm="";
-	htm+="<span class='info' title='You can import it to eclipse pmd plugin latter.'>";
-		htm+="<a href='pattern.do?method=downRuleset&file="+filename+"&plugin=yes' target='_blank'>As plugin use</a>";
-	htm+="</span>";
-	htm+="<span class='alert' title='You can upload to another server to analye code with it'>";
-		htm+="<a href='pattern.do?method=downRuleset&file="+filename+"' target='_blank'>As normal use</a>";
-	htm+="</span>";
-	artDialog({
-		content:htm,
-		title:"Download RuleSet ["+filename+"]",
-		lock:true,
-		id:'downruleset'
-	});
-}
+
 /**
  *上传ruleset 
  */

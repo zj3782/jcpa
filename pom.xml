@@ -49,11 +49,66 @@
 		<artifactId>hibernate-core</artifactId>
 		<version>4.1.6.Final</version>
 	 </dependency>
-    <dependency>
+	 <!--pmd start-->
+    <!--dependency>
     	<groupId>net.sourceforge.pmd</groupId>
     	<artifactId>pmd</artifactId>
     	<version>5.0.0</version>
-    </dependency>
+    </dependency-->
+	  <dependency>
+		  <groupId>org.apache.ant</groupId>
+		  <artifactId>ant</artifactId>
+		  <version>1.8.1</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.apache.ant</groupId>
+		  <artifactId>ant-testutil</artifactId>
+		  <version>1.7.1</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>jaxen</groupId>
+		  <artifactId>jaxen</artifactId>
+		  <version>1.1.1</version>
+		  <exclusions>
+			  <exclusion>
+				  <artifactId>xercesImpl</artifactId>
+				  <groupId>xerces</groupId>
+			  </exclusion>
+		  </exclusions>
+	  </dependency>
+	  <dependency>
+		  <groupId>asm</groupId>
+		  <artifactId>asm</artifactId>
+		  <version>3.2</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>net.sourceforge.saxon</groupId>
+		  <artifactId>saxon</artifactId>
+		  <version>9.1.0.8</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.mozilla</groupId>
+		  <artifactId>rhino</artifactId>
+		  <version>1.7R3</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>junit</groupId>
+		  <artifactId>junit</artifactId>
+		  <version>4.4</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>xerces</groupId>
+		  <artifactId>xercesImpl</artifactId>
+		  <version>2.9.1</version>
+		  <type>jar</type>
+		  <scope>runtime</scope>
+	  </dependency>
+	  <dependency>
+		  <groupId>net.java.dev.javacc</groupId>
+		  <artifactId>javacc</artifactId>
+		  <version>4.1</version>
+	  </dependency>
+	  <!--pmd end-->
     <dependency>
             <groupId>com.ibm.icu</groupId>
 			<artifactId>icu4j</artifactId>
@@ -80,6 +135,15 @@
 				<encoding>UTF-8</encoding>
 			</configuration>
 		</plugin>
+		<plugin>  
+            <groupId>org.apache.maven.plugins</groupId>  
+            <artifactId>maven-war-plugin</artifactId>  
+            <version>2.3</version>  
+            <configuration> 
+				<!--打包war的时候忽略-->
+				<packagingExcludes>**/net/example/**,**/rulesets/**,**/pmd-nicerhtml.xsl,**/ruleset_2_0_0.dtd,**/ruleset_2_0_0.xsd</packagingExcludes>
+            </configuration>  
+        </plugin>
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-jar-plugin</artifactId>
@@ -92,10 +156,16 @@
 						<goal>jar</goal>
 					</goals>
 					<configuration>
-						<classifier>jcpa-${project.version}</classifier>
+						<classifier>5.1.0-SNAPSHOT</classifier>
 						<jarName>pmd</jarName>
 						<includes>
 							<include>**/net/sourceforge/pmd/**</include>
+							<include>**/com/jcpa/pattern/**</include>
+							<include>**/com/jcpa/util/AuxUtil.class</include>
+							<include>**/rulesets/**</include>
+							<include>**/pmd-nicerhtml.xsl</include>
+							<include>**/ruleset_2_0_0.dtd</include>
+							<include>**/ruleset_2_0_0.xsd</include>
 						</includes>
 					</configuration>
 				</execution>
@@ -107,7 +177,7 @@
 					</goals>
 					<configuration>
 						<classifier>pmd-jcpa-${project.version}</classifier>
-						<jarName>javarule</jarName>
+						<jarName>javaruleclass</jarName>
 						<includes>
 							<include>**/com/jcpa/pattern/**</include>
 							<include>**/com/jcpa/util/AuxUtil.class</include>

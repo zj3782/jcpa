@@ -233,9 +233,6 @@ function showTxt(cat){
 					<img src="image/patterns7.png" />
 					<p>Select the file, then click upload button.</p>
 					<p>You can also download the ruleset file.Click the download link.</p>
-					<img src="image/patterns8.png" />
-					<p>If you want to download the file to import to the eclipse plugin,click "as plugin use".</p>
-					<p>If you just want to download it and want to upload this file to another server,click "as normal use".</p>
 				</div>
 				<div id="sysDetailLogin">
 					<h2>User Role</h2>
@@ -355,6 +352,15 @@ function showTxt(cat){
 				In this situation,you can scan your code package by package,and you can find out which file causes this problem.
 				</p>
 			</div>
+			<div class="problem">	
+				<h3>Why I can import the ruleset file to eclipse plugin?</h3>
+				<p>For now,we only support for pmd plugin vesion 4.0,if your plugin is version lower,just upgrade it.</p>
+				<p>If you plugin version is 4.0,then check if the ruleset file is right,if there are java patterns in the ruleset file,you must compression the java class which handle those java patterns to the pmd plugin jars.If you don't know how,you can watch the "Load ruleset in eclipse" item in the "Eclipse plugin usage".</p>
+			</div>
+			<div class="problem">	
+				<h3>I have import the ruleset file to eclipse pmd plugin successed,bu when I scan code,there are no violence,it seems that the patterns dont work.</h3>
+				<p>Make sure you have check the rules you want to work in the "windows"=>"Preferences"=>"PMD"=>"rule configuration" Dialog and you must enable pmd in the project properties dialog.</p>
+			</div>
 		</div>
 		</div>
 		<div id="usage">
@@ -412,7 +418,7 @@ function showTxt(cat){
 					<img src="image/customize_ben1.png"/>
 					<h4>How to add a java pattern.</h4>
 					<p>1、New a class extends com.jcpa.pattern.javaclass.JcpaAbstractJavaRule.(the new class must be in the com.jcpa.pattern.javaclass package too.)</p>
-					<p>2、Visit the pattern list page and click add button.</p>
+					<p>2、Visit the pattern list page and click add button.Choose 'java' in the type filed,and select the classname you just create in the class filed.</p>
 				</div>				
 			</div>
 			<div id="usagePlugin">
@@ -421,8 +427,8 @@ function showTxt(cat){
 					<h3>Install pmd eclipse plugin</h3>
 					<p>1、Select "Help"->"Install New Software" on the eclipse main menu.</p>
 					<p>2、Click "Add" button on the Install dialog.</p>
-					<p>3、Input a name on the name field.Input "http://pmd.sf.net/eclipse" on the Location field.Click OK</p>
-					<p>4、You will see two items named "PMD for Eclipse2" and "PMD for Eclipse3" on the Install dialog.Select one according to your eclipse version.Click next.</p>
+					<p>3、Input a name on the name field.Input "http://sourceforge.net/projects/pmd/files/pmd-eclipse/update-site/" on the Location field.Click OK.<font style="color:red">Note:We only support for plugin v4.0,be cared about the plugin version.</font></p>
+					<p>4、You will see two items named "PMD" on the Install dialog.Select and Click next.</p>
 					<p>5、While the plugin installing,it may popup a dialog warnning that plugin cant't be trusted,just click ok.</p>
 					<p>6、After the plugin installation finish,restart eclipse.</p>
 					<p>7、Select "Window"->"Preferences" on the eclipse main menu.</p>
@@ -433,7 +439,7 @@ function showTxt(cat){
 					<p>1、For login user:<br>
 						Go to the pattern list page.<br>
 						Click the "Rulesets" button on the top of the patterns table,you will see the list of ruleset files.<br>
-						Click the "Download" link after the file you want to download.Choose "as plugin use".<br>
+						Click the "Download" link after the file you want to download.<br>
 					</p>
 					<p>2、For guest user:<br/>
 						Guest user have no power to access the pattern list page.Login user can download the file and send it to guset user.
@@ -446,6 +452,7 @@ function showTxt(cat){
 						(2)Selcect "PMD"->"Rules Configuration" on the left of prefrences dialog.<br>
 						(3)Click the "import rule set..." button on the right of the preferences dialog.<br>
 						(4)Browse and select the ruleset file you want to load.Click OK<br>
+						(5)If you want to use those rules,you must click to select them.<br>
 					</p>
 					<p>2、Load only for one single project.<br>
 						(1)Click the right mouse button on the project.Click Properties on the popupmenu.<br>
@@ -453,8 +460,10 @@ function showTxt(cat){
 						(3)Select the checkbox named "Use the ruleset configured in a project file" on the bottom of the properties dialog.<br>
 						(4)Browse and select a rulse file.
 					</p>
-					<p class="cRed">Attention:If there are java patterns in the ruleset file,you must copy the javarule-pmd-jcpa-xxx.jar to eclipse pmd plugin path.
-					If not,the rulset cannot be imported because it cannot find the class handle the java patterns.</p>
+					<p class="cRed">Attention:If there are java patterns in the ruleset file,you must compress the the java class which the java patterns depend on to the eclipse pmd file----%ECLIPSE_HOME%\plugins\net.sourceforge.pmd.eclipse.plugin_4.0.0.201211080927\lib\pmd-5.1.0-SNAPSHOT.jar.
+					If not,the rulset cannot be imported because it cannot find the class handle the java patterns.
+					You can also just copy the "%WORKSPACE%\target\pmd-5.1.0-SNAPSHOT.jar" file to cover the "%ECLIPSE_HOME%\plugins\net.sourceforge.pmd.eclipse.plugin_4.0.0.201211080927\lib\pmd-5.1.0-SNAPSHOT.jar" after mvn package.
+					</p>
 				</div>
 				<div id="usagePluginScan">
 					<h3>Scan code in eclipse</h3>
