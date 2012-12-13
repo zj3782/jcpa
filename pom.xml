@@ -141,7 +141,7 @@
             <version>2.3</version>  
             <configuration> 
 				<!--打包war的时候忽略-->
-				<packagingExcludes>**/net/example/**,**/rulesets/**,**/pmd-nicerhtml.xsl,**/ruleset_2_0_0.dtd,**/ruleset_2_0_0.xsd</packagingExcludes>
+				<packagingExcludes>**/net/example/**,**/rulesets/**,**/pmd-nicerhtml.xsl,**/ruleset_2_0_0.dtd,**/ruleset_2_0_0.xsd,**/WEB-INF/lib/jsp-api-2.2.jar</packagingExcludes>
             </configuration>  
         </plugin>
 		<plugin>
