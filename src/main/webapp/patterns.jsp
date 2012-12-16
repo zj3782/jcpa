@@ -26,7 +26,7 @@ initPage=<%=sPage%>;
 		</table>
 	</div>
 </div>
-<!-- 添加或者修改pattern -->
+<!-- add or edit pattern -->
 <style>
 #patternAddEdit .line span{height: 30px;line-height: 30px;}
 </style>
@@ -94,7 +94,7 @@ initPage=<%=sPage%>;
 		<span class="span-2"><span class="cRed">(*)</span>Example:</span><textarea id="patternExample" class="span-15 h80"></textarea>
 	</div>
 </div>
-<!-- 查看pattern -->
+<!-- view pattern -->
 <div id="patternDetail" class="" style="display:none;">
 	<div  class="line" id="patternNameBlockDiv">
 		<span class="span-2">Name:</span><div id="patternNameDiv" class="span-15 oHidden cGreen"></div>
@@ -136,7 +136,7 @@ initPage=<%=sPage%>;
 		<span class="span-2">Example:</span><div id="patternExampleDiv" class="span-15  h80 oAuto cGreen"></div>
 	</div>
 </div>
-<!-- 管理ruleset -->
+<!-- manage ruleset -->
 <style>#rulesets #rulesetsTB td{border-collapse: collapse; border:1px dotted #A8D8EB;background:#F5FFEF;padding:5px;}</style>
 <div id="rulesets" style="display:none;" class="h300 w400 oAuto">
 	<div>
@@ -145,7 +145,7 @@ initPage=<%=sPage%>;
 	</div>
 	<table id="rulesetsTB" class="w100p" cellspacing="0" cellpadding="5"><tbody></tbody></table>
 </div>
-<!-- 添加ruleset -->
+<!-- add ruleset -->
 <div id="addruleset" style="display:none;">
 <div class="line">
 	<span class="span-2"><label>FileName:</label></span>
@@ -167,7 +167,7 @@ initPage=<%=sPage%>;
 	</span>
 </div>
 </div>
-<!-- 上传ruleset -->
+<!-- upload ruleset -->
 <div id="upruleset" style="display:none;">
 	<form name="form" action="" method="POST" enctype="multipart/form-data">
 		<div class="line">

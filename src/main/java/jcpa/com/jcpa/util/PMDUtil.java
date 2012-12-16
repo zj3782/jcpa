@@ -27,26 +27,25 @@ import net.sourceforge.pmd.util.datasource.DataSource;
 
 public class PMDUtil{
 	/**
-	 * 对源代码产生分析报告，保存到文件中
-	 * @param	InputPaths	String	源代码目录或文件路径
-	 * @param	RuleSets	String	规则集xml路径
-	 * @param	ReportFile	String	报告保存路径
-	 * @param	ReportFormat	String	报告生成形式（xml,csv,html,emacs,ideaj,summaryhtml,xslt,vbhtml,text,textpad,textcolor,yahtml）
+	 * analysis source code,grenate report to a file
+	 * @param	InputPaths	String	scorce code path
+	 * @param	RuleSets	String	ruleset file path
+	 * @param	ReportFile	String	report file path
+	 * @param	ReportFormat	String	format of the (xml,csv,html,emacs,ideaj,summaryhtml,xslt,vbhtml,text,textpad,textcolor,yahtml)
 	 * */
 	public static boolean report(String InputPaths,String RuleSets,String ReportFile,String ReportFormat){
-		//设置配置参数
 		PMDConfiguration configuration=new PMDConfiguration();
-		configuration.setInputPaths(InputPaths);//源代码目录或文件路径
-		configuration.setRuleSets(RuleSets);//规则集xml路径
-		configuration.setReportFile(ReportFile);//报告保存路径
-		configuration.setReportFormat(ReportFormat);//报告生成形式（xml,csv）
+		configuration.setInputPaths(InputPaths);
+		configuration.setRuleSets(RuleSets);
+		configuration.setReportFile(ReportFile);
+		configuration.setReportFormat(ReportFormat);
 		
 		// Load the RuleSets
 		long startLoadRules = System.nanoTime();
 		RuleSetFactory ruleSetFactory = RulesetsFactoryUtils.getRulesetFactory(configuration);
 		RuleSets ruleSets = RulesetsFactoryUtils.getRuleSets(configuration.getRuleSets(), ruleSetFactory, startLoadRules);
 		if (ruleSets == null)return false;
-		//根据规则集设置语言
+		
 		Set<Language> languages = new HashSet<Language>();
 		LanguageVersionDiscoverer discoverer = configuration.getLanguageVersionDiscoverer();
 		for (Rule rule : ruleSets.getAllRules()) {
@@ -83,23 +82,22 @@ public class PMDUtil{
 	
 	
 	/**
-	 * 对源代码产生分析报告，产生的报告由renderer进行处理
-	 * @param	InputPaths	String	源代码目录或文件路径
-	 * @param	RuleSets	String	规则集xml路径
+	 * analysi source code,and the renderer will handle the report
+	 * @param	InputPaths	String	scorce code path
+	 * @param	RuleSets	String	ruleset path
 	 * @param	renderer	Renderer
 	 * */
 	public static boolean report(String InputPaths,String RuleSets,Renderer renderer){
-		//设置配置参数
 		PMDConfiguration configuration=new PMDConfiguration();
-		configuration.setInputPaths(InputPaths);//源代码目录或文件路径
-		configuration.setRuleSets(RuleSets);//规则集xml路径
+		configuration.setInputPaths(InputPaths);
+		configuration.setRuleSets(RuleSets);
 		
 		// Load the RuleSets
 		long startLoadRules = System.nanoTime();
 		RuleSetFactory ruleSetFactory = RulesetsFactoryUtils.getRulesetFactory(configuration);
 		RuleSets ruleSets = RulesetsFactoryUtils.getRuleSets(configuration.getRuleSets(), ruleSetFactory, startLoadRules);
 		if (ruleSets == null)return false;
-		//根据规则集设置语言
+		
 		Set<Language> languages = new HashSet<Language>();
 		LanguageVersionDiscoverer discoverer = configuration.getLanguageVersionDiscoverer();
 		for (Rule rule : ruleSets.getAllRules()) {
@@ -138,9 +136,9 @@ public class PMDUtil{
 		return true;
 	}
 	/**
-	 * 对源代码产生分析报告，产生的报告由renderer进行处理
-	 * @param	InputPaths	String	源代码目录或文件路径
-	 * @param	RuleSets	String	规则集xml路径
+	 * analysi source code by cmd line,and the renderer will handle the report
+	 * @param	InputPaths	String	scorce code path
+	 * @param	RuleSets	String	ruleset path
 	 * @param	renderer	Renderer
 	 * */
 	public static int reportByCmd(String InputPaths,String ReportFmt,String RuleSets){
@@ -149,7 +147,7 @@ public class PMDUtil{
 		return PMD.run(args);
 	}
 	/**
-     * 获取出错的代码
+     * get file content form beginline to endline
      * @throws Exception 
      * */
     public static String getSource(String fn,int errorBeginLine,int errorEndLine) throws IOException{

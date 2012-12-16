@@ -15,7 +15,6 @@ import com.jcpa.util.json.Json;
 
 
 /**
- * Action基类，其他action都继承自本类
  * @author zhujie
  * */
 public class Action {
@@ -26,7 +25,7 @@ public class Action {
 	protected HttpSession session;
 	protected String MethodName;
 	/**
-	 * Action的入口函数，在control中通过调用此方法进行相应的动作
+	 * Action Entrance
 	 * @param req HttpServletRequest
 	 * @param resp HttpServletResponse
 	 * */
@@ -39,16 +38,16 @@ public class Action {
 			out=resp.getWriter();
 			session = request.getSession();
 			
-			//执行动作之前的准备工作
+			//prepare before action
 			_prepare();
-			//根据method参数调用不同的方法
+			//invoke different method by url parameter
 			MethodName=request.getParameter("method");
 			if(MethodName!=null && !MethodName.equals("")){
 				Class<?> c=this.getClass();
 				Method method=c.getMethod(MethodName);
 				method.invoke(this,new Object[]{});
 			}
-			//执行完动作之后的清理工作
+			//cleanup after action
 			_cleanup();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -57,25 +56,25 @@ public class Action {
 	}
 	
 	/**
-	 * 执行动作之前的准备工作
+	 * prepare before action
 	 */
 	protected void _prepare() throws Exception{}
 	/**
-	 * 执行完动作之后的清理工作
+	 * cleanup after action
 	 */
 	protected void _cleanup() throws Exception{}
 	
 	/**
-	 * ajax返回正确消息
-	 * @param info String 返回的信息
+	 * ajax return success info
+	 * @param info String
 	 */
 	protected void success(String info) throws IOException
 	{
 		out.print(Json.success(info));
 	}	
 	/**
-	 * ajax返回错误消息
-	 * @param info String 返回的信息
+	 * ajax return error info
+	 * @param info String
 	 */
 	protected void error(String info) throws IOException
 	{

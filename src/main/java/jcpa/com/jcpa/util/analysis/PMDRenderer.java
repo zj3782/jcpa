@@ -11,13 +11,11 @@ import net.sourceforge.pmd.Report;
 import net.sourceforge.pmd.RuleViolation;
 import net.sourceforge.pmd.renderers.AbstractIncrementingRenderer;
 
-/**
- * PMD代码分析的Renderer类
- * */
+
 public class PMDRenderer extends AbstractIncrementingRenderer {
 	
 	private CodeReports reports=null;
-	private String RootPath="";//跟目录
+	private String RootPath="";
 	
     public PMDRenderer(CodeReports reports) {
 		super("PMDAnalysis","PMDAnalysis Description", null);

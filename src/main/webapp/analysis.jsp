@@ -66,7 +66,7 @@
 			</div>
 		</div>
 	</div>
-	<!-- 查看单个report -->
+	<!-- view report -->
 	<div id="viewReport" class="box" style="display:none;">
 		<div  class="line">
 			<span class="span-2">Package:</span><div id="viewPackage" class="span-15 oHidden"></div>
@@ -92,7 +92,6 @@
 	</div>
 </div>
 <%if(report!=null){%>
-<!-- 选择 -->
 <div id="chooseAnalysis" style="display:none;">
 	<hr class="space h40">
 	<h3 class="aCenter cGreen">You had grenated a report before,you can choose to see it or start new code scan.</h3>
@@ -113,7 +112,7 @@ $(document).ready(function(){
 	$("#codeTitle").show();
 	$("#codeUrl").html('<%=(String)session.getAttribute("codeUrl")%>');
 	$("#codeUser").html('<%=(String)session.getAttribute("codeUser")%>');
-	//显示选择分析结果还是从新分析
+	//show last report or new
 	$("#analysis").hide();
 	$("#chooseAnalysis").show();
 	<%}else{%>

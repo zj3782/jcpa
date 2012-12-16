@@ -4,8 +4,8 @@ var btns=[{ name: 'Run', displayname: "Run", onpress: toolbarItem_onclick }];
 $(document).ready(function() {
     var mainheight = document.documentElement.clientHeight;
     var option = {
-        height: mainheight-300, //flexigrid插件的高度，单位为px
-        url: 'benchmark.do?method=page', //ajax url,ajax方式对应的url地址
+        height: mainheight-300, 
+        url: 'benchmark.do?method=page', 
         colModel: [
 	        { display: 'ID', name: 'ID', width: 30, sortable: true,sorttype:'num', align: 'left' },
 	        { display: 'Name', name: 'Name', width: 100, sortable: true,sorttype:'ascii', align: 'left' },
@@ -13,14 +13,14 @@ $(document).ready(function() {
 	        { display: 'Result', name: 'Result', width: 500, sortable: false, align: 'left' }
 	    ],
 	    buttons:btns,
-        page:initPage,//初始页数
+        page:initPage,
     	sortname: "ID",
         sortorder: "asc",
         title: "Cases",
         usepager: true,
         useRp: true,
-        rp: 12, // results per page,每页默认的结果数
-        rpOptions: [12, 20, 30, 50, 100], //可选择设定的每页结果数
+        rp: 12, // results per page
+        rpOptions: [12, 20, 30, 50, 100],
         showCheckbox: true,
         onAddRow:onAddRowData,
         onRowProp:contextmenu
@@ -31,7 +31,7 @@ $(document).ready(function() {
     	$("#cases .bbit-grid .nDiv").height(85);
     }
 });
-/**工具栏按钮*/
+/**toolbar function*/
 function toolbarItem_onclick(cmd, grid) {
     if (cmd == "Run") {
     	var rows=flexGrid.flexGetCheckedRows();
@@ -40,7 +40,7 @@ function toolbarItem_onclick(cmd, grid) {
     	AddCase();
     }
 }
-/**右键菜单*/
+/**add popup menu*/
 function contextmenu(row) {
     var menu = { width: 150, items: [
          { text: "Run", icon: "css/images/run.png", alias: "contextmenu-run", action: contextMenuItem_click },          
@@ -54,7 +54,7 @@ function contextmenu(row) {
     }};
     $(row).contextmenu(menu);
 }
-/**右键菜单*/
+/**popup menu function*/
 function contextMenuItem_click(target) {
     var id = $(target).attr("id").substr(3);
     var cmd = this.data.alias;
@@ -68,7 +68,7 @@ function contextMenuItem_click(target) {
     	flexGrid.flexReload();
     }
 }
-/**检查数据*/
+/**check data when add*/
 function onAddRowData(row){
 	for(var i=0;i<row.cell.length;i++){
 		row.cell[i]=safeDecodeURI(row.cell[i]);//解码
@@ -76,7 +76,7 @@ function onAddRowData(row){
 	}
 	return row;
 }
-//运行case
+/*show run case div*/
 function runCase(rows){
 	if(!rows || rows.length<=0){
 		alert("Please select one or more cases to run!");
@@ -106,7 +106,7 @@ function runCase(rows){
 		id:"runcase"
 	});
 }
-//真正运行case
+/*run case on server*/
 function RealRunCase(){
 	var caseName=$("#RunCaseNames").val();;
 	var threadNum=ID("ThreadNum").value;
@@ -135,7 +135,7 @@ function RealRunCase(){
 		art.dialog({id: 'runcase'}).button({name:"OK",disabled:false},{name:"Stop",disabled:true});
 	},"json");
 }
-//查看case
+/*view case*/
 function viewCase(cell)
 {
 	$("#ViewCaseName").html(cell[1]);
@@ -147,7 +147,7 @@ function viewCase(cell)
 		lock:true
 	});
 }
-//停止
+/*stop run*/
 function stopCase(caseNames)
 {
 	$("#RunDiv").mask("Stopping");
@@ -159,7 +159,7 @@ function stopCase(caseNames)
 	},"json");	
 }
 
-//添加Case
+/*add Case*/
 function AddCase(){
 	$("#AddCaseName").val();
 	$("#AddCaseDescript").val();

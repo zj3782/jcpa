@@ -6,16 +6,16 @@ import java.util.List;
 public abstract class Case {
 	protected List<String> result= new LinkedList<String>();
 	/**
-	 * 运行
+	 * run
 	 * @return 
 	 * */
 	public abstract void run(int threads,int repeat,int rwrate) throws Exception;
 	/**
-	 * 停止
+	 * stop
 	 * */
 	public abstract void stop()throws Exception;
 	/**
-	 * 获取运行结果
+	 * get run result
 	 * */
 	public String getResult(){
 		String str="";

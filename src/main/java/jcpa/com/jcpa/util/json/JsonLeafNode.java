@@ -3,15 +3,15 @@ package com.jcpa.util.json;
 import com.jcpa.util.ToolUtil;
 
 /**
- * Leaf节点类
+ * Leaf Node
  * */
 public class JsonLeafNode extends JsonNode{
 	private String text;
-	//是否自动判断text为整数，如果为false，text始终当作String进行处理
+	//if auto judge if text is a num,if not,text will be treated as string
 	public boolean bAutoJudgeNum=true;
 	
 	/**
-	 * 构造方法
+	 * construct
 	 * */
 	public JsonLeafNode(String name,String text){
 		super(name);

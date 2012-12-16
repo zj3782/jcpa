@@ -3,8 +3,8 @@ var initPage=1;
 $(document).ready(function() {
     var mainheight = document.documentElement.clientHeight;
     var option = {
-        height: mainheight-300, //flexigrid插件的高度，单位为px
-        url: 'pattern.do?method=page', //ajax url,ajax方式对应的url地址
+        height: mainheight-300, //flexigrid height
+        url: 'pattern.do?method=page', //data access url
         colModel: [
 	        { display: 'ID', name: 'ID', width: 30, sortable: true,sorttype:'num', align: 'left' },
 	        { display: 'Name', name: 'Name', width: 200, sortable: true,sorttype:'ascii', align: 'left' },
@@ -22,14 +22,14 @@ $(document).ready(function() {
               { name: 'Delete', displayname: "Delete",  onpress: toolbarItem_onclick },
               { name: 'Rulesets', displayname: "Rulesets",  onpress: toolbarItem_onclick }
         ],
-        page:initPage,//初始页数
+        page:initPage,
     	sortname: "ID",
         sortorder: "asc",
         title: "Patterns",
         usepager: true,
         useRp: true,
-        rp: 12, // results per page,每页默认的结果数
-        rpOptions: [12, 20, 30, 50, 100], //可选择设定的每页结果数
+        rp: 12, // results per page
+        rpOptions: [12, 20, 30, 50, 100], //options of results per page
         showCheckbox: true,
         onAddRow:onAddRowData,
         onRowProp:contextmenu
@@ -39,11 +39,11 @@ $(document).ready(function() {
     	$("#patterns .bbit-grid .nDiv").height(170);
     	setTimeout('flexTB.flexRefreshMenuPop()',5000);
     }
-   //载入javaClass列表
+   //load javaClass list
     loadJavaClasses();
 });
 
-/**右键菜单*/
+/**patterns list popup menu*/
 var menu = { width: 150, items: [
      { text: "View", icon: "css/images/view.png", alias: "contextmenu-view", action: contextMenuItem_click },
      { text: "Edit", icon: "css/images/edit.png", alias: "contextmenu-edit", action: contextMenuItem_click },
@@ -56,20 +56,11 @@ var menu = { width: 150, items: [
         return true;
    }
 };
+/**add popup menu*/
 function contextmenu(row) {
     $(row).contextmenu(menu);
 }
-/**工具栏按钮*/
-function toolbarItem_onclick(cmd, grid) {
-    if (cmd == "Add") {
-        AddPattern();
-    }else if (cmd == "Delete") {
-    	delPattern(flexTB.flexGetCheckedRows());
-    }else if(cmd=="Rulesets"){
-    	ManageRulesets();
-    }
-}
-/**右键菜单*/
+/**popup menu function*/
 function contextMenuItem_click(target) {
     var id = $(target).attr("id").substr(3);
     var rows=flexTB.flexGetRowsByIds([id]);
@@ -90,19 +81,27 @@ function contextMenuItem_click(target) {
     flexTB.flexUnCheck();
     flexTB.flexCheck(id);
 }
-/**检查数据*/
+/**patterns list toolbar function*/
+function toolbarItem_onclick(cmd, grid) {
+    if (cmd == "Add") {
+        AddPattern();
+    }else if (cmd == "Delete") {
+    	delPattern(flexTB.flexGetCheckedRows());
+    }else if(cmd=="Rulesets"){
+    	ManageRulesets();
+    }
+}
+/**check data on add*/
 function onAddRowData(row){
 	for(var i=0;i<row.cell.length;i++){
-		row.cell[i]=safeDecodeURI(row.cell[i]);//解码
+		row.cell[i]=safeDecodeURI(row.cell[i]);
 		row.cell[i]=htm2specil(row.cell[i]);
 	}
 	row.cell[1]="<a href='javascript:;' onclick='viewPatternById("+row.id+");'>"+row.cell[1]+"</a>";
 	return row;
 }
-
-//改变pattern的类型
-function changePatternType(type)
-{
+/**change pattern type and change visiable*/
+function changePatternType(type){
 	if(type=='java'){
 		$("#patternExpressionBlock").hide();
 		$("#patternClassBlock").show();
@@ -111,8 +110,7 @@ function changePatternType(type)
 		$("#patternClassBlock").hide();
 	}
 }
-function changePatternTypeDiv(type)
-{
+function changePatternTypeDiv(type){
 	if(type=='java'){
 		$("#patternExpressionBlockDiv").hide();
 		$("#patternClassBlockDiv").show();
@@ -121,7 +119,7 @@ function changePatternTypeDiv(type)
 		$("#patternClassBlockDiv").hide();
 	}
 }
-//载入javaClass列表
+/**load javaclass list*/
 function loadJavaClasses(){
 	$.post("pattern.do",{method:'javaClasses'},function(result){
 		if(result.status){
@@ -134,8 +132,7 @@ function loadJavaClasses(){
 		}
 	},'json');
 }
-
-//删除pattern
+/*delete pattern*/
 function delPattern(rows){
 	if(!rows || !rows.length){
 		alert("Please select one pattern or more ones to delete.");
@@ -175,7 +172,7 @@ function delPattern(rows){
 		icon:"question"
 	});
 }
-//添加pattern
+/*add pattern*/
 function AddPattern()
 {
 	$("#patternName").val("");
@@ -212,7 +209,7 @@ function AddPattern()
 	            		}
 	            		if(!bOk)
 	            		{
-	    					artDialog({content:"Some item(s) is empty,can save!",time:3});
+	    					artDialog({content:"Some item(s) is empty,can not save!",time:3});
 	    					return false;
 	    				}
 	    				$.post("Pattern.do",data,function(result){
@@ -233,7 +230,7 @@ function AddPattern()
 		id:"addpattern"
 	});
 }
-//修改pattern
+/*edit pattern*/
 function editPattern(id,fromView){
 	var waitDlg=artDialog({title:'Loading Pattern...'});
 	$.post("pattern.do?method=get",{'id':id},function(result){
@@ -282,7 +279,7 @@ function editPattern(id,fromView){
 			            		}
 			            		if(!bOk)
 			            		{
-			    					artDialog({content:"Some item(s) is empty,can save!",time:3});
+			    					artDialog({content:"Some item(s) is empty,can not save!",time:3});
 			    					return false;
 			    				}
 			    				$.post("Pattern.do",data,function(result){
@@ -308,7 +305,7 @@ function editPattern(id,fromView){
 		}
 	},'json');
 }
-//查看pattern
+/*view pattern*/
 function viewPatternById(id){
 	var rows=flexTB.flexGetRowsByIds([id]);
 	viewPattern(rows[0].cell);
@@ -363,7 +360,7 @@ function viewPattern(cell){
 	});
 }
 /**
- * 管理ruleset
+ * manage ruleset
  * */
 function ManageRulesets(){
 	var dlg=artDialog({
@@ -393,7 +390,7 @@ function ManageRulesets(){
 	},'json');
 }
 /**
- * 删除某个ruleset
+ * delete ruleset
  * */
 function delRuleset(ruleFile){
 	if(!confirm("Do you want to delete ruleset ["+ruleFile+"]?"))return;
@@ -409,7 +406,7 @@ function delRuleset(ruleFile){
 	},"json");
 }
 /**
- * 添加ruleset
+ * add ruleset
  * */
 function AddRuleSet(){
 	artDialog({
@@ -469,7 +466,7 @@ function addRuleToTB(filename,desc){
 }
 
 /**
- *上传ruleset 
+ *upload ruleset 
  */
 function UpRuleSet(){
 	artDialog({
@@ -496,7 +493,7 @@ function ajaxUpRuleSet(){
 			$("#upruleset").unmask();
 			if(data.status){
 				art.dialog({id:'upruleset'}).close();
-				ManageRulesets();//重新加载
+				ManageRulesets();//reload
 			}else{
 				alert(data.info);
 			}

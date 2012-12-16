@@ -69,7 +69,7 @@ public class PatternDaoImpl implements PatternDao{
 		Session session = HibernateUtil.getSession();
 
 		String HQL_rows = "select count(*) from Pattern ";
-		if(where!=null && !where.equals(""))HQL_rows+="where "+where;//条件
+		if(where!=null && !where.equals(""))HQL_rows+="where "+where;
 		Long rows=(Long)session.createQuery(HQL_rows).list().get(0);
 		return rows.longValue();
 	}
@@ -79,8 +79,8 @@ public class PatternDaoImpl implements PatternDao{
 		Session session = HibernateUtil.getSession();
 		
 		String QuerySql="from Pattern ";
-		if(where!=null && !where.equals(""))QuerySql+="where "+where;//条件
-		if(order!=null && !order.equals(""))QuerySql+=" order by "+order;//排序
+		if(where!=null && !where.equals(""))QuerySql+="where "+where;
+		if(order!=null && !order.equals(""))QuerySql+=" order by "+order;
 		
 		Query query=session.createQuery(QuerySql);
 		query.setFirstResult( (page-1)*onePageCount );
@@ -97,8 +97,8 @@ public class PatternDaoImpl implements PatternDao{
 		Session session = HibernateUtil.getSession();
 		
 		String QuerySql="from Pattern ";
-		if(where!=null && !where.equals(""))QuerySql+="where "+where;//条件
-		if(order!=null && !order.equals(""))QuerySql+=" order by "+order;//排序
+		if(where!=null && !where.equals(""))QuerySql+="where "+where;
+		if(order!=null && !order.equals(""))QuerySql+=" order by "+order;
 		
 		Query query=session.createQuery(QuerySql);
 

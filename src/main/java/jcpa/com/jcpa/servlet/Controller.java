@@ -22,7 +22,7 @@ public class Controller extends HttpServlet{
 	protected void service(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		application=getServletContext();
-		//使得servlet输出中文不会报错
+		//character
 		resp.setCharacterEncoding("UTF-8");
 		req.setCharacterEncoding("UTF-8");
 		
@@ -45,7 +45,7 @@ public class Controller extends HttpServlet{
 		} catch (Exception e) {
 			req.getRequestDispatcher("404.jsp").forward(req,resp);
 		}finally{
-			HibernateUtil.closeSession();//关闭数据库session
+			HibernateUtil.closeSession();//close db session
 		}
 		
 	}

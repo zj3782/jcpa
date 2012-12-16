@@ -18,33 +18,25 @@ import com.jcpa.util.json.JsonLeafNode;
 import com.jcpa.util.json.JsonObjectNode;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**
- * 代码分析action
- * */
+
 public class AnalysisAction extends Action{
-	private String SourcePath="";//源代码存放目录
-	/**
-	 * 执行动作之前的准备工作
-	 */
+	private String SourcePath="";//source code path
 	protected void _prepare() throws Exception{
 		
 	}
-	/**
-	 * 执行完动作之后的清理工作
-	 */
 	protected void _cleanup() throws Exception{
 		
 	}
 	
 	/**
-	 * 
+	 * scan code and gernate report
 	 * */
 	public void work() throws Exception{		
 		CodeReports report=(CodeReports)session.getAttribute("AnalysisReport");
 		if(report!=null)session.removeAttribute("AnalysisReport");
 		report=new CodeReports();
 		session.setAttribute("AnalysisReport",report);
-		report.setStep(CodeReports.STEP_START);//开始
+		report.setStep(CodeReports.STEP_START);
 		
 		String url=request.getParameter("url");
 		String user=request.getParameter("user");
@@ -52,7 +44,7 @@ public class AnalysisAction extends Action{
 		if(url!=null && !url.equals(""))url=url.replaceAll("\\\\","/");
 		session.setAttribute("codeUser",user);
 		session.setAttribute("codeUrl",url);
-		//判断是否是svn
+		//judge is svn
 		boolean isSvn=false;
 		if(url.startsWith("http://") || url.startsWith("https://") ||
 			url.startsWith("svn") || url.startsWith("file://")){
@@ -61,18 +53,18 @@ public class AnalysisAction extends Action{
 		try {
 			if(isSvn){
 				SourcePath=(String)application.getAttribute("JcpaSource")+session.getId();
-				//svn登录
+				//svn login
 				report.setStep(CodeReports.STEP_LOGINING);
 				SVNUpdateClient client=SVNUtil.getClient(user,pwd);
 				report.setStep(CodeReports.STEP_LOGINOK);
-				//svn获取源码
+				//svn check out
 				report.setStep(CodeReports.STEP_CHECKOUTING);
 				SVNUtil.checkout(client,url,SourcePath);
 				report.setStep(CodeReports.STEP_CHECKOUTOK);
 			}else{
 				SourcePath=url;
 			}
-			//pmd分析
+			//pmd analysis
 			String RuleSets=(String)application.getAttribute("Ruleset")+request.getParameter("rule");
 			report.setStep(CodeReports.STEP_PMDING);
 			PMDRenderer renderer=new PMDRenderer(report);
@@ -86,12 +78,12 @@ public class AnalysisAction extends Action{
 			error("Code Analysis Error:"+e.getMessage());
 		}finally{
 			if(isSvn){
-				ToolUtil.deleteDir(new File(SourcePath));//删除源代码目录
+				ToolUtil.deleteDir(new File(SourcePath));//delete svn check out dir
 			}
 		}
 	}
 	/**
-	 * 客户端每隔一段时间获取分析进程
+	 * current analysis step
 	 * */
 	public void step() throws Exception{
 		CodeReports report=(CodeReports)session.getAttribute("AnalysisReport");
@@ -112,8 +104,8 @@ public class AnalysisAction extends Action{
 		if(report==null){
 			error("Session is empty");
 		}else{
-			int ONE_PAGE_COUNT=ToolUtil.strToPositiveInt(request.getParameter("rp"),12);;//一页pattern的个数 
-			int page=ToolUtil.strToPositiveInt(request.getParameter("page"),1);//页码数
+			int ONE_PAGE_COUNT=ToolUtil.strToPositiveInt(request.getParameter("rp"),12);;//one page count
+			int page=ToolUtil.strToPositiveInt(request.getParameter("page"),1);//sum pages
 			
 			JsonObjectNode j=new JsonObjectNode("");
 			j.addChild(new JsonLeafNode("page",String.valueOf(page)));
@@ -130,8 +122,8 @@ public class AnalysisAction extends Action{
 		if(report==null){
 			error("Session is empty");
 		}else{
-			int ONE_PAGE_COUNT=ToolUtil.strToPositiveInt(request.getParameter("rp"),12);;//一页pattern的个数 
-			int page=ToolUtil.strToPositiveInt(request.getParameter("page"),1);//页码数
+			int ONE_PAGE_COUNT=ToolUtil.strToPositiveInt(request.getParameter("rp"),12);;
+			int page=ToolUtil.strToPositiveInt(request.getParameter("page"),1);
 			
 			JsonObjectNode j=new JsonObjectNode("");
 			j.addChild(new JsonLeafNode("page",String.valueOf(page)));
@@ -141,7 +133,7 @@ public class AnalysisAction extends Action{
 		}
 	}
 	/**
-	 * 删除某个/些report
+	 * delete(ingroe) report
 	 * */
 	public void RemoveReport() throws Exception{
 		String SIds=request.getParameter("ids");
@@ -163,7 +155,7 @@ public class AnalysisAction extends Action{
 		}
 	}
 	/**
-	 * 清除session中的report
+	 * clear report in session
 	 * */
 	public void ClearReport() throws Exception{
 		_ClearReport();
@@ -175,7 +167,7 @@ public class AnalysisAction extends Action{
 		session.removeAttribute("codeUrl");
 	}
 	/**
-	 * 下载report
+	 * download report
 	 */
 	public void DownReport() throws Exception{
 		CodeReports report=(CodeReports)session.getAttribute("AnalysisReport");
@@ -218,11 +210,11 @@ public class AnalysisAction extends Action{
 			txt+="</table>";
 			
 			txt+="</div></body></html>";
-			// 设置HTTP头：
+			// http header
 			response.reset();
 			response.setContentType("application/octet-stream");
 			response.addHeader("Content-Disposition","attachment;"+ "filename=\"report.html\"");
-			//写入内容
+			//print to screen
 			out.write(txt);
 			out.flush();
 		}

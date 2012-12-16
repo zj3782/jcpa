@@ -2,7 +2,7 @@ package com.jcpa.util;
 
 public class AuxUtil {
 	/**
-	 * 通过expression和auxiliary获取完整的expression
+	 * Integrate the expression and the auxiliary to get completed expression
 	 * */
 	public static String ExpIntegrate(String exp,String auxStr){
 		if(exp==null || exp.equals(""))return "";

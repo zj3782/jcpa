@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 public class ToolUtil {
 	/**
-	 * 正则表达式获取str中符合pattern格式的子串（返回第一个匹配的）
+	 * regex get the first matched string in str
 	 * */
 	public static String regexGet(String str,String pattern){
 		try {
@@ -31,7 +31,7 @@ public class ToolUtil {
 		return null;
 	}
 	/**
-	 * 将l按照每份oneCount个进行区分，返回能区分的份数
+	 * get split count
 	 * */
 	public static long getSplitCount(long l,long oneCount)throws Exception
 	{
@@ -42,7 +42,7 @@ public class ToolUtil {
 		return splitCount;
 	}
 	/**
-	 * 将字符串str的首字母变为大写字母返回
+	 * make str header char upper
 	 * */
 	public static String strHeadUpper(String str){
 		if(str.length()>0){
@@ -55,13 +55,13 @@ public class ToolUtil {
 		return str;
 	}
 	/**
-	 * 将字符串str装换为整数,如果str无法转换，以0替换
+	 * str to int,if can't return 0
 	 * */
 	public static int strToInt(String str){
 		return strToInt(str,0);
 	}
 	/**
-	 * 将字符串str装换为整数,如果str无法转换，以Default值替换
+	 * str to int,if can't return Default
 	 * */
 	public static int strToInt(String str,int Default){
 		int ret=Default;
@@ -73,7 +73,8 @@ public class ToolUtil {
 		return ret;
 	}
 	/**
-	 * 将字符串str装换为正整数(大于等于1),如果str无法转换，以Default值替换
+	 * str to int,if the result less than 1,return 1
+	 * if str can not convert to int,return Default
 	 * */
 	public static int strToPositiveInt(String str,int Default){
 		int ret=strToInt(str,Default);
@@ -81,16 +82,15 @@ public class ToolUtil {
 		return ret;
 	}
 	/**
-	 * 递归删除目录下的所有文件及子目录下所有文件
-	 * @param dir 将要删除的文件目录
-	 * @return int 返回删除的文件和目录的数目
+	 * Recursive delete foldeer
+	 * @param dir
+	 * @return int delete count
 	 */
 	public static int deleteDir(File dir){
 		int deleteCount=0;
 		File ChildFile;
 		String[] children = dir.list();
 		if(children!=null){
-			//递归删除目录中的子目录和文件
 			for (String chid:children) {
 				ChildFile=new File(dir, chid);
 				if(ChildFile.isDirectory()){
@@ -100,13 +100,13 @@ public class ToolUtil {
 				}
 			}
 		}
-		// 目录此时为空，可以删除
+		// dir is empty now
 		if(dir.delete())deleteCount++;
 		return deleteCount;
 	}
 
     /**
-     * 获取指定目录下指定格式的文件列表
+     * get file with certain endfix in folder
      * */
     public static List<String> getFileFromPath(String Path,String Fix){
     	List<String> files = new LinkedList<String>();
@@ -123,7 +123,7 @@ public class ToolUtil {
 		return files;
     }
     /**
-     * 判断字符串是否为数字
+     * is str a num
      * */
     public static boolean isNum(String str){
     	if(str==null || str.equals(""))return false;//空字符串
@@ -140,7 +140,7 @@ public class ToolUtil {
 		return true; 
     }
     /**
-     * 去除根路径
+     * remove root path
      * */
     public static String rmvRootPath(String FullPath,String RootPath){
     	
@@ -156,7 +156,7 @@ public class ToolUtil {
     	return FullPath.substring(i);
     }
     /**
-     * 将字符串格式化，方便在页面显示
+     * format str by html
      * */
     public static String strHtmlFmt(String in){
     	if(in==null || in.equals(""))return in;
@@ -177,7 +177,7 @@ public class ToolUtil {
     	htmChars.put(' ',"&nbsp;");
     }
     /**
-     * 将字符串变量进行处理以便能够直接在js中当作变量处理
+     * format str by js var
      * */
     public static String strJsvarFmt(String in){
     	if(in==null || in.equals(""))return in;
@@ -196,7 +196,7 @@ public class ToolUtil {
     	Jsvars.put('\'',"\\'");
     }
     /**
-     * 四舍五入
+     * num round
      * */
     public static double getRound(double dSource){
         double iRound;
@@ -206,7 +206,7 @@ public class ToolUtil {
     }
 
     /**
-     * 获取文件内容
+     * get file content
      * @throws Exception 
      * */
     public static String getFileConetent(String fn,String charset) throws IOException{
@@ -221,7 +221,7 @@ public class ToolUtil {
     	return txt;
     }
     /**
-     * 判断目录是否存在
+     * judge is folder exist,if not and bCreate is true,create it
      * */
     public static boolean ifFolderExist(String path,boolean bCreate){
     	try{
@@ -236,7 +236,7 @@ public class ToolUtil {
     	return false;
     }
     /**
-     * 判断文件是否存在
+     * judge if file exist,if not and bCreate is true,it will be created and content is initText.
      * */
     public static boolean ifFileExist(String path,boolean bCreate,String initText,String charset){
     	try {
@@ -259,7 +259,7 @@ public class ToolUtil {
 		return false;
     }
     /**
-     * 获取当前时间
+     * get time string
      * */
     public static String getTimeString() {
     	  String TimeString = "";

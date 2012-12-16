@@ -48,7 +48,7 @@ public class PatternAction extends Action{
     	MethodsPriority.put("javaClasses",1);
     }
 	/**
-	 * 执行动作之前的准备工作
+	 *prepare to before action
 	 */
 	protected void _prepare() throws Exception{
 		String user=(String)session.getAttribute("user");
@@ -61,11 +61,12 @@ public class PatternAction extends Action{
 		}
 	}
 	/**
-	 * 执行完动作之后的清理工作
+	 *cleanup after action
 	 */
 	protected void _cleanup() throws Exception{}
+	
 	/**
-	 * 添加pattern
+	 * add pattern
 	 * */
 	public void add() throws Exception{		
 		Pattern p=new Pattern();	
@@ -80,7 +81,7 @@ public class PatternAction extends Action{
 			p.setScope(request.getParameter("scope"));
 			p.setExample(request.getParameter("example"));
 			p.setPriority(Integer.parseInt(request.getParameter("priority")));
-		} catch (Exception e) {//参数错误
+		} catch (Exception e) {
 			error("Pattern Add Fail:"+e.getMessage());
 			return;
 		}
@@ -89,7 +90,7 @@ public class PatternAction extends Action{
 		boolean bResult=false;
 		try{
 			bResult=dao.add(p);
-		}catch(Exception e){//产生异常
+		}catch(Exception e){
 			error("Pattern Add Fail:"+e.getMessage());
 			return;
 		}
@@ -103,7 +104,7 @@ public class PatternAction extends Action{
 	}
 	
 	/**
-	 * 删除pattern
+	 * delete pattern
 	 * */
 	public void delete() throws Exception{
 		String ids=request.getParameter("ids");
@@ -126,7 +127,7 @@ public class PatternAction extends Action{
 	}
 	
 	/**
-	 * 更新pattern
+	 * update pattern
 	 * */
 	public void update() throws Exception{
 		Pattern p=new Pattern();	
@@ -142,7 +143,7 @@ public class PatternAction extends Action{
 			p.setScope(request.getParameter("scope"));
 			p.setExample(request.getParameter("example"));
 			p.setPriority(Integer.parseInt(request.getParameter("priority")));
-		} catch (Exception e) {//参数错误
+		} catch (Exception e) {
 			error("Pattern Update Fail:"+e.getMessage());
 			return;
 		}
@@ -151,7 +152,7 @@ public class PatternAction extends Action{
 		boolean bResult=false;
 		try{
 			bResult=dao.update(p);
-		}catch(Exception e){//产生异常
+		}catch(Exception e){
 			error("Pattern Update Fail:"+e.getMessage());
 			return;
 		}
@@ -164,7 +165,7 @@ public class PatternAction extends Action{
 		}
 	}
 	/**
-	 * 获取指定id的pattern
+	 * get pattern by id
 	 * */
 	public void get() throws Exception{
 		try {
@@ -179,11 +180,11 @@ public class PatternAction extends Action{
 		}
 	}
 	/**
-	 * 列出第p页的pattern
+	 * list page pattern
 	 * */
 	public void page() throws Exception{
-		int ONE_PAGE_COUNT=ToolUtil.strToPositiveInt(request.getParameter("rp"),25);;//一页pattern的个数 
-		int page=ToolUtil.strToPositiveInt(request.getParameter("page"),1);//页码数
+		int ONE_PAGE_COUNT=ToolUtil.strToPositiveInt(request.getParameter("rp"),25);;//patterns one page 
+		int page=ToolUtil.strToPositiveInt(request.getParameter("page"),1);//curpage
 		
 		try {
 			PatternDao dao=new PatternDaoImpl();
@@ -204,7 +205,7 @@ public class PatternAction extends Action{
 		}
 	}
 	/**
-	 * 获得rulesets
+	 * get rulesets file list
 	 * */
 	public void rulesets() throws Exception{
 		Json j = new Json(1);
@@ -215,12 +216,12 @@ public class PatternAction extends Action{
 		for(String f:files){
 			rules.addItem(new JsonLeafNode("",f));
 		}
-		//描述信息
+		
 		data.addChild(getRulesetDescJsonArr());
 		echo(j.toString());
 	}
 	/**
-	 * 删除某个ruleset
+	 * delete ruleset
 	 * */
 	public void delruleset() throws Exception{
 		try {
@@ -240,12 +241,12 @@ public class PatternAction extends Action{
 		}
 	}
 	/**
-	 * 生成patterns的xml文件
+	 * gernate a ruleset xml file using some patterns
 	 * */
 	public void addruleset() throws Exception{
 		String shortxmlfn,xmlfn,type,cond,desc;
 		try {
-			//生成的文件名
+			//filename gernated
 			shortxmlfn = request.getParameter("fn");
 			if(shortxmlfn==null || shortxmlfn.equals("")){
 				error("Please Input FileName!");
@@ -255,14 +256,14 @@ public class PatternAction extends Action{
 				shortxmlfn+=".xml";
 			}
 			xmlfn = (String)application.getAttribute("Ruleset")+shortxmlfn;
-			//patterns条件
+			//Condition
 			type = request.getParameter("type");
 			if(type.equals("all")){//all patterns
 				cond="";
-			}else{//符合条件的pattern
+			}else{//pattern meet the conditions
 				cond = request.getParameter("cond");
 			}
-			//ruleset的description
+			//description of ruleset
 			desc=request.getParameter("desc");
 			if(desc==null || desc.equals(""))desc="jcpa pmd rules";
 			desc+=" -- generate by "+(String)session.getAttribute("user")+" at the time of "+ToolUtil.getTimeString();
@@ -270,16 +271,16 @@ public class PatternAction extends Action{
 			OutputStream out = new FileOutputStream(xmlfn);
 			OutputStreamWriter fw = new OutputStreamWriter(out, "UTF-8");
 			String buff="",tmp="";
-			//写入xml头部
+			//write xml header
 			buff="<?xml version=\"1.0\"?> <ruleset name=\"jcpa pmd rules\" xmlns=\"http://pmd.sourceforge.net/ruleset/2.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd\" xsi:noNamespaceSchemaLocation=\"http://pmd.sourceforge.net/ruleset_2_0_0.xsd\">";
 			fw.write(buff);
 			buff="<description>"+desc+"</description>";
 			fw.write(buff);
-			//分页取出数据写入xml
+			//read the patterns by page and write to xml
 			final int ONE_PAGE_COUNT = 100;
 			PatternDao dao = new PatternDaoImpl();
-			long Count = dao.count(cond);//数据总条数
-			long pages = ToolUtil.getSplitCount(Count, ONE_PAGE_COUNT);//总页数
+			long Count = dao.count(cond);//patterns meet condition count
+			long pages = ToolUtil.getSplitCount(Count, ONE_PAGE_COUNT);//sum page
 			for (int i = 0; i < pages; i++) {
 				List<Pattern> list = dao.list(i, ONE_PAGE_COUNT, cond,"");
 				for(Pattern p:list) {
@@ -309,7 +310,7 @@ public class PatternAction extends Action{
 					fw.write(buff);
 				}
 			}
-			//写入xml尾部
+			//write xml footer
 			buff="</ruleset>";
 			fw.write(buff);
 			fw.flush();
@@ -322,18 +323,18 @@ public class PatternAction extends Action{
 		addRulesetDesc(shortxmlfn,desc);
 	}
 	/**
-	 * 查看某个ruleset文件
+	 * view ruleset file
 	 * */
 	public void viewRuleset() throws Exception{
 		try {
-			//文件名
+			//filename
 			String fn = request.getParameter("file");
 			fn = (String)application.getAttribute("Ruleset") + fn;
-			//读取文件内容
+			//read file content
 			String txt=ToolUtil.getFileConetent(fn,"UTF-8");
-			// 设置HTTP头：
+			// http header
 			response.setContentType("text/xml");
-			//写入内容
+			//print content to screen
 			out.write(txt);
 			out.flush();
 		} catch (Exception e) {
@@ -341,19 +342,19 @@ public class PatternAction extends Action{
 		}
 	}
 	/**
-	 * 下载某个ruleset
+	 * download ruleset
 	 * */
 	public void downRuleset() throws Exception{
 		try {
-			//文件名
+			//filename
 			String file = request.getParameter("file");
 			String fn = (String)application.getAttribute("Ruleset") + file;
 			String txt=ToolUtil.getFileConetent(fn,"UTF-8");
-			// 设置HTTP头：
+			//http header
 			response.reset();
 			response.setContentType("application/octet-stream");
 			response.addHeader("Content-Disposition","attachment;"+ "filename=\""+file+"\"");
-			//写入内容
+			//write to stream
 			out.write(txt);
 			out.flush();
 		} catch (Exception e) {
@@ -361,17 +362,14 @@ public class PatternAction extends Action{
 		}
 	}
 	/**
-	 * 上传ruleset
+	 * upload ruleset
 	 * */
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public void upRuleset() throws Exception{
 		 /** 
-         * form中的enctype必须是multipart/... 
-         * 组件提供方法检测form表单的enctype属性 
-         * 在isMultipartContent方法中同时检测了是否是post提交 
-         * 如果不是post提交则返回false 
+         * enctype of the form must be multipart/... 
          */  
-        if(ServletFileUpload.isMultipartContent(request)) {  //description
+        if(ServletFileUpload.isMultipartContent(request)) { 
         	//description
 			String desc=request.getParameter("desc");
 			if(desc==null || desc.equals("")){
@@ -383,13 +381,12 @@ public class PatternAction extends Action{
 			
         	String RulePath=(String)application.getAttribute("Ruleset");
             DiskFileItemFactory factory = new DiskFileItemFactory();
-            factory.setRepository(new File(RulePath+"tmp"));//临时文件目录  
-            //内存最大占用  
+            factory.setRepository(new File(RulePath+"tmp"));  
+            
             factory.setSizeThreshold(1024000);  
             ServletFileUpload sfu = new ServletFileUpload(factory);  
-            //单个文件最大值byte  
-            sfu.setFileSizeMax(102400000);
-            //所有上传文件的总和最大值byte  
+            //max file size  
+            sfu.setFileSizeMax(102400000); 
             sfu.setSizeMax(204800000);
             
             List<FileItem> items = null;  
@@ -410,7 +407,6 @@ public class PatternAction extends Action{
             
             if(items!=null){
             	for(FileItem item:items){
-            		//文件域  
                     if(!item.isFormField()) {   
                         String fileName = item.getName();
                         int index=fileName.lastIndexOf("\\");if(index<0)index=0;
@@ -430,7 +426,7 @@ public class PatternAction extends Action{
             error("enctype error!");  
         }  
 	}
-	/*列出javaClass列表*/
+	/*list all javaClass*/
 	public void javaClasses() throws Exception{
 		Json j = new Json(1);
 		JsonObjectNode data = j.createData();
@@ -448,14 +444,14 @@ public class PatternAction extends Action{
 	/*******************************************************************************************************************************/
 	private final String DESC_SPLIT="#@SPLIT@#";
 	/**
-	 * 添加ruleset描述信息
+	 * add ruleset description to file
 	 * */
 	private void addRulesetDesc(String filename,String desc){
 		try {
 			desc=desc.replaceAll("\r\n","\t");
 			desc=desc.replaceAll("\n","\t");
 			String fn=(String)application.getAttribute("Ruleset")+"desc.txt";
-			//读取
+
 			String txt="";
 			BufferedReader bufr = new BufferedReader(new InputStreamReader(new FileInputStream(new File(fn)), "UTF-8"));
 			String r = bufr.readLine(),f;int index;
@@ -471,9 +467,9 @@ public class PatternAction extends Action{
 				r = bufr.readLine();
 			}
 			bufr.close();
-			//新添加的记录写在后面
+			//add new line
 			txt+=filename+DESC_SPLIT+desc+"\r\n";
-			//写入文件
+			//write to file
 			OutputStream out = new FileOutputStream(fn);
 			OutputStreamWriter fw = new OutputStreamWriter(out, "UTF-8");
 			fw.write(txt);
@@ -484,12 +480,12 @@ public class PatternAction extends Action{
 		}
 	}
 	/**
-	 * 删除ruleset描述信息
+	 * delete ruleset description in file
 	 * */
 	private void delRulesetDesc(String filename){
 		try {
 			String fn = (String) application.getAttribute("Ruleset")+ "desc.txt";
-			//从文件读取
+			
 			BufferedReader bufr = new BufferedReader(new InputStreamReader(new FileInputStream(new File(fn)), "UTF-8"));
 			int index;
 			String r = bufr.readLine(),f,txt="";
@@ -505,7 +501,7 @@ public class PatternAction extends Action{
 				r = bufr.readLine();
 			}
 			bufr.close();
-			//写入文件
+			
 			OutputStream out = new FileOutputStream(fn);
 			OutputStreamWriter fw = new OutputStreamWriter(out, "UTF-8");
 			fw.write(txt);
@@ -514,7 +510,7 @@ public class PatternAction extends Action{
 		} catch (Exception e) {}
 	}
 	/**
-	 * 获取ruleset的描述
+	 * get ruleset description
 	 * */
 	private JsonArrayNode getRulesetDescJsonArr(){
 		JsonArrayNode arr = new JsonArrayNode("desc");

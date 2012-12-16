@@ -16,7 +16,7 @@
 	<input type="hidden" id="patternID" value="<%=id%>" />
 	<hr class="space"/>
 	<h2 class="aCenter"><%=name%></h2>
-	<!-- 查看pattern -->
+	<!-- view pattern -->
 	<div id="patternDetail" class="box">
 		<div  class="line">
 			<span class="span-2">Name:</span>

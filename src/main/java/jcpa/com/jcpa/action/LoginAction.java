@@ -6,20 +6,16 @@ import java.io.FileReader;
 
 public class LoginAction extends Action{
 	private String from;
-	/**
-	 * 执行动作之前的准备工作
-	 */
+
 	protected void _prepare() throws Exception{
 		from=request.getParameter("from");
 		if(from==null || from.equals(""))from="index.jsp";
 	}
-	/**
-	 * 执行完动作之后的清理工作
-	 */
+
 	protected void _cleanup() throws Exception{}
 	
 	/**
-	 * 登录
+	 * login
 	 * */
 	public void in()throws Exception{
 		String user=request.getParameter("user");
@@ -35,14 +31,14 @@ public class LoginAction extends Action{
 		}
 	}
 	/**
-	 * 登出
+	 * logout
 	 * */
 	public void out()throws Exception{
 		session.setAttribute("user","guest");
 		response.sendRedirect(from);
 	}
 	/**
-	 * 检查用户名和密码是否正确
+	 * check username and password
 	 * */
 	private boolean check(String user,String password){
 		try {

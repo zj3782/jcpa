@@ -16,30 +16,32 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-	//设置界面元素宽度
+	//content height
 	$("#content").removeClass("container");
 	$("#cat").width(260);
 	$("#txt").width(document.body.clientWidth-260-65);
-	//内容部分最小高度
+	//txt min-height
 	$("#txt").css("min-height",$("#cat").height());
-	//菜单挡住了内容，变换成水平菜单
+	//make menu horizontal,or it will cover the content
 	$("#menu").removeClass("vrmenu");
+	$("#menu").removeClass("vlmenu");
 	$("#menu").addClass("hmenu");
-	//初始化目录
+	//init category
 	$("#cat .cat-h").each(function(){initCat(this);});
-	//初始显示什么内容
+	//get init show from the url
 	var url=document.location.href;
 	var start=url.lastIndexOf('#');
 	var cat="sys";
 	if(start>0){
 		cat=url.substr(start+1,url.length-start);
 	}
-	setTimeout(function(){showTxt(cat);},1000);//延时一段时间显示
+	//delay a little time to show help txt
+	setTimeout(function(){showTxt(cat);},1000);
 });
 function initCat(cat){
 	$(cat).click(function(){
 		if($(this).hasClass('selected')){
-			//折叠子菜单
+			//fold submenu
 			var scat=$(this).attr('cat');
 			if(typeof(scat)=='string' && scat!=''){
 				var subCat=$(".cat-group[cat='"+scat+"']");
@@ -47,7 +49,6 @@ function initCat(cat){
 				$(this).toggleClass('closed');
 			}			
 		}else{
-			//更换显示内容
 			showTxt(cat);	
 		}
 	});
@@ -138,7 +139,7 @@ function showTxt(cat){
 					<p>You can click the underlined Location column to go to see the View Report page,in this page you can see where break the rule in the source file.	</p>
 					<img src="image/CodeAnalysis3.png" />
 					<p>There is an error list below the report list. If the list is not empty which shows that there are files that can’t be resolved in the analyzing codes, please check whether the file contains syntax errors.
-					If not,make sure your patterns expression is correct.
+					If not,it's probable that your patterns expression have something wrong,for example: the brackets don't match.
 					</p>
 					<img src="image/CodeAnalysis4.png" />
 				</div>

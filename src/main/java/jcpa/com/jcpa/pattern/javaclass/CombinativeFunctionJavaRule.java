@@ -13,6 +13,7 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 	public Object visit(ASTCompilationUnit node, Object data) {
 		try {
 			String aux=(String) getProperty(getPropertyDescriptor("aux"));
+			if(aux==null || aux.equals(""))return data;
 			String xpath1="//MethodDeclarator[##AUX_CON##][./descendant::*/ReferenceType[@Array = true() and @ArrayDepth = 1]]";
 			String xpath2="//PrimaryExpression[PrimaryPrefix/Name[##AUX_CON##]][./descendant::*/Arguments]";
 			xpath1=AuxUtil.ExpIntegrate(xpath1, aux);

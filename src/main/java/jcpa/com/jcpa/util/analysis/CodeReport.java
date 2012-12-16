@@ -162,9 +162,7 @@ public class CodeReport {
 		this.extInfoUrl = extInfoUrl;
 	}
 	
-	/**
-	 * 判断两个report是否相等
-	 * */
+	
 	public boolean isEquals(CodeReport another){
 		if(this.rulePriority==another.rulePriority &&
 			this.column==another.column &&

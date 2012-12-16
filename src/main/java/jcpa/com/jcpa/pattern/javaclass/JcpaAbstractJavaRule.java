@@ -5,7 +5,7 @@ import net.sourceforge.pmd.lang.rule.properties.StringProperty;
 
 public abstract class JcpaAbstractJavaRule extends AbstractJavaRule {
 	public static final StringProperty AUX_DESCRIPTOR = new StringProperty("aux", "Auxiliary field", "", 1.0f);
-	/*构造方法*/
+
 	public JcpaAbstractJavaRule(){
 		definePropertyDescriptor(AUX_DESCRIPTOR);
 	}

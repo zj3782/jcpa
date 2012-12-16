@@ -13,8 +13,8 @@ import com.jcpa.util.ToolUtil;
 
 public class LockTester extends Case {
 	
-	protected static boolean bInterrupt=false;//是否打断程序运行
-	protected static boolean bRuning=false;//程序是否正在运行
+	protected static boolean bInterrupt=false;
+	protected static boolean bRuning=false;
 	
     private final Map<String, Data> m = new HashMap<String, Data>();
     private final ReentrantReadWriteLock rwm = new ReentrantReadWriteLock();
@@ -189,7 +189,7 @@ public class LockTester extends Case {
 		start();
 		waitRst();
 		bRuning=false;
-		if(bInterrupt){//中途停止
+		if(bInterrupt){
 			throw new Exception("Program Has Been Interrupted.");
 		}
 	}

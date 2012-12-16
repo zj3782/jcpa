@@ -5,12 +5,13 @@ import java.util.List;
 import com.jcpa.util.AuxUtil;
 
 import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
+import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
 public class CallExpensiveFunctionJavaRule extends JcpaAbstractJavaRule {
 	@Override
-	public Object visit(ASTCompilationUnit node, Object data) {
+	public Object visit(ASTMethodDeclaration node, Object data) {
 		try {
 			String aux=(String) getProperty(getPropertyDescriptor("aux"));
+			if(aux==null || aux.equals(""))return data;
 			String xpath="//PrimaryExpression[PrimarySuffix/Arguments][PrimaryPrefix/Name[##AUX_CON##]]";
 			xpath=AuxUtil.ExpIntegrate(xpath, aux);
 
@@ -24,7 +25,6 @@ public class CallExpensiveFunctionJavaRule extends JcpaAbstractJavaRule {
 
 			        if(isTreeEqual(a, b)) {
 			        	addViolation(data, a);
-			        	addViolation(data, b);
 			        }
 			    }
 			}

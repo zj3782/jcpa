@@ -17,19 +17,19 @@ public class SVNUtil {
 	private static SVNClientManager CM;
 	
 	/***
-     * 通过不同的协议初始化版本库
+     * support servel agreements
      */
     public static void setupLibrary() {
-       // 对于使用http://和https：//
+       // http:// https://
        DAVRepositoryFactory.setup();
-       //对于使用svn：/ /和svn+xxx：/ /
+       //svn:/ / svn+xxx:/ /
        SVNRepositoryFactoryImpl.setup();
-       //对于使用file://
+       //file://
        FSRepositoryFactory.setup();
     }
     
     /*
-     * 根据字符串获取SVNURL对象
+     * get SVNURL object by string
      * */
     public static SVNURL url(String url){
     	SVNURL repositoryURL = null;
@@ -40,14 +40,18 @@ public class SVNUtil {
 	    }
 	    return repositoryURL;
     }
-	/*获取client*/
+	/*
+	 *get SVNUpdateClient by username and password
+	 **/
 	public static SVNUpdateClient getClient(String UserName,String PassWord){
 		ISVNOptions options = SVNWCUtil.createDefaultOptions( true );
         ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(UserName, PassWord);
         CM = SVNClientManager.newInstance( options , authManager );
         return CM.getUpdateClient();
 	}
-	/*checkout*/
+	/*
+	 * checkout
+	 * */
 	public static boolean checkout(String UserName,String PassWord,String url,String localDir)
 			throws Exception
 	{

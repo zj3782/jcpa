@@ -3,13 +3,13 @@ $(document).ready(function() {
     var option = {
         height: 350,
         colModel: [
-                { display: 'Package', name: 'package', width: 150, sortable: true,sorttype:'ascii', align: 'left' },
-       	        { display: 'Class', name: 'class', width: 130, sortable: true,sorttype:'ascii', align: 'left' },
-       	        { display: 'Method/Static', name: 'method', width: 150, sortable: false, align: 'left' },
-       	        { display: 'Location', name: 'method', width: 150, sortable: false, align: 'left' },
-       	        { display: 'Code', name: 'code', width: 200, sortable: false, align: 'left' },
-    	        { display: 'Rule', name: 'rule', width: 220, sortable: true,sorttype:'ascii', align: 'left' },
-       	        { display: 'Priority', name: 'priority', width: 50, sortable: true,sorttype:'num', align: 'left' }
+                { display: 'Package', name: 'package', width: 140, sortable: true,sorttype:'ascii', align: 'left' },
+       	        { display: 'Class', name: 'class', width: 120, sortable: true,sorttype:'ascii', align: 'left' },
+       	        { display: 'Method/Static', name: 'method', width: 130, sortable: false, align: 'left' },
+       	        { display: 'Location', name: 'location', width: 150, sortable: false, align: 'left' },
+       	        { display: 'Code', name: 'code', width: 30, sortable: false, align: 'left' },
+    	        { display: 'Rule', name: 'rule', width: 210, sortable: true,sorttype:'ascii', align: 'left' },
+       	        { display: 'Priority', name: 'priority', width: 40, sortable: true,sorttype:'num', align: 'left' }
 		],
 		buttons: [
 	              { name: 'Ignore', displayname: "Ignore",  onpress: toolbarItem_onclick },
@@ -17,15 +17,15 @@ $(document).ready(function() {
 		url:"Analysis.do?method=reportlist",
 		usepager: true,
 		useRp: true,
-		rp: 12, // results per page,每页默认的结果数
-        rpOptions: [12, 20, 30, 50, 100], //可选择设定的每页结果数
+		rp: 12, // results per page
+        rpOptions: [12, 20, 30, 50, 100], //chooses of results per page
         onAddRow:onAddRowData,
         showCheckbox: true,
         striped:false,
         autoload:false
     };
     flexTBR=$("#reportTB").flexigrid(option);
-    flexTBR.flexToggleCol(4,false);//Code这一列隐藏
+    //flexTBR.flexToggleCol(4,false);//hide the 'Code' column
     
     option = {
         height: 100,
@@ -43,17 +43,17 @@ $(document).ready(function() {
     };
     flexTBE=$("#errorTB").flexigrid(option);
 });
-/**工具栏按钮*/
+/**toolbar function*/
 function toolbarItem_onclick(cmd, grid) {
    if (cmd == "Ignore") {
     	IgnoreReports(flexTBR.flexGetCheckedRows());
     }
 }
-/**检查数据*/
+/**check data on add*/
 function onAddRowData(row){
-	row.cell[4]=htm2specil(row.cell[4]);//code
+	row.cell[4]=htm2specil(row.cell[4]);//code column
 	for(var i=0;i<row.cell.length;i++){
-			row.cell[i]=safeDecodeURI(row.cell[i]);//解码
+			row.cell[i]=safeDecodeURI(row.cell[i]);//decode
 	}
 	row.cell[3]="<a href='javascript:;' onclick='viewReportById("+row.id+")'>"+row.cell[3]+"</a>";
 	row.cell[5]="<a href='"+row.cell[7]+"' target='_blank'>"+row.cell[5]+"</a>";
@@ -78,7 +78,7 @@ function onAddErrorRowData(row){
 	return row;
 }
 /**
- * 删除reports
+ * delete reports
  * */
 function IgnoreReports(rows){
 	if(!rows || !rows.length){
@@ -121,7 +121,7 @@ function IgnoreReports(rows){
 	});
 }
 /**
- * 查看单个report
+ * view report
  * */
 function viewReportById(id){
 	var rows=flexTBR.flexGetRowsByIds([id]);
@@ -138,22 +138,22 @@ function viewReport(cell){
 	artDialog({content:ID('viewReport'),title:'View Report',lock:true,id:'viewReport'});
 }
 /////////////////////////////////////////////////////////////
-//step常量
-var STEP_START=0;//开始
-var STEP_LOGINING=1;//svn登录中
-var STEP_LOGINOK=2;//svn登录成功
-var STEP_CHECKOUTING=3;//svn检出中
-var STEP_CHECKOUTOK=4;//svn检出成功
-var STEP_PMDING=5;//pmd处理过程中
-var STEP_PMDOK=6;//pmd处理成功
-var STEP_SUCCESSEND=7;//成功结束
-var STEP_FAILEND=8;//失败结束
+//Constant var of analysis step
+var STEP_START=0;//starting
+var STEP_LOGINING=1;//svn logining
+var STEP_LOGINOK=2;//svn login success
+var STEP_CHECKOUTING=3;//svn checking out
+var STEP_CHECKOUTOK=4;//svn check out success
+var STEP_PMDING=5;//pmd proccessing
+var STEP_PMDOK=6;//pmd process success
+var STEP_SUCCESSEND=7;//analysis success
+var STEP_FAILEND=8;//analysis fail
 var steps=['Starting','Svn logining','Svn login ok','Svn checking out',
            'Svn check out ok','Pmd analysing','Pmd analyse ok','Code analyse ok','Code analyse fail'];
 
 var TimerID=null;
 /**
- * 开始分析
+ * start analysis
  * */
 function Analysis(){
 	var data={method:"work"};
@@ -164,7 +164,7 @@ function Analysis(){
 	$.post("Analysis.do",data,function(result){
 		if(result.status){
 			IntervalGetStep();
-		}else{//产生错误
+		}else{//error
 			alert(result.info);
 			EndIntervalGetStep();
 		}
@@ -179,20 +179,23 @@ function Analysis(){
 	$("#reportArea").mask("Analysising...");
 }
 /**
- * 定时获取结果report
+ * start the interval getting analysis step
  * */
 function StartIntervalGetStep(interval){
 	if(typeof(interval)!="number")interval=2000;
 	if(TimerID)clearInterval(TimerID);
 	TimerID=setInterval(IntervalGetStep,interval);
 }
+/**
+ * stop the interval getting analysis step
+ * */
 function EndIntervalGetStep(){
 	if(TimerID)clearInterval(TimerID);
 	TimerID=0;
 }
 
 /**
- * 定时获取step
+ * interval get analysis step
  */
 function IntervalGetStep(){
 	$.post("Analysis.do",{"method":"step"},function(result){
@@ -212,7 +215,7 @@ function IntervalGetStep(){
 	},"json");
 }
 /**
- * 重新分析
+ * reabalysis
  */
 function ReAnalysis(ask){
 	if(ask!=false && !confirm("Do you want to go back?"))return;
@@ -221,7 +224,7 @@ function ReAnalysis(ask){
 	});
 }
 /**
- *获取ruleset 
+ *get ruleset files list
  */
 function getRulesets(){
 	$.post("pattern.do",{method:'rulesets'},function(result){

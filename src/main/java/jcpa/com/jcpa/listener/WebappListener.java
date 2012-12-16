@@ -15,7 +15,7 @@ import com.jcpa.util.ToolUtil;
 public class WebappListener implements ServletContextListener { 
 	private ServletContext application = null;
 	/**
-	 * webapp启动
+	 * webapp startup
 	 * */
     public void contextInitialized(ServletContextEvent sce) {
     	commonInit(sce);
@@ -24,14 +24,14 @@ public class WebappListener implements ServletContextListener {
     }
     
     /**
-     * webapp停止
+     * webapp stop
      * */
 	public void contextDestroyed(ServletContextEvent sce) { 
         stopHsqlServer(sce);
     }
     
 	/**
-	 * 公共初始化
+	 * common init
 	 * */
 	private void commonInit(ServletContextEvent sce){
 		application = sce.getServletContext();  
@@ -42,7 +42,7 @@ public class WebappListener implements ServletContextListener {
 		application.setAttribute("Classes",this.getClass().getResource("/").getPath().replace('\\', '/'));
 	}
 	/**
-	 * 检查目录
+	 * check folder
 	 * */
 	private void checkFolder(ServletContextEvent sce){
 		try {
@@ -57,23 +57,23 @@ public class WebappListener implements ServletContextListener {
 		}
 	}
     /** 
-     * 启动hsql数据库 
+     * start hsqldb 
      */ 
     private void startHsqlServer(ServletContextEvent sce) {
     	try {
-			// 获得数据库文件访问路径 
+			//db file path
 			String dbPath = sce.getServletContext().getInitParameter("hsql.dbPath"); 
 			dbPath = (String)application.getAttribute("WebRoot")+dbPath;
 			if (!dbPath.endsWith("/")){
 				dbPath = dbPath + "/"; 
 			}
-			// 数据库文件名 
+			// dbname
 			String dbName = sce.getServletContext().getInitParameter("hsql.dbName"); 
 			if (dbName==null || dbName.equals("")) { 
 				System.out.println("[Error]:Can't get hsqldb.dbName from web.xml Context Param"); 
 			    return; 
 			}
-			// 数据库访问端口 
+			// db port
 			int port = -1; 
 			try { 
 			    port = Integer.parseInt(sce.getServletContext().getInitParameter("hsql.port")); 
@@ -82,7 +82,7 @@ public class WebappListener implements ServletContextListener {
 			    e.printStackTrace(); 
 			    return; 
 			}
-			// 启动数据库 
+			// start db
 			Server server = new Server();
 			server.setDatabaseName(0, dbName); 
 			server.setDatabasePath(0, dbPath + dbName); 
@@ -90,7 +90,7 @@ public class WebappListener implements ServletContextListener {
 			server.setSilent(true); 
 			server.setTrace(true); 
 			server.start();
-			// 等待Server启动 
+			
 			try { 
 			    Thread.sleep(800); 
 			} catch (InterruptedException e) { 
@@ -102,7 +102,7 @@ public class WebappListener implements ServletContextListener {
 		} 
     }
     /**
-     * 停止hsql服务器
+     * stop hsqldb
      * */
     private void stopHsqlServer(ServletContextEvent sce){
         try { 

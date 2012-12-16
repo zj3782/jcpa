@@ -1,14 +1,14 @@
 package com.jcpa.util.json;
 
 /**
- * json节点基类（array，object，leaf）
+ * json node base class（array，object，leaf）
  * */
 public class JsonNode{
 	protected String _NODE_CLASS_TYPE="base";
-	protected String name="";/**节点名称*/
+	protected String name="";/**node name*/
 
 	/**
-	 * 构造方法
+	 * construct
 	 * */
 	JsonNode(String name){
 		this.name=name;

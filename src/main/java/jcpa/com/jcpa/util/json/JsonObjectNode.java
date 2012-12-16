@@ -6,19 +6,19 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Object节点类
+ * ObjectNode
  * */
 public class JsonObjectNode extends JsonNode{
 	List<JsonNode> childs=Collections.synchronizedList(new LinkedList<JsonNode>());
 	/**
-	 * 构造方法
+	 * construct
 	 * */
 	public JsonObjectNode(String name){
 		super(name);
 		_NODE_CLASS_TYPE=_NODE_CLASS_TYPE+".object";
 	}
 	/**
-	 * 添加子节点（array,object,leaf）
+	 * add child（array,object,leaf）
 	 * */
 	public void addChild(JsonNode child){
 		childs.add(child);

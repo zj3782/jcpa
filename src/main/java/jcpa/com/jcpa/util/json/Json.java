@@ -5,15 +5,14 @@ import java.util.Map;
 
 
 /**
- * json类
+ * json
  * */
 public class Json {
-	 private int status=1;//操作是否成功
-	 private String info="";//提示信息
-	 private JsonObjectNode data=null;//附加信息
-	 /**
-	  * 构造方法
-	  * */
+	 private int status=1;//success or not
+	 private String info="";
+	 private JsonObjectNode data=null;
+
+	 
 	 public Json(){
 		 this.status=1;
 		 this.info="";
@@ -27,18 +26,13 @@ public class Json {
 		 this.info=info;
 	 }
 	
-	 /**
-	  * 
-	  * */
 	 public JsonObjectNode createData(){
 		 if(data==null){
 			 data = new JsonObjectNode("data");
 		 }
 		 return data;
 	 }
-	 /**
-	  * 生成json字符串
-	  * */
+
 	 public String toString(){
 		 String str="{";
 		 str+="\"status\":"+status;
@@ -93,9 +87,6 @@ public class Json {
 		this.data = data;
 	}
 	
-	/**
-	 * 便捷输出json信息
-	 * */
 	public static String success(String info){
 		Json j=new Json(1,info);
 		return j.toString();
@@ -104,8 +95,9 @@ public class Json {
 		Json j=new Json(0,info);
 		return j.toString();
 	}
+
 	/**
-	 * 格式化字符串以符合json输出
+	 *format str for json 
 	 * */
 	public static String JsonFmt(String in){
 		if(in==null || in.equals(""))return in;

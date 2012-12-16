@@ -19,7 +19,7 @@ public class BenchmarkDaoImpl implements BenchmarkDao{
 		Session session = HibernateUtil.getSession();
 
 		String HQL_rows = "select count(*) from Benchmark ";
-		if(where!=null && !where.equals(""))HQL_rows+="where "+where;//条件
+		if(where!=null && !where.equals(""))HQL_rows+="where "+where;
 		Long rows=(Long)session.createQuery(HQL_rows).list().get(0);
 		return rows.longValue();
 	}
@@ -30,7 +30,7 @@ public class BenchmarkDaoImpl implements BenchmarkDao{
 		Session session = HibernateUtil.getSession();
 		
 		String QuerySql="from Benchmark";
-		if(where!=null && !where.equals(""))QuerySql+="where "+where;//条件
+		if(where!=null && !where.equals(""))QuerySql+="where "+where;
 		Query query=session.createQuery(QuerySql);
 		query.setFirstResult( (page-1)*onePageCount );
 		query.setMaxResults(onePageCount);

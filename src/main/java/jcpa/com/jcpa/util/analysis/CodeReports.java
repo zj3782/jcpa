@@ -7,33 +7,29 @@ import com.jcpa.util.json.JsonArrayNode;
 import com.jcpa.util.json.JsonLeafNode;
 import com.jcpa.util.json.JsonObjectNode;
 
-/**
- * 分析产生的Report（放在session中）
- * */
+
 public class CodeReports {
 	private int reportCount=0;
 	private List<CodeReport> reports = new LinkedList<CodeReport>();
 	private List<CodeReportError> errors = new LinkedList<CodeReportError>();
 	
-	/**分析进行到的步骤*/
+	/**analysis step*/
 	private int step;
-	public static final int STEP_START=0;//开始
-	public static final int STEP_LOGINING=1;//svn登录中
-	public static final int STEP_LOGINOK=2;//svn登录成功
-	public static final int STEP_CHECKOUTING=3;//svn检出中
-	public static final int STEP_CHECKOUTOK=4;//svn检出成功
-	public static final int STEP_PMDING=5;//pmd处理过程中
-	public static final int STEP_PMDOK=6;//pmd处理成功
-	public static final int STEP_SUCCESSEND=7;//成功结束
-	public static final int STEP_FAILEND=8;//失败结束
+	public static final int STEP_START=0;//start
+	public static final int STEP_LOGINING=1;//svn logining
+	public static final int STEP_LOGINOK=2;//svn login ok
+	public static final int STEP_CHECKOUTING=3;//svn checking out
+	public static final int STEP_CHECKOUTOK=4;//svn check out success
+	public static final int STEP_PMDING=5;//pmd analysing
+	public static final int STEP_PMDOK=6;//pmd analyse ok
+	public static final int STEP_SUCCESSEND=7;//analyse ok
+	public static final int STEP_FAILEND=8;//analyse fial
 	
+
 	
-	/**
-	 * 构造方法
-	 * */
 	public CodeReports(){}
 	/**
-	 * 添加report
+	 * add report
 	 * */
 	public void add(CodeReport report){
 		synchronized(reports){
@@ -47,7 +43,7 @@ public class CodeReports {
 					reports.add(i,report);
 					break;
 				}else if(r.getRulePriority() == report.getRulePriority()){
-					if(r.isEquals(report)){//相同的错误（同种错误、同行同列）
+					if(r.isEquals(report)){//some report(some rule,some line)
 						break;
 					}
 				}
@@ -58,7 +54,7 @@ public class CodeReports {
 		}
 	}
 	/**
-	 * 删除report
+	 * delete report
 	 * */
 	public boolean remove(int id){
 		boolean ret=false;
@@ -78,7 +74,7 @@ public class CodeReports {
 		return ret;
 	}
 	/**
-	 * 添加error
+	 * add error
 	 * */
 	public void addError(CodeReportError error){
 		synchronized(errors){
@@ -116,13 +112,13 @@ public class CodeReports {
 		return arr;
 	}
 	/**
-	 * 返回report个数
+	 * report count
 	 * */
 	public int reportCount(){
 		return reports.size();
 	}
 	/**
-	 * 返回error个数
+	 * error count
 	 * */
 	public int errorCount(){
 		return errors.size();
@@ -134,15 +130,11 @@ public class CodeReports {
 	public List<CodeReportError> getErrors() {
 		return errors;
 	}
-	/**
-	 * 取得step
-	 * */
+
 	public int getStep() {
 		return step;
 	}
-	/**
-	 * 设置step
-	 * */
+
 	public void setStep(int step) {
 		this.step = step;
 	}

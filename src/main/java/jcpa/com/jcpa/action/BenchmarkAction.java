@@ -14,17 +14,13 @@ import com.jcpa.util.json.JsonLeafNode;
 import com.jcpa.util.json.JsonObjectNode;
 
 public class BenchmarkAction extends Action{
-	/**
-	 * 执行动作之前的准备工作
-	 */
+
 	protected void _prepare() throws Exception{}
-	/**
-	 * 执行完动作之后的清理工作
-	 */
+
 	protected void _cleanup() throws Exception{}
 	
 	/**
-	 * 列出第p页的case
+	 * list page case
 	 * */
 	public void page() throws Exception{
 		int ONE_PAGE_COUNT=ToolUtil.strToPositiveInt(request.getParameter("rp"),25);;//一页pattern的个数 
@@ -50,7 +46,7 @@ public class BenchmarkAction extends Action{
 		}
 	}
 	/**
-	 * 运行
+	 * run case
 	 * */
 	public void run() throws Exception{
 		String caseName;
@@ -94,7 +90,7 @@ public class BenchmarkAction extends Action{
 		echo(j.toString());
 	}
 	/**
-	 * 
+	 * stop run
 	 * */
 	public void stop() throws Exception{
 		try {
@@ -112,7 +108,7 @@ public class BenchmarkAction extends Action{
 	}
 	
 	/**
-	 * add
+	 * add case
 	 * */
 	public void add() throws Exception{
 		try {

@@ -1,63 +1,32 @@
 /**
- * 检查变量
+ * check Var is null or undefined
  * */
 function checkVar(Var){
 	if(Var==null || typeof(Var)=="undefined")return false;
 	return true;
 }
 /**
- * 判断变量是否是object，如果是直接返回原值，不是代表id，通过document.getElementById取得控件对象
+ * judge value if is a document object,if not return document.getElementById(value)
  * */
 function ctrlOrId(value){
 	if(typeof(value)!="object")value=ID(value);
 	return value;
 }
 /**
- * 通过id获取控件（document.getElementById）
+ * document.getElementById(id)
  */
 function ID(id){
 	return document.getElementById(id);
 }
 /**
-*通过name获取控件数组
+*document.getElementsByName(name)
 */
 function NAME(name){
 	return document.getElementsByName(name);
 }
 
 /**
- * 设置控件失去焦点的时候如果内容为空，显示什么内容提示
- * @param select	jQuery选择器（例如"#myID"、".myClass"）
- * @param note		提示文本
- * @param style		失去焦点是否增加input_blur样式
- * */
-function setBlurNote(select,note,init,style){
-	if(!checkVar(select))return false;
-	if(!checkVar(note))note="";
-	if(!checkVar(style))style=true;
-	if(!checkVar(init))init=true;
-	
-	if(init){
-		$(select).val(note);
-		if(style)$(select).addClass("input_blur");
-	}
-	
-	$(select).focus(function(){
-		if(style)$(this).removeClass("input_blur");
-		if(this.value==note){
-			this.value="";
-		}
-	});
-	$(select).blur(function(){
-		if(style)$(this).addClass("input_blur");		
-		if(this.value==""){
-			$(this).val(note);
-		}
-	});
-}
-
-/**
- * 字符串转化为数字(如果str无法转化为数字，以Default代替)
+ * str2int(if can't，return Default)
  * */
 function strToInt(str,Default){
 	if(typeof(Default)!='number')Default=0;
@@ -68,7 +37,9 @@ function strToInt(str,Default){
 	if(num==NaN)num=Default;
 	return num;
 }
-
+/*
+ * \r\n and \n to <br> 
+ * */
 function rn2br(str,strrn){
 	if(typeof(str)!="string")return str;
 	str=str.replace(/\r\n/g,'<br>');
@@ -79,34 +50,58 @@ function rn2br(str,strrn){
 	}
 	return str;
 }
+/**
+ *<br> to \r\n 
+ * */
 function br2rn(str){
 	if(typeof(str)!="string")return str;
 	str=str.replace(/<br>/g,'\r\n');
 	str=str.replace(/<br\/>/g,'\r\n');
 	return str;
 }
+/**
+ *\t to four &nbsp; 
+ * */
 function tab2space(str){
 	if(typeof(str)!="string")return str;
 	str=str.replace(/\t/g,'&nbsp;&nbsp;&nbsp;&nbsp;');
 	return str;
 }
+/**
+ *blank to &nbsp; 
+ * */
 function blank2space(str){
 	if(typeof(str)!="string")return str;
 	str=str.replace(/ /g,'&nbsp;');
 	return str;
 }
+/**
+ * > to &gt;
+*  < to $lt; 
+ * */
 function htm2specil(str){
 	if(typeof(str)!="string")return str;
 	str=str.replace(/>/g,'&gt;');
 	str=str.replace(/</g,'&lt;');
 	return str;
 }
+/**
+ * &gt; to >
+*  $lt; to < 
+ * */
 function specil2htm(str){
 	if(typeof(str)!="string")return str;
 	str=str.replace(/&gt;/g,'>');
 	str=str.replace(/&lt;/g,'<');
 	return str;
 }
+/**
+ * make str fit to show on page
+ * 		htm2specil
+ * 		rn2br
+ * 		tab2space
+ * 		blank2space
+ * */
 function strHtmFmt(str){
 	if(typeof(str)!="string")return str;
 	str=htm2specil(str);
@@ -115,6 +110,9 @@ function strHtmFmt(str){
 	str=blank2space(str);
 	return str;
 }
+/**
+ * safely decodeURIComponent
+ * */
 function safeDecodeURI(str){
 	try{
 		return decodeURIComponent(str);

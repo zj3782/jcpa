@@ -19,8 +19,8 @@ public class SetTester extends Case{
 	public long t3 = 0;
 	public long t4 = 0;
 	
-	protected static boolean bInterrupt=false;//是否打断程序运行
-	protected static boolean bRuning=false;//程序是否正在运行
+	protected static boolean bInterrupt=false;//interrupt run or not
+	protected static boolean bRuning=false;//is running
 	
 	static Set<String> s1 = Collections.synchronizedSet(new HashSet<String>());
 	static Set<String> s2 = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
@@ -133,7 +133,7 @@ public class SetTester extends Case{
 		start();
 		waitRst();
 		bRuning=false;
-		if(bInterrupt){//中途停止
+		if(bInterrupt){//interrupt
 			throw new Exception("Program Has Been Interrupted.");
 		}
 	}
