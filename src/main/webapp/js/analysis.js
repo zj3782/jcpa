@@ -25,7 +25,7 @@ $(document).ready(function() {
         autoload:false
     };
     flexTBR=$("#reportTB").flexigrid(option);
-    //flexTBR.flexToggleCol(4,false);//hide the 'Code' column
+    flexTBR.flexToggleCol(4,false);//hide the 'Code' column
     
     option = {
         height: 100,
@@ -202,10 +202,12 @@ function IntervalGetStep(){
 		if(result.status){
 			$("#reportArea").mask(steps[result.data.step]);
 			if(result.data.step==STEP_SUCCESSEND || result.data.step==STEP_FAILEND){
+				$("#reportArea").unmask();
 				flexTBR.flexReload();
 				flexTBE.flexReload();
 				EndIntervalGetStep();
-				$("#reportArea").unmask();
+				flexTBR.flexToggleCol(4,true);
+				flexTBR.flexToggleCol(4,false);
 			}
 		}else{
 			EndIntervalGetStep();
