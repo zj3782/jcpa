@@ -1,4 +1,4 @@
-<?xml version="1.0"?> <ruleset name="jcpa pmd rules" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd" xsi:noNamespaceSchemaLocation="http://pmd.sourceforge.net/ruleset_2_0_0.xsd"><description>jcpa pmd rules -- generate by admin at the time of 2012.12.16 08:55:30</description><rule name="ProbeSizeOfArrayOrCollectionBeforeForStatement" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=1" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[//BlockStatement
+<?xml version="1.0"?> <ruleset name="jcpa pmd rules" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd" xsi:noNamespaceSchemaLocation="http://pmd.sourceforge.net/ruleset_2_0_0.xsd"><description>jcpa pmd rules -- generate by admin at the time of 2012.12.17 09:09:35</description><rule name="ProbeSizeOfArrayOrCollectionBeforeForStatement" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=1" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[//BlockStatement
 [
 descendant::*/IfStatement/descendant::*[RelationalExpression]/descendant::*/Literal[@Image="0"]
 ]
@@ -105,7 +105,7 @@ public String postiveMethod() {
 public String postiveMethod() {
         String question = "?";
         process(question);
-}]]></example></rule><rule name="CallExpensiveFunctionTwiceOrMoreInClass" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=4" class="com.jcpa.pattern.javaclass.CallExpensiveFunctionJavaRule"><properties><property name="aux"><value><![CDATA[factorial,MethodFactory.getInstance,.trim]]></value></property></properties><description>Function result is not preserved.</description><priority>2</priority><example><![CDATA[public long negativeMethod() {
+}]]></example></rule><rule name="CallExpensiveFunctionTwiceOrMore" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=4" class="com.jcpa.pattern.javaclass.CallExpensiveFunctionJavaRule"><properties><property name="aux"><value><![CDATA[factorial,MethodFactory.getInstance,.trim,.find]]></value></property></properties><description>Function result is not preserved.</description><priority>2</priority><example><![CDATA[public long negativeMethod() {
         long part1 = costMethod(6);
         long part2 = costMethod(6);
         return part1 + part2;
@@ -393,7 +393,7 @@ preceding-sibling/LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceTy
 Statement/WhileStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount=0]]/Name/@Image,".next"
 )]
 [ends-with(preceding-sibling::BlockStatement
-/descendant::*/PrimaryExpression/PrimaryPrefix[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount=0]]/Name/@Image,".iterator")]]]></value></property></properties><description>Old version's usage is not recommended.</description><priority>2</priority><example><![CDATA[public void negativeMethod() {
+/descendant::*/PrimaryExpression/PrimaryPrefix[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount=0]]/Name/@Image,".iterator")]]]></value></property></properties><description>Old version's usage is not recommended.</description><priority>4</priority><example><![CDATA[public void negativeMethod() {
         String[] strs = { "E", "F", "G", "H" };
         for (int i = 0; i < strs.length; i++) {
             assert (strs[i] != null);
@@ -444,13 +444,13 @@ public String[] postiveMethod () {
 [
 descendant::*/BlockStatement/Statement/SynchronizedStatement
 [
-descendant::*/BlockStatement/descendant::*/PrimaryExpression/PrimarySuffix[preceding-sibling::*[position()=1 and self::PrimaryPrefix]/Name[contains(@Image,"costMethod") or contains(@Image,"costMethod") or contains(@Image,"excludecostMethod") or contains(@Image,"includecostMethod") or contains(@Image,"processItem")]]/Arguments[@ArgumentCount>=0]
+descendant::*/BlockStatement/descendant::*/PrimaryExpression/PrimarySuffix[preceding-sibling::*[position()=1 and self::PrimaryPrefix]/Name[contains(@Image,"costMethod") or contains(@Image,"excludecostMethod") or contains(@Image,"includecostMethod") or contains(@Image,"processItem")]]/Arguments[@ArgumentCount>=0]
 ]
 /Expression/PrimaryExpression/PrimaryPrefix/Name/@Image=
 preceding-sibling::*/FieldDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image="Map" or @Image="Set" or @Image="List"]/TypeArguments]/VariableDeclarator/VariableDeclaratorId/@Image
 ]
 /descendant::*/BlockStatement/Statement/SynchronizedStatement/descendant::*/BlockStatement/descendant::*/PrimaryExpression/PrimaryPrefix
-[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount>=0]]/Name[contains(@Image,"costMethod") or contains(@Image,"costMethod") or contains(@Image,"excludecostMethod") or contains(@Image,"includecostMethod") or contains(@Image,"processItem")]]]></value></property></properties><description>Expensive operation(s) is in synchronized block.</description><priority>1</priority><example><![CDATA[public void negativeMethod() {
+[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount>=0]]/Name[contains(@Image,"costMethod") or contains(@Image,"excludecostMethod") or contains(@Image,"includecostMethod") or contains(@Image,"processItem")]]]></value></property></properties><description>Expensive operation(s) is in synchronized block.</description><priority>1</priority><example><![CDATA[public void negativeMethod() {
         synchronized (strList) {
             strList.add("F");
             costMethod();
@@ -514,13 +514,18 @@ AllocationExpression[ClassOrInterfaceType[@Image="HashSet"]]/Arguments[@Argument
 -->
 public Set<String> postiveMethod () {
      return Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
-}]]></example></rule><rule name="CallCombinativeFunctionTwiceOrMoreInLoop" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=12" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[//Statement[ForStatement]
-[
-descendant::*/Statement[descendant::*/BlockStatement/descendant::*/PrimaryExpression/PrimarySuffix
-[preceding-sibling::*[position()=1 and self::PrimaryPrefix]/Name[contains(@Image,"cominativeMethod") or contains(@Image,"cominativeMethod") or contains(@Image,"serviceA.call") or contains(@Image,"processRow") or contains(@Image,"Configuration.getInstance") or contains(@Image,"ServiceSessionManager.getInstance") or contains(@Image,"ServiceManagerFactory.getServiceManager") or contains(@Image,"SPIContextManager.getSPIContext")]]
-/Arguments[@ArgumentCount="1"]/ArgumentList/descendant::*/PrimaryPrefix/Name/@Image=
-ancestor::*/ForStatement/LocalVariableDeclaration/VariableDeclarator/VariableDeclaratorId/@Image]
-]]]></value></property></properties><description>Combinative functions in loop are not combined.</description><priority>1</priority><example><![CDATA[public void negativeMethod() {
+}]]></example></rule><rule name="CallCombinativeFunctionTwiceOrMoreInLoop" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=12" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[
+//ForStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix
+[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount>"0"]]
+/Name[contains(@Image,"cominativeMethod") or contains(@Image,"serviceA.call") or contains(@Image,"processRow") or contains(@Image,"Configuration.getInstance") or contains(@Image,"ServiceSessionManager.getInstance") or contains(@Image,"ServiceManagerFactory.getServiceManager") or contains(@Image,"SPIContextManager.getSPIContext")]
+|
+//WhileStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix
+[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount>"0"]]
+/Name[contains(@Image,"cominativeMethod") or contains(@Image,"serviceA.call") or contains(@Image,"processRow") or contains(@Image,"Configuration.getInstance") or contains(@Image,"ServiceSessionManager.getInstance") or contains(@Image,"ServiceManagerFactory.getServiceManager") or contains(@Image,"SPIContextManager.getSPIContext")]
+|
+//DoStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix
+[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount>"0"]]
+/Name[contains(@Image,"cominativeMethod") or contains(@Image,"serviceA.call") or contains(@Image,"processRow") or contains(@Image,"Configuration.getInstance") or contains(@Image,"ServiceSessionManager.getInstance") or contains(@Image,"ServiceManagerFactory.getServiceManager") or contains(@Image,"SPIContextManager.getSPIContext")]]]></value></property></properties><description>Combinative functions in loop are not combined.</description><priority>1</priority><example><![CDATA[public void negativeMethod() {
      String[] keys = { "A", "B", "C", "D" };
      for (String key: keys) {
             Row row = DBManager.getRowByID(key);
@@ -538,7 +543,7 @@ public void postiveMethod() {
 [count(
 Statement[ForStatement or WhileStatement or DoStatement]
 /descendant::*/Statement[ForStatement or WhileStatement or DoStatement]
-)>0]]]></value></property></properties><description>Computation Complexity is O(square of N) or higher.</description><priority>1</priority><example><![CDATA[for (int i : nums)
+)>0]]]></value></property></properties><description>Computation Complexity is O(square of N) or higher.</description><priority>2</priority><example><![CDATA[for (int i : nums)
     for (int j : nums) {
         sum += i * j;
     }

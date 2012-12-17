@@ -14,16 +14,15 @@ public class AuxUtil {
 		for(int j=0;j<auxs.length;j++){
 			String items[]=auxs[j].split(",");
 			itemEqStr="";itemEndStr="";itemConStr="";
-			if(items.length>0){
-				itemEqStr+="@Image=\""+items[0]+"\"";
-				itemConStr+="contains(@Image,\""+items[0]+"\")";
-				itemEndStr+="ends-with(@Image,\""+items[0]+"\")";
-			}
 			for(String item:items){
-				itemEqStr+=" or @Image=\""+item+"\"";
-				itemConStr+=" or contains(@Image,\""+item+"\")";
-				itemEndStr+=" or ends-with(@Image,\""+item+"\")";
+				item=item.trim();
+				itemEqStr+="@Image=\""+item+"\" or ";
+				itemConStr+="contains(@Image,\""+item+"\") or ";
+				itemEndStr+="ends-with(@Image,\""+item+"\") or ";
 			}
+			if(itemEqStr.length()>4)itemEqStr=itemEqStr.substring(0,itemEqStr.length()-4);
+			if(itemConStr.length()>4)itemConStr=itemConStr.substring(0,itemConStr.length()-4);
+			if(itemEndStr.length()>4)itemEndStr=itemEndStr.substring(0,itemEndStr.length()-4);
 			exp=exp.replaceAll("##AUX_EQ_"+j+"##",itemEqStr);
 			exp=exp.replaceAll("##AUX_END_"+j+"##",itemEndStr);
 			exp=exp.replaceAll("##AUX_CON_"+j+"##",itemConStr);

@@ -12,11 +12,15 @@ public class CallExpensiveFunctionJavaRule extends JcpaAbstractJavaRule {
 		try {
 			String aux=(String) getProperty(getPropertyDescriptor("aux"));
 			if(aux==null || aux.equals(""))return data;
-			String xpath="//PrimaryExpression[PrimarySuffix/Arguments][PrimaryPrefix/Name[##AUX_CON##]]";
+			
+			String xpath="//MethodDeclaration[MethodDeclarator/@Image=\""+node.getMethodName()+"\"]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments][PrimaryPrefix/Name[##AUX_CON##]]";
 			xpath=AuxUtil.ExpIntegrate(xpath, aux);
-
+			
+			//all method invoke node
 			List<?> lst = node.findChildNodesWithXPath(xpath);
 			int len = lst.size();
+			
+			//System.out.println("Node:"+node.getBeginLine()+"-"+node.getEndLine()+"   ChildNodes:"+len+"   XPATH:"+xpath);
 
 			for(int i = 0; i < len; i++) {
 			    for(int j = i + 1; j < len; j++) {
@@ -25,6 +29,7 @@ public class CallExpensiveFunctionJavaRule extends JcpaAbstractJavaRule {
 
 			        if(isTreeEqual(a, b)) {
 			        	addViolation(data, a);
+			        	break;
 			        }
 			    }
 			}
