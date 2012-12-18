@@ -2,6 +2,8 @@ package com.jcpa.pattern.javaclass;
 
 import java.util.List;
 
+import org.jaxen.JaxenException;
+
 import com.jcpa.util.AuxUtil;
 
 import net.sourceforge.pmd.lang.java.ast.ASTArgumentList;
@@ -13,22 +15,26 @@ import net.sourceforge.pmd.lang.java.ast.ASTName;
 import net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression;
 
 public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
+	private String methodName="";
+	private String aux="";
+	
 	@Override
 	public Object visit(ASTMethodDeclaration node, Object data) {
 		try {
-			String aux=(String) getProperty(getPropertyDescriptor("aux"));
+			aux=(String) getProperty(getPropertyDescriptor("aux"));
 			if(aux==null || aux.equals(""))return data;
-			String xpath="//MethodDeclaration[MethodDeclarator/@Image=\""+node.getMethodName()+"\"]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments][PrimaryPrefix/Name[##AUX_CON##]]";
+			methodName=node.getMethodName();
+			String xpath="//MethodDeclaration[MethodDeclarator/@Image=\""+methodName+"\"]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments][PrimaryPrefix/Name[##AUX_CON##]]";
 			xpath=AuxUtil.ExpIntegrate(xpath, aux);
 			//all method invoke node
 			List<?> lst = node.findChildNodesWithXPath(xpath);
-			int len = lst.size();
+			int len = lst.size();			
 			
 			for(int i = 0; i < len; i++) {
 			    for(int j = i + 1; j < len; j++) {
 			    	ASTPrimaryExpression a = (ASTPrimaryExpression) lst.get(i);
 			    	ASTPrimaryExpression b = (ASTPrimaryExpression) lst.get(j);
-
+			    	
 			        if(isInvokeEqual(a, b)) {
 			        	addViolation(data, a);
 			        	break;
@@ -46,7 +52,7 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 	 * 		2.argument count
 	 * 		3.argument type
 	 * */
-	public static boolean isInvokeEqual(ASTPrimaryExpression na, ASTPrimaryExpression nb) throws Exception{
+	public  boolean isInvokeEqual(ASTPrimaryExpression na, ASTPrimaryExpression nb) throws Exception{
 		List<ASTName> prefixNamesA=na.findChildNodesWithXPath("./PrimaryPrefix/Name");
 		List<ASTName> prefixNamesB=nb.findChildNodesWithXPath("./PrimaryPrefix/Name");
 		//judge method name is equal
@@ -91,7 +97,7 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 	/**
 	 * judge if two parameter type equal
 	 * */
-	public static boolean isExpTypeEqual(ASTExpression ea,ASTExpression eb) throws Exception{
+	public  boolean isExpTypeEqual(ASTExpression ea,ASTExpression eb) throws Exception{
 		//parameter has three types:		1.actual		2.reference		3.expression
 		
 		//actual parameter
@@ -146,36 +152,58 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 	/**
 	 * judge parameter equal
 	 * */
-	public static boolean isParameterTypeEqual(ASTLiteral ta,ASTLiteral tb){
+	public  boolean isParameterTypeEqual(ASTLiteral ta,ASTLiteral tb){
 		return (ta.isIntLiteral() && tb.isIntLiteral()) || (ta.isCharLiteral() && tb.isCharLiteral()) || (ta.isFloatLiteral() && tb.isFloatLiteral()) || (ta.isStringLiteral() && tb.isStringLiteral());
 	}
-	public static boolean isParameterTypeEqual(ASTLiteral ta,ASTName nb){
+	public  boolean isParameterTypeEqual(ASTLiteral ta,ASTName nb){
+		//TODO
+		String type=getNameType(nb);
+		return (ta.isIntLiteral() && type.equals("int")) || (ta.isCharLiteral() && type.equals("char")) || (ta.isFloatLiteral() && type.equals("float")) || (ta.isStringLiteral() && type.equals("String"));
+	}
+	public  boolean isParameterTypeEqual(ASTName na,ASTName nb){
+		//TODO
+//		return getNameType(nb).equals(getNameType(nb));
+		return false;
+	}
+	public  boolean isParameterTypeEqual(ASTLiteral ta,ASTExpression expB){
 		//TODO
 		return false;
 	}
-	public static boolean isParameterTypeEqual(ASTName na,ASTName nb){
+	public  boolean isParameterTypeEqual(ASTName na,ASTExpression expB){
 		//TODO
 		return false;
 	}
-	public static boolean isParameterTypeEqual(ASTLiteral ta,ASTExpression expB){
-		//TODO
-		return false;
-	}
-	public static boolean isParameterTypeEqual(ASTName na,ASTExpression expB){
-		//TODO
-		return false;
-	}
-	public static boolean isParameterTypeEqual(ASTExpression expA,ASTExpression expB){
+	public  boolean isParameterTypeEqual(ASTExpression expA,ASTExpression expB){
 		//TODO
 		return false;
 	}
 	
+	/**
+	 * get reference parameter type
+	 * */
+	public String getNameType(ASTName n){
+//		String xpath1="//ForStatement/Statement[descendant::*/PrimaryExpression[PrimaryPrefix/Name[##AUX_CON##]][./descendant::*/Arguments]]/preceding-sibling::*[VariableDeclarator/VariableDeclaratorId/@Image=\""+n.getImage()+"\"]/Type";
+//		xpath1=AuxUtil.ExpIntegrate(xpath1, aux);
+//
+//		String xpath2="//BlockStatement[descendant::*/PrimaryExpression[PrimaryPrefix/Name[##AUX_CON##]][./descendant::*/Arguments]]/preceding-sibling::*/LocalVariableDeclaration[VariableDeclarator/VariableDeclaratorId/@Image=\""+n.getImage()+"\"]/Type";
+//		xpath2=AuxUtil.ExpIntegrate(xpath2, aux);
+//
+//		try {
+//			List<?> l1=n.findChildNodesWithXPath(xpath1);
+//			List<?> l2=n.findChildNodesWithXPath(xpath2);
+//			
+//		} catch (JaxenException e) {
+//			e.printStackTrace();
+//			return "";
+//		} 
 
+		return "";
+	}
 	
 	/**
 	 * judge if list is empty
 	 * */
-	public static boolean isListEmpty(List<?> l){
+	public  boolean isListEmpty(List<?> l){
 		if(l==null || l.size()==0)return true;
 		return false;
 	}
