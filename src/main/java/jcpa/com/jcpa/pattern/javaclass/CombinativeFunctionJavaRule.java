@@ -2,30 +2,63 @@ package com.jcpa.pattern.javaclass;
 
 import java.util.List;
 
-import org.jaxen.JaxenException;
-
 import com.jcpa.util.AuxUtil;
 
-import net.sourceforge.pmd.lang.java.ast.ASTArgumentList;
+import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.java.ast.ASTArguments;
+import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.lang.java.ast.ASTExpression;
 import net.sourceforge.pmd.lang.java.ast.ASTLiteral;
 import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTName;
 import net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression;
 
+
 public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 	private String methodName="";
 	private String aux="";
 	
 	@Override
-	public Object visit(ASTMethodDeclaration node, Object data) {
+	public Object visit(ASTCompilationUnit node, Object data) {	
 		try {
 			aux=(String) getProperty(getPropertyDescriptor("aux"));
-			if(aux==null || aux.equals(""))return data;
+			if (aux == null || aux.equals(""))return data;
+			//in method
+			List<ASTMethodDeclaration> methods=node.findChildNodesWithXPath("//MethodDeclaration");
+			for(ASTMethodDeclaration m:methods){
+				MyMethodVisit(m,data);
+			}
+			//inloop
+			String xpath1 = "//ForStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix";
+			xpath1 += "[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount>\"0\"]]";
+			xpath1 += "/Name[##AUX_CON##]";
+			xpath1 += "|";
+			xpath1 += "//WhileStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix";
+			xpath1 += "[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount>\"0\"]]";
+			xpath1 += "/Name[##AUX_CON##]";
+			xpath1 += "|";
+			xpath1 += "//DoStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix";
+			xpath1 += "[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount>\"0\"]]";
+			xpath1 += "/Name[##AUX_CON##]";
+			xpath1 = AuxUtil.ExpIntegrate(xpath1, aux);
+			//System.out.println(xpath1);
+			List<Node> lst = node.findChildNodesWithXPath(xpath1);
+			for(Node n:lst){
+				addViolation(data, n);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return data;
+	}
+	
+	public void MyMethodVisit(ASTMethodDeclaration node, Object data) {
+		try {
+			if(aux==null || aux.equals(""))return;
 			methodName=node.getMethodName();
 			String xpath="//MethodDeclaration[MethodDeclarator/@Image=\""+methodName+"\"]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments][PrimaryPrefix/Name[##AUX_CON##]]";
 			xpath=AuxUtil.ExpIntegrate(xpath, aux);
+			
 			//all method invoke node
 			List<?> lst = node.findChildNodesWithXPath(xpath);
 			int len = lst.size();			
@@ -44,7 +77,6 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return data;
 	}
 	/**
 	 * is method invoke  equal
@@ -77,22 +109,24 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 		if(argCountA==0 && argCountB==0){
 			return true;//no arguments
 		}
-		List<ASTArgumentList> arglistA=argA.findChildNodesWithXPath("./ArgumentList");
-		List<ASTArgumentList> arglistB=argB.findChildNodesWithXPath("./ArgumentList");
-		if(isListEmpty(arglistA) || isListEmpty(arglistB)){
-			return false;
-		}
-		//compare argument one by one
-		List<ASTExpression> expA=arglistA.get(0).findChildNodesWithXPath("./Expression");
-		List<ASTExpression> expB=arglistB.get(0).findChildNodesWithXPath("./Expression");
-		if(isListEmpty(expA) || isListEmpty(expB) || expA.size()!=expB.size()){
-			return false;
-		}
-		int expCount=expA.size();
-		for(int i=0;i<expCount;i++){
-			if(!isExpTypeEqual(expA.get(i),expB.get(i)))return false;
-		}
+		//to make question simple,we don't judge if every parameter's type,if args count equal,return true
 		return true;
+//		List<ASTArgumentList> arglistA=argA.findChildNodesWithXPath("./ArgumentList");
+//		List<ASTArgumentList> arglistB=argB.findChildNodesWithXPath("./ArgumentList");
+//		if(isListEmpty(arglistA) || isListEmpty(arglistB)){
+//			return false;
+//		}
+//		//compare argument one by one
+//		List<ASTExpression> expA=arglistA.get(0).findChildNodesWithXPath("./Expression");
+//		List<ASTExpression> expB=arglistB.get(0).findChildNodesWithXPath("./Expression");
+//		if(isListEmpty(expA) || isListEmpty(expB) || expA.size()!=expB.size()){
+//			return false;
+//		}
+//		int expCount=expA.size();
+//		for(int i=0;i<expCount;i++){
+//			if(!isExpTypeEqual(expA.get(i),expB.get(i)))return false;
+//		}
+//		return true;
 	}
 	/**
 	 * judge if two parameter type equal

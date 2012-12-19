@@ -24,4 +24,18 @@ public class CallExpensiveFunctionTwiceOrMoreInMethod {
         long part2 = factorial(6);
         return part1 + part2;
     }
+
+    public long wrongCallFunctions2() {
+    	int a=1,b=1;
+        long part1 = factorial(6,7);
+        long part2 = factorial(6,7);
+        long part3 = factorial(a,b);
+        long part4 = factorial(a,b);
+        long part5 = factorial(a,b);
+        return part1 + part2+part3+part4+part5;
+    }
+    
+    public long factorial(int a,int b){
+    	return a+b;
+    }
 }
