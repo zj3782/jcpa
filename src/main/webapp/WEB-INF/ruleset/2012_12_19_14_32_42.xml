@@ -1,4 +1,4 @@
-<?xml version="1.0"?> <ruleset name="jcpa pmd rules" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd" xsi:noNamespaceSchemaLocation="http://pmd.sourceforge.net/ruleset_2_0_0.xsd"><description>jcpa pmd rules -- generate by admin at the time of 2012.12.18 09:27:08</description><rule name="ProbeSizeOfArrayOrCollectionBeforeForStatement" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=1" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[//BlockStatement
+<?xml version="1.0"?> <ruleset name="jcpa pmd rules" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd" xsi:noNamespaceSchemaLocation="http://pmd.sourceforge.net/ruleset_2_0_0.xsd"><description>jcpa pmd rules -- generate by admin at the time of 2012.12.19 10:32:46</description><rule name="ProbeSizeOfArrayOrCollectionBeforeForStatement" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=1" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[//BlockStatement
 [
 descendant::*/IfStatement/descendant::*[RelationalExpression]/descendant::*/Literal[@Image="0"]
 ]
@@ -514,32 +514,7 @@ AllocationExpression[ClassOrInterfaceType[@Image="HashSet"]]/Arguments[@Argument
 -->
 public Set<String> postiveMethod () {
      return Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
-}]]></example></rule><rule name="CallCombinativeFunctionTwiceOrMoreInLoop" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=12" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[
-//ForStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix
-[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount>"0"]]
-/Name[contains(@Image,"cominativeMethod") or contains(@Image,"serviceA.call") or contains(@Image,"processRow") or contains(@Image,"Configuration.getInstance") or contains(@Image,"ServiceSessionManager.getInstance") or contains(@Image,"ServiceManagerFactory.getServiceManager") or contains(@Image,"SPIContextManager.getSPIContext")]
-|
-//WhileStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix
-[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount>"0"]]
-/Name[contains(@Image,"cominativeMethod") or contains(@Image,"serviceA.call") or contains(@Image,"processRow") or contains(@Image,"Configuration.getInstance") or contains(@Image,"ServiceSessionManager.getInstance") or contains(@Image,"ServiceManagerFactory.getServiceManager") or contains(@Image,"SPIContextManager.getSPIContext")]
-|
-//DoStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix
-[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount>"0"]]
-/Name[contains(@Image,"cominativeMethod") or contains(@Image,"serviceA.call") or contains(@Image,"processRow") or contains(@Image,"Configuration.getInstance") or contains(@Image,"ServiceSessionManager.getInstance") or contains(@Image,"ServiceManagerFactory.getServiceManager") or contains(@Image,"SPIContextManager.getSPIContext")]]]></value></property></properties><description>Combinative functions in loop are not combined.</description><priority>1</priority><example><![CDATA[public void negativeMethod() {
-     String[] keys = { "A", "B", "C", "D" };
-     for (String key: keys) {
-            Row row = DBManager.getRowByID(key);
-            processRow(row);
-     }
-}
--->
-public void postiveMethod() {
-     String[] keys = { "A", "B", "C", "D" };
-     List<Row> rows = dbManager.getRowByID(keys);
-     for (Row row: rows) {
-            processRow(row);
-     }
-}]]></example></rule><rule name="ComputationalComplexityProblem" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=13" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[//BlockStatement
+}]]></example></rule><rule name="ComputationalComplexityProblem" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=12" class="net.sourceforge.pmd.lang.rule.XPathRule"><properties><property name="xpath"><value><![CDATA[//BlockStatement
 [count(
 Statement[ForStatement or WhileStatement or DoStatement]
 /descendant::*/Statement[ForStatement or WhileStatement or DoStatement]
@@ -547,11 +522,28 @@ Statement[ForStatement or WhileStatement or DoStatement]
     for (int j : nums) {
         sum += i * j;
     }
-}]]></example></rule><rule name="CallCombinativeFunctionTwiceOrMore" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=14" class="com.jcpa.pattern.javaclass.CombinativeFunctionJavaRule"><properties><property name="aux"><value><![CDATA[cominativeMethod,cominativeMethod2,serviceA.call,processRow,Configuration.getInstance,ServiceSessionManager.getInstance,ServiceManagerFactory.getServiceManager,SPIContextManager.getSPIContext]]></value></property></properties><description>Combinative functions are not combined.</description><priority>1</priority><example><![CDATA[public void negativeMethod () {
+}]]></example></rule><rule name="CallCombinativeFunctionTwiceOrMore" language="java" since="5.0" scope="inner-class" message="" externalInfoUrl="pattern.jsp?id=13" class="com.jcpa.pattern.javaclass.CombinativeFunctionJavaRule"><properties><property name="aux"><value><![CDATA[cominativeMethod,cominativeMethod2,serviceA.call,processRow,Configuration.getInstance,ServiceSessionManager.getInstance,ServiceManagerFactory.getServiceManager,SPIContextManager.getSPIContext,getRowByID]]></value></property></properties><description>Combinative functions are not combined.</description><priority>1</priority><example><![CDATA[public void negativeMethod1 () {
         cominativeMethod("A");
         cominativeMethod("B");
 }
 -->
-public void postiveMethod() {
+public void postiveMethod1() {
         cominativeMethod(new String[] { "A", "B" });
+}
+
+
+public void negativeMethod2() {
+     String[] keys = { "A", "B", "C", "D" };
+     for (String key: keys) {
+            Row row = DBManager.getRowByID(key);
+            processRow(row);
+     }
+}
+-->
+public void postiveMethod2() {
+     String[] keys = { "A", "B", "C", "D" };
+     List<Row> rows = dbManager.getRowByID(keys);
+     for (Row row: rows) {
+            processRow(row);
+     }
 }]]></example></rule></ruleset>
