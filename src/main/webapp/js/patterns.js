@@ -9,13 +9,13 @@ $(document).ready(function() {
 	        { display: 'ID', name: 'ID', width: 30, sortable: true,sorttype:'num', align: 'left' },
 	        { display: 'Name', name: 'Name', width: 200, sortable: true,sorttype:'ascii', align: 'left' },
 	        { display: 'Type', name: 'Type', width: 45, sortable: true,sorttype:'ascii', align: 'left' },
-	        { display: 'Class/Expression', name: 'Expression', width: 100, sortable: false, align: 'left' },
-	        { display: 'Auxiliary', name: 'Auxiliary', width: 50, sortable: false, align: 'left' },
-	        { display: 'Warning', name: 'Warning', width: 90, sortable: false, align: 'left' },
-	        { display: 'Category', name: 'Category', width: 90, sortable: false, sorttype:'ascii',align: 'left' },
-	        { display: 'Scope', name: 'Scope', width: 75, sortable: true, align: 'left'},
-	        { display: 'Example', name: 'Example', width: 90, sortable: false, align: 'left' },
-	        { display: 'Priority', name: 'Priority', width: 45, sortable: false,sorttype:'num', align: 'left' }
+	        { display: 'Class/Expression', name: 'Expression', width: 100, sortable: true,sorttype:'ascii', align: 'left' },
+	        { display: 'Auxiliary', name: 'Auxiliary', width: 50, sortable: true,sorttype:'ascii', align: 'left' },
+	        { display: 'Warning', name: 'Warning', width: 90, sortable: true,sorttype:'ascii', align: 'left' },
+	        { display: 'Category', name: 'Category', width: 90, sortable: true, sorttype:'ascii',align: 'left' },
+	        { display: 'Scope', name: 'Scope', width: 75, sortable: true,sorttype:'ascii', align: 'left'},
+	        { display: 'Example', name: 'Example', width: 90, sortable: true, align: 'left' },
+	        { display: 'Priority', name: 'Priority', width: 45, sortable: true,sorttype:'num', align: 'left' }
 	    ],
         buttons: [
               { name: 'Add', displayname: "Add", onpress: toolbarItem_onclick },
@@ -93,6 +93,12 @@ function toolbarItem_onclick(cmd, grid) {
 }
 /**check data on add*/
 function onAddRowData(row){
+	if(row.cell[1]){
+		var matches=row.cell[1].match(/<a[^>]+>([^<]*)<\/a>/);
+		if(matches && matches.length>1){
+			row.cell[1]=matches[1];
+		}
+	}
 	for(var i=0;i<row.cell.length;i++){
 		row.cell[i]=safeDecodeURI(row.cell[i]);
 		row.cell[i]=htm2specil(row.cell[i]);

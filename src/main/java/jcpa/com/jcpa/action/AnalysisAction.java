@@ -50,14 +50,19 @@ public class AnalysisAction extends Action{
 			url.startsWith("svn") || url.startsWith("file://")){
 			isSvn=true;
 		}
+		
+		System.out.println("["+ToolUtil.getTimeString()+"]Strat to analysis code.Url:"+url);
+		
 		try {
 			if(isSvn){
 				SourcePath=(String)application.getAttribute("JcpaSource")+session.getId();
 				//svn login
+				System.out.println("["+ToolUtil.getTimeString()+"]svn logining...");
 				report.setStep(CodeReports.STEP_LOGINING);
 				SVNUpdateClient client=SVNUtil.getClient(user,pwd);
 				report.setStep(CodeReports.STEP_LOGINOK);
 				//svn check out
+				System.out.println("["+ToolUtil.getTimeString()+"]svn checking out...");
 				report.setStep(CodeReports.STEP_CHECKOUTING);
 				SVNUtil.checkout(client,url,SourcePath);
 				report.setStep(CodeReports.STEP_CHECKOUTOK);
@@ -65,17 +70,21 @@ public class AnalysisAction extends Action{
 				SourcePath=url;
 			}
 			//pmd analysis
+			System.out.println("["+ToolUtil.getTimeString()+"]pmd analysing...");
 			String RuleSets=(String)application.getAttribute("Ruleset")+request.getParameter("rule");
 			report.setStep(CodeReports.STEP_PMDING);
 			PMDRenderer renderer=new PMDRenderer(report);
 			renderer.setRootPath(SourcePath);
 			PMDUtil.report(SourcePath, RuleSets, renderer);
 			report.setStep(CodeReports.STEP_PMDOK);
+			
 			report.setStep(CodeReports.STEP_SUCCESSEND);
+			System.out.println("["+ToolUtil.getTimeString()+"]analyse over.");
 			success("success");
 		} catch (Exception e) {
 			report.setStep(CodeReports.STEP_FAILEND);
 			error("Code Analysis Error:"+e.getMessage());
+			System.out.println("["+ToolUtil.getTimeString()+"]anayse exception");
 		}finally{
 			if(isSvn){
 				ToolUtil.deleteDir(new File(SourcePath));//delete svn check out dir

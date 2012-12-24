@@ -5,9 +5,9 @@ $(document).ready(function() {
         colModel: [
                 { display: 'Package', name: 'package', width: 140, sortable: true,sorttype:'ascii', align: 'left' },
        	        { display: 'Class', name: 'class', width: 120, sortable: true,sorttype:'ascii', align: 'left' },
-       	        { display: 'Method/Static', name: 'method', width: 130, sortable: false, align: 'left' },
-       	        { display: 'Location', name: 'location', width: 150, sortable: false, align: 'left' },
-       	        { display: 'Code', name: 'code', width: 30, sortable: false, align: 'left' },
+       	        { display: 'Method/Static', name: 'method', width: 130, sortable: true,sorttype:'ascii', align: 'left' },
+       	        { display: 'Location', name: 'location', width: 150, sortable: true,sorttype:'ascii', align: 'left' },
+       	        { display: 'Code', name: 'code', width: 30, sortable: true,sorttype:'ascii', align: 'left' },
     	        { display: 'Rule', name: 'rule', width: 210, sortable: true,sorttype:'ascii', align: 'left' },
        	        { display: 'Priority', name: 'priority', width: 40, sortable: true,sorttype:'num', align: 'left' }
 		],
@@ -31,7 +31,7 @@ $(document).ready(function() {
         height: 100,
         colModel: [
            { display: 'file', name: 'file', width: 450, sortable: true,sorttype:'ascii', align: 'left' },
-           { display: 'error', name: 'error', width: 450, sortable: false, align: 'left' }
+           { display: 'error', name: 'error', width: 450, sortable: true,sorttype:'ascii', align: 'left' }
         ],
         url:"Analysis.do?method=errorlist",
         usepager: true,

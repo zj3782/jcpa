@@ -9,8 +9,8 @@ $(document).ready(function() {
         colModel: [
 	        { display: 'ID', name: 'ID', width: 30, sortable: true,sorttype:'num', align: 'left' },
 	        { display: 'Name', name: 'Name', width: 100, sortable: true,sorttype:'ascii', align: 'left' },
-	        { display: 'Descript', name: 'Descript', width: 200, sortable: false, align: 'left' },
-	        { display: 'Result', name: 'Result', width: 500, sortable: false, align: 'left' }
+	        { display: 'Descript', name: 'Descript', width: 200, sortable: true,sorttype:'ascii', align: 'left' },
+	        { display: 'Result', name: 'Result', width: 500, sortable: true,sorttype:'ascii', align: 'left' }
 	    ],
 	    buttons:btns,
         page:initPage,
