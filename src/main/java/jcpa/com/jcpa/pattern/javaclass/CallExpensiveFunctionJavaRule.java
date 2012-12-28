@@ -5,7 +5,10 @@ import java.util.List;
 import com.jcpa.util.AuxUtil;
 
 import net.sourceforge.pmd.lang.ast.Node;
+import net.sourceforge.pmd.lang.java.ast.ASTIfStatement;
 import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
+import net.sourceforge.pmd.lang.java.ast.ASTStatement;
+
 public class CallExpensiveFunctionJavaRule extends JcpaAbstractJavaRule {
 	@Override
 	public Object visit(ASTMethodDeclaration node, Object data) {
@@ -28,7 +31,9 @@ public class CallExpensiveFunctionJavaRule extends JcpaAbstractJavaRule {
 			        Node b = (Node) lst.get(j);
 
 			        if(isTreeEqual(a, b)) {
-			        	addViolation(data, a);
+			        	if(!isDiffBranch(a,b)){//judge if a is in if block and b is in else block
+			        		addViolation(data, a);	
+			        	}
 			        	break;
 			        }
 			    }
@@ -76,5 +81,21 @@ public class CallExpensiveFunctionJavaRule extends JcpaAbstractJavaRule {
         if(imgb != null && !imgb.equals(imga)) return false;
 
         return true;
+    }
+    /**
+     * judge if two node in different Branches
+     * */
+    public static boolean isDiffBranch(Node na,Node nb){
+    	List<ASTIfStatement> laIf=na.getParentsOfType(ASTIfStatement.class);
+    	for(ASTIfStatement i:laIf){
+    		ASTStatement s=i.getFirstChildOfType(ASTStatement.class);
+    		if(isParent(s,nb)){//in same branch
+    				return false;
+    		}
+    		if(isParent(i,s)){
+    				return true;
+    		}
+    	}
+    	return false;
     }
 }

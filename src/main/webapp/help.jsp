@@ -205,6 +205,9 @@ function showTxt(cat){
 						"##AUX_CON_0##"means that position should be replaced by the first part of the auxiliary filed,<br>
 						"##AUX_CON_1##"means that position should be replaced by the second part of the auxiliary filed and so on.<br>
 						"##AUX_CON##" means this position should be replaced by all of the auxiliary filed.</p>
+					<p>4)If you just want to replace the aux string in the expression,just use like this:<br>
+						##AUX_REP##、##AUX_REP_0##、##AUX_REP_1##
+					</p>
 					<p><B>b.java pattern</B></p>
 					<img src="image/patterns1-1.png" />
 					<p>If you want to add a java pattern,you must choose which class to handle this pattern.And the class can access the auxiliary field.</p>

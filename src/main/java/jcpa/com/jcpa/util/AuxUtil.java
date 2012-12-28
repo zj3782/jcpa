@@ -7,6 +7,7 @@ public class AuxUtil {
 	public static String ExpIntegrate(String exp,String auxStr){
 		if(exp==null || exp.equals(""))return "";
 		if(auxStr==null || auxStr.equals(""))return exp;
+		String auxStrReplaceAll=auxStr;
 		if(auxStr.startsWith("##"))auxStr=auxStr.substring(2);
 		
 		String itemEqStr="",auxsEqStr="",itemEndStr="",auxsEndStr="",itemConStr="",auxsConStr="";
@@ -26,6 +27,7 @@ public class AuxUtil {
 			exp=exp.replaceAll("##AUX_EQ_"+j+"##",itemEqStr);
 			exp=exp.replaceAll("##AUX_END_"+j+"##",itemEndStr);
 			exp=exp.replaceAll("##AUX_CON_"+j+"##",itemConStr);
+			exp=exp.replaceAll("##AUX_REP_"+j+"##",auxs[j]);//replace
 			auxsEqStr+=itemEqStr+" or ";
 			auxsEndStr+=itemEndStr+" or ";
 			auxsConStr+=itemConStr+" or ";
@@ -36,6 +38,7 @@ public class AuxUtil {
 		exp=exp.replaceAll("##AUX_EQ##",auxsEqStr);
 		exp=exp.replaceAll("##AUX_END##",auxsEndStr);
 		exp=exp.replaceAll("##AUX_CON##",auxsConStr);
+		exp=exp.replaceAll("##AUX_REP##",auxStrReplaceAll);
 		return exp;
 	} 
 }

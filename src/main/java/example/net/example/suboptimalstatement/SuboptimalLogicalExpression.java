@@ -10,6 +10,12 @@ public class SuboptimalLogicalExpression {
         boolean m = true;
         return (!(l | r | m));
     }
+    
+    public boolean correctExpression2() {
+        boolean l = true;
+        boolean r = false;
+        return (!l & !r);
+    }
 
     public boolean wrongExpression() {
         boolean l = true;

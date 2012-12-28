@@ -7,8 +7,6 @@ import com.jcpa.util.AuxUtil;
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.java.ast.ASTArguments;
 import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
-import net.sourceforge.pmd.lang.java.ast.ASTExpression;
-import net.sourceforge.pmd.lang.java.ast.ASTLiteral;
 import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTName;
 import net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression;
@@ -111,27 +109,27 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 		}
 		//to make question simple,we don't judge if every parameter's type,if args count equal,return true
 		return true;
-//		List<ASTArgumentList> arglistA=argA.findChildNodesWithXPath("./ArgumentList");
-//		List<ASTArgumentList> arglistB=argB.findChildNodesWithXPath("./ArgumentList");
-//		if(isListEmpty(arglistA) || isListEmpty(arglistB)){
-//			return false;
-//		}
-//		//compare argument one by one
-//		List<ASTExpression> expA=arglistA.get(0).findChildNodesWithXPath("./Expression");
-//		List<ASTExpression> expB=arglistB.get(0).findChildNodesWithXPath("./Expression");
-//		if(isListEmpty(expA) || isListEmpty(expB) || expA.size()!=expB.size()){
-//			return false;
-//		}
-//		int expCount=expA.size();
-//		for(int i=0;i<expCount;i++){
-//			if(!isExpTypeEqual(expA.get(i),expB.get(i)))return false;
-//		}
-//		return true;
+/*		List<ASTArgumentList> arglistA=argA.findChildNodesWithXPath("./ArgumentList");
+		List<ASTArgumentList> arglistB=argB.findChildNodesWithXPath("./ArgumentList");
+		if(isListEmpty(arglistA) || isListEmpty(arglistB)){
+			return false;
+		}
+		//compare argument one by one
+		List<ASTExpression> expA=arglistA.get(0).findChildNodesWithXPath("./Expression");
+		List<ASTExpression> expB=arglistB.get(0).findChildNodesWithXPath("./Expression");
+		if(isListEmpty(expA) || isListEmpty(expB) || expA.size()!=expB.size()){
+			return false;
+		}
+		int expCount=expA.size();
+		for(int i=0;i<expCount;i++){
+			if(!isExpTypeEqual(expA.get(i),expB.get(i)))return false;
+		}
+		return true;*/
 	}
 	/**
 	 * judge if two parameter type equal
 	 * */
-	public  boolean isExpTypeEqual(ASTExpression ea,ASTExpression eb) throws Exception{
+/*	public  boolean isExpTypeEqual(ASTExpression ea,ASTExpression eb) throws Exception{
 		//parameter has three types:		1.actual		2.reference		3.expression
 		
 		//actual parameter
@@ -182,11 +180,11 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 			}
 		}
 	}
-	
+	*/
 	/**
 	 * judge parameter equal
 	 * */
-	public  boolean isParameterTypeEqual(ASTLiteral ta,ASTLiteral tb){
+/*	public  boolean isParameterTypeEqual(ASTLiteral ta,ASTLiteral tb){
 		return (ta.isIntLiteral() && tb.isIntLiteral()) || (ta.isCharLiteral() && tb.isCharLiteral()) || (ta.isFloatLiteral() && tb.isFloatLiteral()) || (ta.isStringLiteral() && tb.isStringLiteral());
 	}
 	public  boolean isParameterTypeEqual(ASTLiteral ta,ASTName nb){
@@ -211,34 +209,12 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 		//TODO
 		return false;
 	}
-	
+*/	
 	/**
 	 * get reference parameter type
 	 * */
-	public String getNameType(ASTName n){
-//		String xpath1="//ForStatement/Statement[descendant::*/PrimaryExpression[PrimaryPrefix/Name[##AUX_CON##]][./descendant::*/Arguments]]/preceding-sibling::*[VariableDeclarator/VariableDeclaratorId/@Image=\""+n.getImage()+"\"]/Type";
-//		xpath1=AuxUtil.ExpIntegrate(xpath1, aux);
-//
-//		String xpath2="//BlockStatement[descendant::*/PrimaryExpression[PrimaryPrefix/Name[##AUX_CON##]][./descendant::*/Arguments]]/preceding-sibling::*/LocalVariableDeclaration[VariableDeclarator/VariableDeclaratorId/@Image=\""+n.getImage()+"\"]/Type";
-//		xpath2=AuxUtil.ExpIntegrate(xpath2, aux);
-//
-//		try {
-//			List<?> l1=n.findChildNodesWithXPath(xpath1);
-//			List<?> l2=n.findChildNodesWithXPath(xpath2);
-//			
-//		} catch (JaxenException e) {
-//			e.printStackTrace();
-//			return "";
-//		} 
-
+/*	public String getNameType(ASTName n){
 		return "";
 	}
-	
-	/**
-	 * judge if list is empty
-	 * */
-	public  boolean isListEmpty(List<?> l){
-		if(l==null || l.size()==0)return true;
-		return false;
-	}
+*/
 }

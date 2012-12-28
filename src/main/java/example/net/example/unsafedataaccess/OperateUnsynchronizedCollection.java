@@ -36,20 +36,6 @@ public class OperateUnsynchronizedCollection {
         safeMap.put("K", "V");
     }
 
-    public void CorrectPutUnsafeSet() {
-        synchronized (unsafeSet) {
-            safeSet.add("A");
-        }
-
-        synchronized (unsafeSet) {
-            safeList.add("A");
-        }
-
-        synchronized (safeMap) {
-            safeMap.put("K", "V");
-        }
-    }
-
     public void wrongPutUnsafeSet() {
         unsafeSet.add("A");
         unsafeList.add("A");
