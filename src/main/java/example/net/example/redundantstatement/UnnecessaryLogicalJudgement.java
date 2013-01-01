@@ -55,4 +55,11 @@ public class UnnecessaryLogicalJudgement {
         }
         return signal;
     }
+	
+	public void rightConstant(String propertyElem){
+		String tmpStr = (propertyElem == null) ? null : "123";
+		if (tmpStr == null || tmpStr.equals("")) {
+			tmpStr="345";
+		}
+	}
 }

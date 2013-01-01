@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd>
-    <useProjectRuleSet>true</useProjectRuleSet>
-    <ruleSetFile>C:\Users\Code\Downloads\2012_11_19_test.plugin.xml</ruleSetFile>
+    <useProjectRuleSet>false</useProjectRuleSet>
+    <ruleSetFile>.ruleset</ruleSetFile>
+    <rules>
+        <rule>
+            <name>ProbeSizeOfArrayOrCollectionBeforeForStatement</name>
+            <ruleset>jcpa pmd rules</ruleset>
+        </rule>
+    </rules>
     <includeDerivedFiles>false</includeDerivedFiles>
-    <violationsAsErrors>false</violationsAsErrors>
+    <violationsAsErrors>true</violationsAsErrors>
+    <fullBuildEnabled>true</fullBuildEnabled>
 </pmd>
