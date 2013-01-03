@@ -7,4 +7,7 @@ public class DBManager {
 		return null;
 	}
 
+	public static void someCombinativeFunction(String key){
+		
+	}
 }

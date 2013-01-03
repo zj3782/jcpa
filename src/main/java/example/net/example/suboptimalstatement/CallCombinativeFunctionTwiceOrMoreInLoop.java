@@ -11,6 +11,13 @@ public class CallCombinativeFunctionTwiceOrMoreInLoop {
 			processRow(callCombinativeFunctionTwiceOrMoreInLoop);
 		}
 	}
+	
+	public void methodB(){
+		String[] keys = { "A", "B", "C", "D" };
+		for (String key: keys) {
+			DBManager.someCombinativeFunction(key);
+		}
+	}
 
 	private void processRow(
 			CallCombinativeFunctionTwiceOrMoreInLoop callCombinativeFunctionTwiceOrMoreInLoop) {

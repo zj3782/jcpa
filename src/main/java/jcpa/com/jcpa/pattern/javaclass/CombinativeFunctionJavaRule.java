@@ -29,15 +29,15 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 			//inloop
 			String xpath1 = "//ForStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix";
 			xpath1 += "[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount>\"0\"]]";
-			xpath1 += "/Name[##AUX_CON##]";
+			xpath1 += "/Name[##AUX_REG##]";
 			xpath1 += "|";
 			xpath1 += "//WhileStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix";
 			xpath1 += "[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount>\"0\"]]";
-			xpath1 += "/Name[##AUX_CON##]";
+			xpath1 += "/Name[##AUX_REG##]";
 			xpath1 += "|";
 			xpath1 += "//DoStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix";
 			xpath1 += "[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount>\"0\"]]";
-			xpath1 += "/Name[##AUX_CON##]";
+			xpath1 += "/Name[##AUX_REG##]";
 			xpath1 = AuxUtil.ExpIntegrate(xpath1, aux);
 			//System.out.println(xpath1);
 			List<Node> lst = node.findChildNodesWithXPath(xpath1);
@@ -45,7 +45,7 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 				addViolation(data, n);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("Exception:"+e.getMessage());
 		}
 		return data;
 	}
@@ -54,7 +54,7 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 		try {
 			if(aux==null || aux.equals(""))return;
 			methodName=node.getMethodName();
-			String xpath="//MethodDeclaration[MethodDeclarator/@Image=\""+methodName+"\"]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments][PrimaryPrefix/Name[##AUX_CON##]]";
+			String xpath="//MethodDeclaration[MethodDeclarator/@Image=\""+methodName+"\"]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments][PrimaryPrefix/Name[##AUX_REG##]]";
 			xpath=AuxUtil.ExpIntegrate(xpath, aux);
 			
 			//all method invoke node
@@ -73,7 +73,8 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 			    }
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("Exception:"+e.getMessage());
 		}
 	}
 	/**

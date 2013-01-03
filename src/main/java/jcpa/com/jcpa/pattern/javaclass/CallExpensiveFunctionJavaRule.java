@@ -16,7 +16,7 @@ public class CallExpensiveFunctionJavaRule extends JcpaAbstractJavaRule {
 			String aux=(String) getProperty(getPropertyDescriptor("aux"));
 			if(aux==null || aux.equals(""))return data;
 			
-			String xpath="//MethodDeclaration[MethodDeclarator/@Image=\""+node.getMethodName()+"\"]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments][PrimaryPrefix/Name[##AUX_CON##]]";
+			String xpath="//MethodDeclaration[MethodDeclarator/@Image=\""+node.getMethodName()+"\"]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments][PrimaryPrefix/Name[##AUX_REG##]]";
 			xpath=AuxUtil.ExpIntegrate(xpath, aux);
 			
 			//all method invoke node
@@ -39,7 +39,7 @@ public class CallExpensiveFunctionJavaRule extends JcpaAbstractJavaRule {
 			    }
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("Exception:"+e.getMessage());
 		}
 		return data;
 	}
