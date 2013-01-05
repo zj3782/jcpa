@@ -109,6 +109,22 @@ public class CallExpensiveFunctionTwiceOrMoreInMethod {
 		}
 	}
 	
+	public void correctCallFunctionIncase(int i){
+		switch(i){
+		case 1:
+			i++;
+			costMethod();
+			break;
+		case 2:
+			i+=3;
+			costMethod();
+			break;
+		default:
+			i++;
+			break;
+		}
+	}
+	
 	public void costMethod(){}
 	public void costMethod1(){}
 	public void costMethod2(){}
