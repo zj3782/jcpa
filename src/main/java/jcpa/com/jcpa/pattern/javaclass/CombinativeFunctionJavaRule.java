@@ -59,7 +59,7 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 			
 			//all method invoke node
 			List<?> lst = node.findChildNodesWithXPath(xpath);
-			int len = lst.size();			
+			int len = lst.size();	
 			
 			for(int i = 0; i < len; i++) {
 			    for(int j = i + 1; j < len; j++) {
@@ -67,7 +67,9 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 			    	ASTPrimaryExpression b = (ASTPrimaryExpression) lst.get(j);
 			    	
 			        if(isInvokeEqual(a, b)) {
-			        	addViolation(data, a);
+			        	if(!isDiffJudgeBranch(a,b) && !isDiffCaseBranch(a,b)){//judge if a is in if block and b is in else block or different case block
+			        		addViolation(data, a);
+			        	}
 			        	break;
 			        }
 			    }

@@ -5,10 +5,7 @@ import java.util.List;
 import com.jcpa.util.AuxUtil;
 
 import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.java.ast.ASTSwitchStatement;
-import net.sourceforge.pmd.lang.java.ast.ASTIfStatement;
 import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTStatement;
 
 public class CallExpensiveFunctionJavaRule extends JcpaAbstractJavaRule {
 	@Override
@@ -82,35 +79,5 @@ public class CallExpensiveFunctionJavaRule extends JcpaAbstractJavaRule {
         if(imgb != null && !imgb.equals(imga)) return false;
 
         return true;
-    }
-    /**
-     * judge if two node in different if Branches
-     * */
-    public static boolean isDiffJudgeBranch(Node na,Node nb){
-    	List<ASTIfStatement> laIf=na.getParentsOfType(ASTIfStatement.class);
-    	for(ASTIfStatement i:laIf){
-    		ASTStatement s=i.getFirstChildOfType(ASTStatement.class);
-    		if(isParent(s,nb)){//in same branch
-    				return false;
-    		}
-    		if(isParent(i,s)){
-    				return true;
-    		}
-    	}
-    	return false;
-    }
-    /**
-     * judge if two node in different case branches
-     * */
-    public static boolean isDiffCaseBranch(Node na,Node nb){
-    	List<ASTSwitchStatement> laS=na.getParentsOfType(ASTSwitchStatement.class);
-    	for(ASTSwitchStatement s:laS){
-    		if(isParent(s,nb)){//na is in same switch block with nb
-    			//TODO:judge na and nb in same switch block and also in same case block.
-        		//TODO:judge is case block has break statement
-    			return true;
-    		}
-    	}
-    	return false;
     }
 }

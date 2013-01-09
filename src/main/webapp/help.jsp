@@ -167,16 +167,16 @@ function showTxt(cat){
 					<p>Click the Add button on the top left of the list.You can choose what type of patterns you want to add.</p>
 					<p><B>a.xpath pattern</B></p>
 					<img src="image/patterns1-0.png" />
-					<p><span style="color:red;">Attention:</span>If you meet the following situation--you want to find the line which call some function such as 'method1'、'method2'.</p>
+					<p><span style="color:red;">Attention:</span></p>
+					<p>1)If you want to find out which line calls function such as 'method1'、'method2'.</p>
 					<p>You can write the expression like this:<span style="color:green;">//PrimarySuffix[@Image='method1' or @Image='method2']</span>.</p>
-					<p>You can also write like this:<br>
+					<p>You can also write like this in the page:<br>
 						Expression: <span style="color:green;">//PrimarySuffix[##AUX_EQ##]</span><br>
 						Auxiliary: <span style="color:green;">method1,method2</span><br>
 						That means you can write "##AUX_EQ##" in the expression to occupy the position and auxiliary will take its position latter.
 					</p>
-					<p>What if I need more than one "##AUX_EQ##" in the expression ? </p>
-					<p>For example:</p>
-					<p>1)I want to replace the first position with '@Image="method1" or @Image="method2"' 
+					<p>What if I need more than one "##AUX_EQ##" in the expression ? For example:</p>
+					<p>I want to replace the first position with '@Image="method1" or @Image="method2"' 
 						and replace the second position with '@Image="method3" or @Image="method4"'
 						and replace the second position with '@Image="method1" or @Image="method2" or @Image="method3" or @Image="method4"':<br>
 						Expression: <span style="color:green;">//PrimarySuffix[##AUX_EQ_0##]..........[##AUX_EQ_1##]......[##AUX_EQ##]</span><br>
@@ -186,7 +186,8 @@ function showTxt(cat){
 						"##AUX_EQ_1##"means that position should be replaced by the second part of the auxiliary filed and so on.<br>
 						"##AUX_EQ##" means this position should be replaced by all of the auxiliary filed.
 					</p>
-					<p>2)I want to replace the first position with 'ends-with(@Image,"fix1") or ends-with(@Image,"fix2")' 
+					<p>2)If you want to find out which line calls function whose name end with  specific string such as 'fix1'.For example:<br>
+						I want to replace the first position with 'ends-with(@Image,"fix1") or ends-with(@Image,"fix2")' 
 						and replace the second position with 'ends-with(@Image,"fix3") or ends-with(@Image,"fix4")' 
 						and replace the second position with "ends-with(@Image,"fix1") or ends-with(@Image,"fix2") or ends-with(@Image,"fix3") or ends-with(@Image,"fix4")":<br>
 						Expression: <span style="color:green;">//PrimarySuffix[##AUX_END_0##]..........[##AUX_END_1##]......[##AUX_END##]</span><br>
@@ -196,7 +197,8 @@ function showTxt(cat){
 						"##AUX_END_1##"means that position should be replaced by the second part of the auxiliary filed and so on.<br>
 						"##AUX_END##" means this position should be replaced by all of the auxiliary filed.
 					</p>
-					<p>3)I want to replace the first position with 'contains(@Image,"fix1") or contains(@Image,"fix2")' 
+					<p>3)If you want to find out which line calls function whose name contains  specific string such as 'fix1'.For example:<br>
+						I want to replace the first position with 'contains(@Image,"fix1") or contains(@Image,"fix2")' 
 						and replace the second position with 'contains(@Image,"fix3") or contains(@Image,"fix4")' 
 						and replace the second position with "contains(@Image,"fix1") or contains(@Image,"fix2") or contains(@Image,"fix3") or contains(@Image,"fix4")":<br>
 						Expression: <span style="color:green;">//PrimarySuffix[##AUX_CON_0##]..........[##AUX_CON_1##]......[##AUX_CON##]</span><br>
@@ -205,20 +207,26 @@ function showTxt(cat){
 						"##AUX_CON_0##"means that position should be replaced by the first part of the auxiliary filed,<br>
 						"##AUX_CON_1##"means that position should be replaced by the second part of the auxiliary filed and so on.<br>
 						"##AUX_CON##" means this position should be replaced by all of the auxiliary filed.</p>
-					<p>4)If you just want to replace the aux string in the expression,just use like this:<br>
-						##AUX_REP##、##AUX_REP_0##、##AUX_REP_1##<br/>
-						Expression: <span style="color:green;">//PrimarySuffix[##AUX_REP_0##]..........[##AUX_REP_1##]......[##AUX_REP##]</span><br>
-						Auxiliary: <span style="color:green;">fix1,fix2##fix3##</span><br>
-						Result: <span style="color:green;">//PrimarySuffix[fix1,fix2]..........[fix3]......[fix1,fix2##fix3##]</span>
+					<p>4)If you just want to replace the aux string in the expression,For example:<br>
+						I want to find out whic method need more than two parameter or need none;
+						Expression: <span style="color:green;">//PrimarySuffix/Argument[@ArgumentCount>##AUX_REP_0## or @ArgumentCount=##AUX_REP_1##]</span><br>
+						Auxiliary: <span style="color:green;">2##0##</span><br>
+						Then ##AUX_REP_0## will be replaced by 2 and ##AUX_REP_1## will be replaced by 0
 					</p>
-					<p>5)If you want to use regular auxiliary,you can use "##AUX_REG_0##"、"##AUX_REG_1##"、"##AUX_REG##"<br>
-						Expression: <span style="color:green;">//PrimarySuffix[##AUX_REG_0##]..........[##AUX_REG_1##]......[##AUX_REG##]</span><br>
-						Auxiliary: <span style="color:green;">^in[A-Z].*##^in$,^out$##</span><br>
-						Result: <span style="color:green;">//PrimarySuffix[pmd:matches(@Image,'^in[A-Z].*')]..........[pmd:matches(@Image,'^in$','^out$')]......[pmd:matches(@Image,'^in[A-Z].*','^in$','^out$')]</span>
+					<p>5)What if I want to find out which line calls function whose name start as 'DB' and end as 'er'.<br>
+						Expression: <span style="color:green;">//PrimarySuffix[##AUX_REG_0##]</span><br>
+						Auxiliary: <span style="color:green;">^DB(.)*er$##^in[A-Z].*##^in$,^out$##</span><br>
+						Result: <span style="color:green;">//PrimarySuffix[pmd:matches(@Image,'^DB(.)*er$')]</span><br>
+						That means that if you used ##AUX_REG## or ##AUX_REG_0## in the expression,you can write regular string in the auxiliary filed.
 					</p>
+					<p>6)I want to find out which line call function like this:"obj.func();".But obj must be instance of Class MyObj </p>
+					Expression: <span style="color:green;">//BlockStatement[##AUX_CMI_0##]</span><br>
+					Auxiliary: <span style="color:green;">MyObj->func##String->split,JsonObject->toString##</span><br>
+					"MyObj->func" means that instance of MyObj calls method of func.If you want to use regular string in the auxiliary filed,you can use ##AUX_CMI_REG_0## in the expression.<br>
+					<font style="color:red">Note:You must put "##AUX_CMI_0##" into "BlockStatement[]".</font>That is because the ##AUX_CMI_0## will be replaced by some xpath code,and this code works under BlockStatement.
 					<p><B>b.java pattern</B></p>
 					<img src="image/patterns1-1.png" />
-					<p>If you want to add a java pattern,you must choose which class to handle this pattern.And the class can access the auxiliary field.</p>
+					<p>If you want to add a java pattern,you must choose which class to handle this pattern.If you want to see how to add a new class to hanlde this pattern,see "How to add a java pattern" in "Customize"</p>
 					<p>(2) delete pattern</p>
 					<p>If you want to delete a single pattern in the pattern line, you can use the right-click menu to delete.</p>
 					<p>If you want to delete many patterns in the pattern line, you can click the Delete button on the top left of the list to delete the patterns selected.</p>

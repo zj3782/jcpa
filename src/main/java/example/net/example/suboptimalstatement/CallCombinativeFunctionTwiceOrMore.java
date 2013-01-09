@@ -45,5 +45,39 @@ public class CallCombinativeFunctionTwiceOrMore {
         cominativeMethod2(c,d);
     }
 
-   
+    public void correctCallMethods2(int a) {
+    	if(a==1){
+    		cominativeMethod2("A","B");
+    	}else if(a==2){
+    		cominativeMethod2("C","D");
+    	}else{
+    		String c="",d="";
+    		cominativeMethod2(c,d);
+    	}
+    }
+    public void correctCallMethods3(int a) {
+    	switch(a){
+    	case 1:
+    		cominativeMethod2("A","B");
+    		break;
+    	case 2:
+    		cominativeMethod2("C","D");
+    		break;
+    	default:
+    		String c="",d="";
+    		cominativeMethod2(c,d);
+    	}
+    }
+    public void wrongCallMethods3(int a) {
+    	switch(a){
+    	case 1:
+    		cominativeMethod2("A","B");
+    	case 2:
+    		cominativeMethod2("C","D");
+    		break;
+    	default:
+    		String c="",d="";
+    		cominativeMethod2(c,d);
+    	}
+    }
 }

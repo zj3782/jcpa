@@ -46,6 +46,7 @@ public class CallExpensiveFunctionTwiceOrMoreInMethod {
 			if(a==1){
 				costMethod();
 			}
+			costMethod();
 		}else if(a==2){
 			costMethod1();
 		}else if(a==3){
@@ -58,16 +59,11 @@ public class CallExpensiveFunctionTwiceOrMoreInMethod {
 		int a=12;
 		if(a==1){
 			if(a==1){
-				costMethod();
+				factorial(1);
 			}
-			costMethod();
 		}else if(a==2){
 			factorial(1);
 			factorial(1);
-		}else if(a==3){
-			costMethod();
-		}else{
-			costMethod();
 		}
 	}
 	public void correctCallFunctions4(){
@@ -115,6 +111,23 @@ public class CallExpensiveFunctionTwiceOrMoreInMethod {
 			i++;
 			costMethod();
 			break;
+		case 2:
+			i+=3;
+			costMethod();
+			break;
+		default:
+			i++;
+			break;
+		}
+	}
+	public void wrongCallFunctionIncase(int i){
+		switch(i){
+		case 1:
+			costMethod();
+			for(int j=0;j<10;j++){
+				i++;
+				if(j==2)break;
+			}
 		case 2:
 			i+=3;
 			costMethod();
