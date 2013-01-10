@@ -19,6 +19,17 @@ public class SynchronizeCollectionWithLockVariable {
     private final Lock r = rwl.readLock();
     private final Lock w = rwl.writeLock();
 
+    public Data correctGet(String key) {
+        r.lock();
+        try {
+        	DBManager db=new DBManager();
+        	db.process();
+            return m.get(key);
+        } finally {
+            r.unlock();
+        }
+    }
+    
     public Data get(String key) {
         r.lock();
         try {
@@ -73,5 +84,8 @@ public class SynchronizeCollectionWithLockVariable {
             this.name = name;
         }
 
+    }
+    class DBManager{
+    	public void process(){}
     }
 }
