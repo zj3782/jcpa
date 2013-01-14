@@ -14,7 +14,7 @@ public class CallExpensiveFunctionJavaRule extends JcpaAbstractJavaRule {
 			String aux=(String) getProperty(getPropertyDescriptor("aux"));
 			if(aux==null || aux.equals(""))return data;
 			
-			String xpath="//MethodDeclaration[MethodDeclarator/@Image=\""+node.getMethodName()+"\"]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments][PrimaryPrefix/Name[##AUX_REG##]]";
+			String xpath="./descendant::*/BlockStatement/descendant::*/PrimaryExpression[##AUX_CMI_REG##]";
 			xpath=AuxUtil.ExpIntegrate(xpath, aux);
 			
 			//all method invoke node

@@ -26,7 +26,7 @@ public class ProbeSizeOfArrayOrCollectionBeforeForStatement {
     
     public void correctUsage(){
     	List<String> services=new LinkedList<String>();
-    	if (services != null && services.size() > 0) {
+    	if (services.size() > 0) {
     	       List<String> temp = new ArrayList<String>();
     	       for (String elem : services) {
     	                  temp.add(elem);

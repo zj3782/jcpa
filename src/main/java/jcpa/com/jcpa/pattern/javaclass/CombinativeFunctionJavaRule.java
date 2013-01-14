@@ -27,17 +27,11 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 				MyMethodVisit(m,data);
 			}
 			//inloop
-			String xpath1 = "//ForStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix";
-			xpath1 += "[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount>\"0\"]]";
-			xpath1 += "/Name[##AUX_REG##]";
+			String xpath1 = "//ForStatement/Statement/descendant::*/BlockStatement[##AUX_CMI_REG##]";
 			xpath1 += "|";
-			xpath1 += "//WhileStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix";
-			xpath1 += "[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount>\"0\"]]";
-			xpath1 += "/Name[##AUX_REG##]";
+			xpath1 += "//WhileStatement/Statement/descendant::*/BlockStatement[##AUX_CMI_REG##]";
 			xpath1 += "|";
-			xpath1 += "//DoStatement/Statement/descendant::*/PrimaryExpression/PrimaryPrefix";
-			xpath1 += "[following-sibling::*[position()=1 and self::PrimarySuffix]/Arguments[@ArgumentCount>\"0\"]]";
-			xpath1 += "/Name[##AUX_REG##]";
+			xpath1 += "//DoStatement/Statement/descendant::*/BlockStatement[##AUX_CMI_REG##]";
 			xpath1 = AuxUtil.ExpIntegrate(xpath1, aux);
 			//System.out.println(xpath1);
 			List<Node> lst = node.findChildNodesWithXPath(xpath1);
@@ -54,8 +48,7 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 		try {
 			if(aux==null || aux.equals(""))return;
 			methodName=node.getMethodName();
-			String xpath="//MethodDeclaration[MethodDeclarator/@Image=\""+methodName+"\"]/descendant::*/PrimaryExpression[PrimarySuffix/Arguments][PrimaryPrefix/Name[##AUX_REG##]]";
-			xpath=AuxUtil.ExpIntegrate(xpath, aux);
+			String xpath="./descendant::*/BlockStatement/descendant::*/PrimaryExpression[##AUX_CMI_REG##]";
 			
 			//all method invoke node
 			List<?> lst = node.findChildNodesWithXPath(xpath);

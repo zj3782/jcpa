@@ -10,4 +10,7 @@ public class DBManager {
 	public static void someCombinativeFunction(String key){
 		
 	}
+	public void someCombinativeFunction2(String key){
+		
+	}
 }

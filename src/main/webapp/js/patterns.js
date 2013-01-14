@@ -20,6 +20,7 @@ $(document).ready(function() {
         buttons: [
               { name: 'Add', displayname: "Add", onpress: toolbarItem_onclick },
               { name: 'Delete', displayname: "Delete",  onpress: toolbarItem_onclick },
+			  /*{ name: 'Check', displayname: "Check",  onpress: toolbarItem_onclick },*/
               { name: 'Rulesets', displayname: "Rulesets",  onpress: toolbarItem_onclick }
         ],
         page:initPage,
@@ -32,7 +33,8 @@ $(document).ready(function() {
         rpOptions: [12, 20, 30, 50, 100], //options of results per page
         showCheckbox: true,
         onAddRow:onAddRowData,
-        onRowProp:contextmenu
+        onRowProp:contextmenu,
+        onRowChecked:rowcheck
     };
     flexTB=$("#patternTB").flexigrid(option);
     if($.browser.msie){
@@ -47,7 +49,7 @@ $(document).ready(function() {
 var menu = { width: 150, items: [
      { text: "View", icon: "css/images/view.png", alias: "contextmenu-view", action: contextMenuItem_click },
      { text: "Edit", icon: "css/images/edit.png", alias: "contextmenu-edit", action: contextMenuItem_click },
-     { text: "Delete", icon: "css/images/delete.png", alias: "contextmenu-delete", action: contextMenuItem_click },
+	 { text: "Delete", icon: "css/images/delete.png", alias: "contextmenu-delete", action: contextMenuItem_click }
   ],onContextMenu:function(event,e){
   		var target=event.currentTarget;
   		var id = $(target).attr("id").substr(3);
@@ -87,7 +89,7 @@ function toolbarItem_onclick(cmd, grid) {
         AddPattern();
     }else if (cmd == "Delete") {
     	delPattern(flexTB.flexGetCheckedRows());
-    }else if(cmd=="Rulesets"){
+	}else if(cmd=="Rulesets"){
     	ManageRulesets();
     }
 }
@@ -104,7 +106,71 @@ function onAddRowData(row){
 		row.cell[i]=htm2specil(row.cell[i]);
 	}
 	row.cell[1]="<a href='javascript:;' onclick='viewPatternById("+row.id+");'>"+row.cell[1]+"</a>";
+	
+	for(var i=0;i<ckids.length;i++){
+		if(ckids[i]==row.id){
+			row.ck=true;
+		}
+	}
+	
 	return row;
+}
+/**rowcheck*/
+var ckids=[];
+function rowcheck(){
+	var id=$(this).val();
+	for(var i=0;i<ckids.length;i++){
+		if(ckids[i]==id){
+			if(!this.checked){
+				ckids.splice(i,1);
+			}
+			return;
+		}
+	}
+	if(this.checked)ckids.push(id);
+}
+/**check if pattern expression is right*/
+function checkPattern(rows){
+	if(!rows || !rows.length){
+		alert("Please select one pattern or more ones to check.");
+		return;
+	}
+	var strPattern="";
+	var strIds="";
+	var ids=[];
+	for(var i=0;i<rows.length;i++){
+		strPattern+=rows[i].cell[1]+"<br>";
+		strIds+=","+rows[i].id;
+		ids.push(rows[i].id);
+	}
+	$("#check_patterns").html(strPattern);
+	$("#check_info_tb tbody").html("");
+	
+	artDialog({
+		title:"Checking patterns...",
+		content:ID('check_pattern_div'),
+		lock:true,
+		id:"check_pattern"
+	}).show();
+	$("#check_pattern_div").mask("checking...");
+	$.post("Pattern.do",{"method":"check","ids":strIds},function(result){
+		if(result.status){
+			$("#check_patterns").html("");
+			var htm="";
+			for(var i=0;i<result.data.length;i++){
+				htm+="<tr><td>";
+				htm+="<a href='javascript:;' onclick='viewPatternById("+result.data[i].id+");'>"+result.data[i].name+"</a>";
+				htm+="</td>";
+				htm+="<td>";
+				htm+=result.data[i].ok;
+				htm+="</td></tr>";
+			}
+			$("#check_info_tb tbody").html(htm);			
+		}else{
+			artDialog({title:"Check fail",content:result.info,icon:"error"});
+		}
+		$("#check_pattern_div").unmask();
+	},"json");
 }
 /**change pattern type and change visiable*/
 function changePatternType(type){
@@ -427,14 +493,13 @@ function AddRuleSet(){
 			var type=(ID("AddPatternAll").checked)?"all":(ID("AddPatternSelect").checked)?"selected":"custom";
 			var cond="";
 			if(type=="selected"){
-				var rows=flexTB.flexGetCheckedRows();
-				if(rows.length<=0){
+				if(ckids.length<=0){
 					alert("There is no pattern selected.");
 					return;
 				}
-				cond+="ID in ( "+rows[0].id;
-				for(var i=1;i<rows.length;i++){
-					cond+=","+rows[i].id;
+				cond+="ID in ( "+ckids[0];
+				for(var i=1;i<ckids.length;i++){
+					cond+=","+ckids[i];
 				}
 				cond+=")";
 			}else{

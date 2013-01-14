@@ -161,6 +161,10 @@ function Analysis(){
 	data.user=$("#user").val();
 	data.pwd=$("#pwd").val();
 	data.rule=$("#rule").val();
+	if(data.url=="" || data.rule==""){
+		alert("Url and Ruleset file must not be empty!");
+		return;
+	}
 	$.post("Analysis.do",data,function(result){
 		if(result.status){
 			IntervalGetStep();

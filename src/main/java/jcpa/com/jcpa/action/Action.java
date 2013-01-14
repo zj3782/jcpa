@@ -51,7 +51,7 @@ public class Action {
 			_cleanup();
 		} catch (Exception e) {
 			e.printStackTrace();
-			echo(e.toString());
+			error(e.toString());
 		}
 	}
 	

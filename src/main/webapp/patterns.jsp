@@ -136,9 +136,18 @@ initPage=<%=sPage%>;
 		<span class="span-2">Example:</span><div id="patternExampleDiv" class="span-15  h80 oAuto cGreen"></div>
 	</div>
 </div>
+<!--check pattern-->
+<style>#check_info_tb td{border-collapse: collapse; border:1px dotted #A8D8EB;background:#F5FFEF;padding:5px;}</style>
+<div id="check_pattern_div"style="display:none;" class="w400 oAuto">
+	<h3>You are checking those patterns:</h3>
+	<div id="check_patterns"></div>
+	<table id="check_info_tb" class="w100p" cellspacing="0" cellpadding="5">
+		<tbody></tbody>
+	</table>
+</div>
 <!-- manage ruleset -->
 <style>#rulesets #rulesetsTB td{border-collapse: collapse; border:1px dotted #A8D8EB;background:#F5FFEF;padding:5px;}</style>
-<div id="rulesets" style="display:none;" class="h300 w400 oAuto">
+<div id="rulesets" style="display:none;" class="w400 oAuto">
 	<div>
 		<a href="javascript:;" onclick="AddRuleSet();">Generate</a>
 		<a href="javascript:;" onclick="UpRuleSet();">Upload</a>

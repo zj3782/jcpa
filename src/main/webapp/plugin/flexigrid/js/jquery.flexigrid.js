@@ -374,10 +374,14 @@
                 	if(typeof(p.onAddRow)=="function"){
                 		row=p.onAddRow(row);
                 	}
-            		tbhtml.push("<tr id='", "row", row.id, "'");
+            		tbhtml.push("<tr id='", "row", row.id, "'"," class=' ");
             		if (i % 2 && p.striped) {
-            			tbhtml.push(" class='erow'");
+            			tbhtml.push("erow ");
             		}
+            		if(row.ck==true){
+            			tbhtml.push("trSelected ");
+            		}
+            		tbhtml.push("'");
             		if(row.style)tbhtml.push(" style='"+row.style+"'");
             		tbhtml.push(">");
             		var trid = row.id;
@@ -400,7 +404,7 @@
             			}
             			div.push("'>");
             			if (idx == "-1") { //checkbox
-            				div.push("<input type='checkbox' id='chk_", row.id, "' class='itemchk' value='", row.id, "'/>");
+            				div.push("<input type='checkbox' id='chk_", row.id, "' class='itemchk' ",(row.ck!=true)?"":"checked"," value='", row.id, "'/>");
             				if (tdclass != "") {
             					tdclass += " chboxtd";
             				} else {
@@ -677,7 +681,7 @@
                     if (pth.process)
                     { pth.process(tdDiv, pid); }
                 }
-                $("input.itemchk", tdDiv).each(function() {
+                /*$("input.itemchk", tdDiv).each(function() {
                     $(this).click(function() {
                         if (this.checked) {
                             $(ptr).addClass("trSelected");
@@ -689,7 +693,7 @@
                             p.onRowChecked.call(this);
                         }
                     });
-                });
+                });*/
                 $(this).empty().append(tdDiv).removeAttr('width'); //wrap content
                 //add editable event here 'dblclick',如果需要可编辑在这里添加可编辑代码 
             },
@@ -754,6 +758,16 @@
                 });
             	return rows;
             },
+			getCheckedRowIds: function() {//获取选中的行id
+            	if(!p.showCheckbox)return [];
+            	var ids=[];
+            	$("tr",t).each(function() {
+            		var id=$(this).attr("id").substr(3);
+            		if($("#chk_"+id,this).attr("checked")!="checked")return;
+                    ids.push(id);
+                });
+            	return ids;
+            },
            /**设置选中*/
             check:function(ids){
             	if(!p.showCheckbox || ids==null || typeof(ids)=='undefined')return;
@@ -761,10 +775,16 @@
             		for(var i=0;i<ids.length;i++){
             			$("#chk_"+ids[i],t).attr("checked","checked");
             			$("#row"+ids[i],t).addClass("trSelected");
+            			if (p.onRowChecked) {
+                            p.onRowChecked.call(document.getElementById("chk_"+ids[i]));
+                        }
             		}
             	}else{
             		$("#chk_"+ids,t).attr("checked","checked");
             		$("#row"+ids,t).addClass("trSelected");
+            		if (p.onRowChecked) {
+                        p.onRowChecked.call(document.getElementById("chk_"+ids));
+                    }
             	}
             },
             /**设置取消选中*/
@@ -774,13 +794,20 @@
             		for(var i=0;i<ids.length;i++){
             			$("#chk_"+ids[i],t).removeAttr("checked");
             			$("#row"+ids[i],t).removeClass("trSelected");
+            			if (p.onRowChecked) {
+                            p.onRowChecked.call(document.getElementById("chk_"+ids[i]));
+                        }
             		}
             	}else if(typeof(ids)=='undefined'){
             		$(".chboxtd input[type='checkbox']",t).removeAttr("checked");
             		$("tr").removeClass("trSelected");
+            		checkAllOrNot();
             	}else{
             		$("#chk_"+ids,t).removeAttr("checked");
             		$("#row"+ids,t).removeClass("trSelected");
+            		if (p.onRowChecked) {
+                        p.onRowChecked.call(document.getElementById("chk_"+ids));
+                    }
             	}
             },
             /**获取列数zhujie add*/
@@ -1567,6 +1594,12 @@
     $.fn.flexGetCheckedRows = function() {
         if (this[0].grid) {
             return this[0].grid.getCheckedRows();
+        }
+        return [];
+    };
+	$.fn.flexGetCheckedRowIds = function() {
+        if (this[0].grid) {
+            return this[0].grid.getCheckedRowIds();
         }
         return [];
     };

@@ -19,6 +19,14 @@ public class CallCombinativeFunctionTwiceOrMoreInLoop {
 		}
 	}
 
+	public void methodC(){
+		String[] keys = { "A", "B", "C", "D" };
+		for (String key: keys) {
+			DBManager abc=new DBManager();
+			abc.someCombinativeFunction2(key);
+		}
+	}
+	
 	private void processRow(
 			CallCombinativeFunctionTwiceOrMoreInLoop callCombinativeFunctionTwiceOrMoreInLoop) {
 		// TODO Auto-generated method stub

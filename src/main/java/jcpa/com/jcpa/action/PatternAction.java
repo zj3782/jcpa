@@ -37,6 +37,7 @@ public class PatternAction extends Action{
     	MethodsPriority.put("add",1);
     	MethodsPriority.put("delete",1);
     	MethodsPriority.put("update",1);
+    	MethodsPriority.put("check",2);
     	MethodsPriority.put("get",2);
     	MethodsPriority.put("page",2);
     	MethodsPriority.put("rulesets",2);
@@ -163,6 +164,20 @@ public class PatternAction extends Action{
 		}else{
 			error("Pattern Update Fail");
 		}
+	}
+	/**
+	 * check pattern
+	 * */
+	public void check() throws Exception{
+		String ids=request.getParameter("ids");
+		String[] idArr=ids.split(",");
+		ids="";
+		for(String id:idArr){
+			ids+=id+",";
+		}
+		if(ids.length()>0)ids=ids.substring(0,ids.length()-1);
+		
+		error("Not implemented.");
 	}
 	/**
 	 * get pattern by id
