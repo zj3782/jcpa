@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /*
- * Wrong occurrences: 2;
+ * Wrong occurrences: 3;
  */
 public class OperateUnsynchronizedCollection {
     Set<String> unsafeSet = null;

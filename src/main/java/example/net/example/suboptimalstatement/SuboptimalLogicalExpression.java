@@ -1,7 +1,7 @@
 package net.example.suboptimalstatement;
 
 /*
- * Wrong occurrences: 2;
+ * Wrong occurrences: 1;
  */
 public class SuboptimalLogicalExpression {
     public boolean correctExpression() {

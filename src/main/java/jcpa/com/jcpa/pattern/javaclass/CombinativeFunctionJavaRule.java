@@ -49,6 +49,7 @@ public class CombinativeFunctionJavaRule extends JcpaAbstractJavaRule {
 			if(aux==null || aux.equals(""))return;
 			methodName=node.getMethodName();
 			String xpath="./descendant::*/BlockStatement/descendant::*/PrimaryExpression[##AUX_CMI_REG##]";
+			xpath = AuxUtil.ExpIntegrate(xpath, aux);
 			
 			//all method invoke node
 			List<?> lst = node.findChildNodesWithXPath(xpath);

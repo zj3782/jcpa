@@ -10,7 +10,7 @@ public class ReclaimMemorySpace {
 
     // It is correct
     public ReclaimMemorySpace() {
-        String field = null;
+        field = null;
     }
 
     public String correctSetNull() {
@@ -32,4 +32,12 @@ public class ReclaimMemorySpace {
         question = null;
         return what;
     }
+
+	public String getField() {
+		return field;
+	}
+
+	public void setField(String field) {
+		this.field = field;
+	}
 }

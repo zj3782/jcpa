@@ -1,7 +1,7 @@
 package net.example.suboptimalstatement;
 
 /*
- * Wrong occurrences: 1;
+ * Wrong occurrences: 4;
  */
 public class CallCombinativeFunctionTwiceOrMoreInLoop {
 	public void methodA() {

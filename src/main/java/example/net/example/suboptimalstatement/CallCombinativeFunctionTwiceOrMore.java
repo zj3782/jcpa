@@ -1,7 +1,7 @@
 package net.example.suboptimalstatement;
 
 /*
- * Wrong occurrences: 2;
+ * Wrong occurrences: 4;
  */
 public class CallCombinativeFunctionTwiceOrMore {
 	
@@ -14,7 +14,14 @@ public class CallCombinativeFunctionTwiceOrMore {
      void cominativeMethod(String[][] s) {
 
      }
+     void cominativeMethod(String s1,String s2) {
 
+     }
+     void cominativeMethod(String[] s1,String[] s2) {
+
+     }
+     
+     
     public void correctCallMethods() {
         cominativeMethod(new String[] { "A", "B" });
     }
@@ -23,61 +30,53 @@ public class CallCombinativeFunctionTwiceOrMore {
         cominativeMethod("A");
         cominativeMethod("B");
     }
-
-   
-    void cominativeMethod2(String s1,String s2) {
-
-    }
-    void cominativeMethod2(String[] s1,String[] s2) {
-
-    }
     
     public void correctCallMethods2() {
         cominativeMethod(new String[][] { {"A", "B"},{"C","D"}});
     }
     
-    
-    
     public void wrongCallMethods2() {
     	String c="",d="";
-        cominativeMethod2("A","B");
-        cominativeMethod2("C","D");
-        cominativeMethod2(c,d);
+        cominativeMethod("A","B");
+        cominativeMethod("C","D");
+        cominativeMethod(c,d);
     }
 
-    public void correctCallMethods2(int a) {
+    public void correctCallMethodsInIfElse(int a) {
     	if(a==1){
-    		cominativeMethod2("A","B");
+    		cominativeMethod("A","B");
     	}else if(a==2){
-    		cominativeMethod2("C","D");
+    		cominativeMethod("C","D");
     	}else{
     		String c="",d="";
-    		cominativeMethod2(c,d);
+    		cominativeMethod(c,d);
     	}
     }
-    public void correctCallMethods3(int a) {
+    
+    public void correctCallMethodsInCase(int a) {
     	switch(a){
     	case 1:
-    		cominativeMethod2("A","B");
+    		cominativeMethod("A","B");
     		break;
     	case 2:
-    		cominativeMethod2("C","D");
+    		cominativeMethod("C","D");
     		break;
     	default:
     		String c="",d="";
-    		cominativeMethod2(c,d);
+    		cominativeMethod(c,d);
     	}
     }
-    public void wrongCallMethods3(int a) {
+    
+    public void wrongCallMethodsInCase(int a) {
     	switch(a){
     	case 1:
-    		cominativeMethod2("A","B");
+    		cominativeMethod("A","B");
     	case 2:
-    		cominativeMethod2("C","D");
+    		cominativeMethod("C","D");
     		break;
     	default:
     		String c="",d="";
-    		cominativeMethod2(c,d);
+    		cominativeMethod(c,d);
     	}
     }
 }

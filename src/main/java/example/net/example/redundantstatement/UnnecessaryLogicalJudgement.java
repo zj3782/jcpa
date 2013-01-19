@@ -9,6 +9,7 @@ import java.util.Scanner;
  * Wrong occurrences: 2;
  */
 public class UnnecessaryLogicalJudgement {
+	
     public InputStream correctTestVariable() {
         Properties prop = new Properties();
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(

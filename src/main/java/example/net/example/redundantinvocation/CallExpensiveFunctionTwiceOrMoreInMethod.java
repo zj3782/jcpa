@@ -1,19 +1,11 @@
 package net.example.redundantinvocation;
 
 /*
- * Wrong occurrences: 2;
+ * Wrong occurrences: 6;
  */
 public class CallExpensiveFunctionTwiceOrMoreInMethod {
 
-    private long factorial(long n) {
-        if (n == 1) {
-            return 1;
-        } else {
-            return n * factorial(n - 1);
-        }
-    }
-
-    public long correctCallFunctions() {
+     public long correctCallFunctions() {
         long part1 = factorial(4);
         long part2 = factorial(5);
         return part1 + part2;
@@ -25,7 +17,7 @@ public class CallExpensiveFunctionTwiceOrMoreInMethod {
         return part1 + part2;
     }
 
-    public long wrongCallFunctions2() {
+    public long wrongCallManyFunctions() {
     	int a=1,b=1;
         long part1 = factorial(6,7);
         long part2 = factorial(6,7);
@@ -33,14 +25,9 @@ public class CallExpensiveFunctionTwiceOrMoreInMethod {
         long part4 = factorial(a,b);
         long part5 = factorial(a,b);
         return part1 + part2+part3+part4+part5;
-    }
-    
-    public long factorial(int a,int b){
-    	return a+b;
-    }
+    }	
 	
-	
-	public void correctCallFunctions3(){
+	public void correctCallFunctionsInIfElse(){
 		int a=12;
 		if(a==1){
 			if(a==1){
@@ -48,14 +35,15 @@ public class CallExpensiveFunctionTwiceOrMoreInMethod {
 			}
 			costMethod();
 		}else if(a==2){
-			costMethod1();
+			factorial(1);
 		}else if(a==3){
-			costMethod2();
+			factorial(1);
 		}else{
 			costMethod();
 		}
 	}
-	public void wrongCallFunctions3(){
+	
+	public void wrongCallFunctionsInIfElse(){
 		int a=12;
 		if(a==1){
 			if(a==1){
@@ -66,7 +54,8 @@ public class CallExpensiveFunctionTwiceOrMoreInMethod {
 			factorial(1);
 		}
 	}
-	public void correctCallFunctions4(){
+	
+	public void correctCallFunctionsInIfElse2(){
 		int a=12;
 		if(a==1){
 			if(a-1==1){
@@ -74,17 +63,18 @@ public class CallExpensiveFunctionTwiceOrMoreInMethod {
 			}
 		}else{
 			if(a==2){
-				costMethod1();
+				costMethod();
 			}else{
 				if(a==3){
-					costMethod2();
+					costMethod();
 				}else{
 					costMethod();
 				}
 			}
 		}
 	}
-	public void correctCallFunctions5(){
+	
+	public void correctCallFunctionsInIfElse3(){
 		int a=12;
 		if(a==1){
 			if(a==1){
@@ -92,7 +82,8 @@ public class CallExpensiveFunctionTwiceOrMoreInMethod {
 			}
 		}else if(a==2){
 			if(a==1){
-				factorial(1,2);
+				a++;
+				costMethod();
 			}else{
 				costMethod();
 			}
@@ -105,7 +96,7 @@ public class CallExpensiveFunctionTwiceOrMoreInMethod {
 		}
 	}
 	
-	public void correctCallFunctionIncase(int i){
+	public void correctCallFunctionInCase(int i){
 		switch(i){
 		case 1:
 			i++;
@@ -120,7 +111,7 @@ public class CallExpensiveFunctionTwiceOrMoreInMethod {
 			break;
 		}
 	}
-	public void wrongCallFunctionIncase(int i){
+	public void wrongCallFunctionInCase(int i){
 		switch(i){
 		case 1:
 			costMethod();
@@ -138,7 +129,15 @@ public class CallExpensiveFunctionTwiceOrMoreInMethod {
 		}
 	}
 	
+	private long factorial(long n) {
+        if (n == 1) {
+            return 1;
+        } else {
+            return n * factorial(n - 1);
+        }
+    }
+	public long factorial(int a,int b){
+    	return a+b;
+    }
 	public void costMethod(){}
-	public void costMethod1(){}
-	public void costMethod2(){}
 }

@@ -6,6 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+/*
+ * Wrong occurrences: 3;
+ */
 public class LegacyUsage {
     public void correctIterate() {
         String[] strs = { "A", "B", "C", "D" };

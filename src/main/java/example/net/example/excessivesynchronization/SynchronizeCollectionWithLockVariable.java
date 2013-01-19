@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /*
- * Wrong occurrences: 1;
+ * Wrong occurrences: 4;
  * 
  * Correct:
  * Map<String, Data> m = Collections.synchronizedMap(new HashMap<String, Data>());
