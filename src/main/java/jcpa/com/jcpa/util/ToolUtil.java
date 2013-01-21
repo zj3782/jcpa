@@ -196,6 +196,19 @@ public class ToolUtil {
     	Jsvars.put('\'',"\\'");
     }
     /**
+     * remove \r and \n
+     * */
+    public static String rmvRN(String in){
+    	if(in==null || in.equals(""))return in;
+		StringBuffer quotedString = new StringBuffer();
+		char c;
+	    for (int i=0;  i<in.length();  ++i) {
+	      c=in.charAt(i);
+	      if(c!='\r' && c!='\n')quotedString.append(c);
+	    }
+	    return quotedString.toString();
+    }
+    /**
      * num round
      * */
     public static double getRound(double dSource){

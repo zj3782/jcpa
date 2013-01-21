@@ -6,7 +6,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 /*
- * Wrong occurrences: 5;
+ * Wrong occurrences: 6;
  */
 public class JCPATest {
 	List<String> strList=new ArrayList<String>();
@@ -25,8 +25,7 @@ public class JCPATest {
 
 	public void callExpensiveMethodInSynchronization() {
 		GenericEntity entity = new GenericEntity();
-		synchronized (strList) {
-			strList.add("ABC");
+		synchronized (this) {
 			entity.expensiveFunction("ab");
 		}
 	}

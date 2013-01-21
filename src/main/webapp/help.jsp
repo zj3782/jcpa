@@ -222,8 +222,15 @@ function showTxt(cat){
 					<p>6)I want to find out which line call function like this:"obj.func();".But obj must be instance of Class MyObj </p>
 					Expression: <span style="color:green;">//BlockStatement[##AUX_CMI_0##]</span><br>
 					Auxiliary: <span style="color:green;">MyObj->func##String->split,JsonObject->toString##</span><br>
-					"MyObj->func" means that instance of MyObj calls method of func.If you want to use regular string in the auxiliary filed,you can use ##AUX_CMI_REG_0## in the expression.<br>
-					<font style="color:red">Note:You must put "##AUX_CMI_0##" into "BlockStatement[]".</font>That is because the ##AUX_CMI_0## will be replaced by some xpath code,and this code works under BlockStatement.
+					"MyObj->func" means that instance of MyObj calls method of func.<br>
+					If you want to use regular string in the auxiliary filed,you can use ##AUX_CMI_REG_0## in the expression.<br>
+					for example:(.)*Bean->get$,^DBManager$->select$,(.)*DB(.)*->(.)*<br/>
+					But you can not write like this:"^DBManager$->^select$".You can't write ^ in the header of method.Reasons are followed:<br/>
+					<span class="cGreen">DBManager db;<br>
+					db.select();</span><br/>
+					The function name are parsed to "db.select",not "select",if you write like this:^DBManager$->^select$,it means you want to list function name start with "select",but the function name is "db.select",so it will not be found.
+					You can write like this:^DBManager$->select$.<br/>
+					<font style="color:red">Note:You must put "##AUX_CMI_0##" under BlockStatement or PrimaryExpression.</font>That is because the ##AUX_CMI_0## will be replaced by some xpath code,and this code works under BlockStatement.
 					<p><B>b.java pattern</B></p>
 					<img src="image/patterns1-1.png" />
 					<p>If you want to add a java pattern,you must choose which class to handle this pattern.If you want to see how to add a new class to hanlde this pattern,see "How to add a java pattern" in "Customize"</p>
@@ -379,7 +386,12 @@ function showTxt(cat){
 			</div>
 			<div class="problem">	
 				<h3>I have import the ruleset file to eclipse pmd plugin successed,bu when I scan code,there are no violence,it seems that the patterns dont work.</h3>
-				<p>Make sure you have check the rules you want to work in the "windows"=>"Preferences"=>"PMD"=>"rule configuration" Dialog and you must enable pmd in the project properties dialog.</p>
+				<p>Make sure you have enable pmd in the project properties dialog.</p>
+			</div>
+			<div class="problem">
+				<h3>When I load ruleset file in eclipse,it alert errors--"Project ruleset file already exists......"</h3>
+				<img src="image/load_error.png"/>
+				<p>Close eclipse and enter the project folder,open ".pmd" file with notepad.Edit the "ruleSetFileruleSetFile" block with an existent ruleset file path.</p>
 			</div>
 		</div>
 		</div>
@@ -471,7 +483,7 @@ function showTxt(cat){
 				<div id="usagePluginLoad">
 					<h3>Load ruleset in eclipse</h3>
 					<p class="cRed">Attention:Before you import the ruleset file,
-					you'd better copy the "%WORKSPACE%\target\pmd-5.1.0-SNAPSHOT.jar" file to cover the "%ECLIPSE_HOME%\plugins\net.sourceforge.pmd.eclipse.plugin_4.0.0.201211080927\lib\pmd-5.1.0-SNAPSHOT.jar" after mvn package,
+					you'd better close your eclipse and copy the "%WORKSPACE%\target\pmd-5.1.0-SNAPSHOT.jar" file to cover the "%ECLIPSE_HOME%\plugins\net.sourceforge.pmd.eclipse.plugin_4.0.0.201211080927\lib\pmd-5.1.0-SNAPSHOT.jar" after mvn package,
 					then restart eclipse to take effect.Because if there are java patterns in the ruleset file,one java pattern must depend on a certain class.
 					</p>
 					<p>1、Global load:<br>
@@ -482,19 +494,28 @@ function showTxt(cat){
 						(5)Then in the rule list,you will see the rules have been added.You can select "group by ruleset" or sort the list by the "Rule set" column,
 						and the rules whose rule set name are "jcpa pmd" are just imported.<br/>
 						<img src="image/customize_load0.png"/><br>
-						If you want to use those rules,you must click to select them.<br/>
+						If you want to make those rules work,you must click to select them.<br/>
 					</p>
-					<p>2、Load only for one single project.<br>
+					<p>2、Load only for one single project.</p>
+					<p>
 						(1)Click the right mouse button on the project.Click Properties on the popupmenu.<br>
 						(2)Select "PMD" on the left of project Properties dialog.<br>
 						(3)You can choose which rule you want to take effect or select the checkbox named "Use the ruleset configured in a project file" and location a ruleset file on the properties dialog.<br>
+						<img src="image/customize_load1.png" /><br>
+						<font class="cRed">Note:We find that if you don't load globally,only load only for one single project,sometimes it doesn't work.But if you load global first and then load the ruleset file for one project,it works well.It seems that is a bug for the plugin.</font>
 					</p>
 				</div>
 				<div id="usagePluginScan">
 					<h3>Scan code in eclipse</h3>
 					<p>1、Switch to the "PMD" perspective.</p>
+					<img src="image/customize_load2.png" />
 					<p>2、Click the right mouse button on the project、folder、file(s).Click "PMD"->"Check code with pmd" on the popupmenu.</p>
-					<p>3、You will see the violations on the Violation Overview</p>
+					<img src="image/customize_load3.png" />
+					<p>3、You will see the violations on the Violation Overview,and you will see there are marks in the package and files,that means this files break rules.</p>
+					<img src="image/customize_load4.png" />
+					<img src="image/customize_load5.png" />
+					<img src="image/customize_load6.png" />
+					<img src="image/customize_load7.png" />
 				</div>
 			</div>
 		</div>

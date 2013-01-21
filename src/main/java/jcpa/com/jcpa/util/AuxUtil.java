@@ -88,7 +88,7 @@ public class AuxUtil {
 				}else{//two part
 					String c=cm[0],m=cm[1];
 					
-					repXpathItemReg+="(descendant-or-self::PrimaryExpression/PrimaryPrefix/Name[pmd:matches(@Image,'\\."+m+"')]";
+					repXpathItemReg+="(descendant-or-self::PrimaryExpression/PrimaryPrefix/Name[pmd:matches(@Image,'\\\\."+m+"')]";
 					repXpathItemReg+="and";
 					repXpathItemReg+="(";
 					repXpathItemReg+="ancestor::*/MethodDeclaration/descendant::*/LocalVariableDeclaration[Type/descendant::*/ClassOrInterfaceType[pmd:matches(@Image,'"+c+"')]]/VariableDeclarator/VariableDeclaratorId/@Image";

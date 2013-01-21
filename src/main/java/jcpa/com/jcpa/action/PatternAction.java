@@ -301,7 +301,7 @@ public class PatternAction extends Action{
 				for(Pattern p:list) {
 					buff="<rule name=\""+ p.getName()
 							+ "\" language=\"java\" since=\"5.0\" scope=\""+p.getScope()
-							+"\" message=\"\" externalInfoUrl=\"pattern.jsp?id="+p.getId()+"\" ";
+							+"\" message=\""+ToolUtil.rmvRN(p.getWarning())+"\" externalInfoUrl=\"pattern.jsp?id="+p.getId()+"\" ";
 					
 					if(p.getPatternType()!=null && p.getPatternType().equals("java")){
 						buff+="class=\"com.jcpa.pattern.javaclass."+p.getJavaClass()+"\">";
