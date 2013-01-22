@@ -1,5 +1,6 @@
 package com.jcpa.util;
 
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -91,13 +92,13 @@ public class AuxUtil {
 					repXpathItemReg+="(descendant-or-self::PrimaryExpression/PrimaryPrefix/Name[pmd:matches(@Image,'\\\\."+m+"')]";
 					repXpathItemReg+="and";
 					repXpathItemReg+="(";
-					repXpathItemReg+="ancestor::*/MethodDeclaration/descendant::*/LocalVariableDeclaration[Type/descendant::*/ClassOrInterfaceType[pmd:matches(@Image,'"+c+"')]]/VariableDeclarator/VariableDeclaratorId/@Image";
+					repXpathItemReg+="ancestor::*/MethodDeclaration/descendant::*/LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceType[pmd:matches(@Image,'"+c+"')]]/VariableDeclarator/VariableDeclaratorId/@Image";
 					repXpathItemReg+="=substring-before(descendant-or-self::PrimaryExpression/PrimaryPrefix/Name/@Image,'.')";
 					repXpathItemReg+=" or ";
-					repXpathItemReg+="ancestor::*/MethodDeclaration/descendant::*/FormalParameters/FormalParameter[Type/descendant::*/ClassOrInterfaceType[pmd:matches(@Image,'"+c+"')]]/VariableDeclaratorId/@Image";
+					repXpathItemReg+="ancestor::*/MethodDeclaration/descendant::*/FormalParameters/FormalParameter[Type/ReferenceType/ClassOrInterfaceType[pmd:matches(@Image,'"+c+"')]]/VariableDeclaratorId/@Image";
 					repXpathItemReg+="=substring-before(descendant-or-self::PrimaryExpression/PrimaryPrefix/Name/@Image,'.')";
 					repXpathItemReg+=" or ";
-					repXpathItemReg+="ancestor::*/ClassOrInterfaceBodyDeclaration/FieldDeclaration[Type/descendant::*/ClassOrInterfaceType[pmd:matches(@Image,'"+c+"')]]/VariableDeclarator/VariableDeclaratorId/@Image";
+					repXpathItemReg+="ancestor::*/ClassOrInterfaceBodyDeclaration/FieldDeclaration[Type/ReferenceType/ClassOrInterfaceType[pmd:matches(@Image,'"+c+"')]]/VariableDeclarator/VariableDeclaratorId/@Image";
 					repXpathItemReg+="=substring-before(descendant-or-self::PrimaryExpression/PrimaryPrefix/Name/@Image,'.')";
 					repXpathItemReg+="))";
 					repXpathItemReg+=" or ";
@@ -105,13 +106,13 @@ public class AuxUtil {
 					repXpathItem+="(descendant-or-self::PrimaryExpression/PrimaryPrefix/Name[ends-with(@Image,'."+m+"')]";
 					repXpathItem+="and";
 					repXpathItem+="(";
-					repXpathItem+="ancestor::*/MethodDeclaration/descendant::*/LocalVariableDeclaration[Type/descendant::*/ClassOrInterfaceType[@Image='"+c+"']]/VariableDeclarator/VariableDeclaratorId/@Image";
+					repXpathItem+="ancestor::*/MethodDeclaration/descendant::*/LocalVariableDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image='"+c+"']]/VariableDeclarator/VariableDeclaratorId/@Image";
 					repXpathItem+="=substring-before(descendant-or-self::PrimaryExpression/PrimaryPrefix/Name/@Image,'.')";
 					repXpathItem+=" or ";
-					repXpathItem+="ancestor::*/MethodDeclaration/descendant::*/FormalParameters/FormalParameter[Type/descendant::*/ClassOrInterfaceType[@Image='"+c+"']]/VariableDeclaratorId/@Image";
+					repXpathItem+="ancestor::*/MethodDeclaration/descendant::*/FormalParameters/FormalParameter[Type/ReferenceType/ClassOrInterfaceType[@Image='"+c+"']]/VariableDeclaratorId/@Image";
 					repXpathItem+="=substring-before(descendant-or-self::PrimaryExpression/PrimaryPrefix/Name/@Image,'.')";
 					repXpathItem+=" or ";
-					repXpathItem+="ancestor::*/ClassOrInterfaceBodyDeclaration/FieldDeclaration[Type/descendant::*/ClassOrInterfaceType[@Image='"+c+"']]/VariableDeclarator/VariableDeclaratorId/@Image";
+					repXpathItem+="ancestor::*/ClassOrInterfaceBodyDeclaration/FieldDeclaration[Type/ReferenceType/ClassOrInterfaceType[@Image='"+c+"']]/VariableDeclarator/VariableDeclaratorId/@Image";
 					repXpathItem+="=substring-before(descendant-or-self::PrimaryExpression/PrimaryPrefix/Name/@Image,'.')";
 					repXpathItem+="))";
 					repXpathItem+=" or ";

@@ -391,14 +391,16 @@ function showTxt(cat){
 			<div class="problem">
 				<h3>When I load ruleset file in eclipse,it alert errors--"Project ruleset file already exists......"</h3>
 				<img src="image/load_error.png"/>
-				<p>Close eclipse and enter the project folder,open ".pmd" file with notepad.Edit the "ruleSetFileruleSetFile" block with an existent ruleset file path.</p>
+				<p>Method A:Close eclipse and enter the project folder,open ".pmd" file with notepad.Edit the "ruleSetFileruleSetFile" block with an existent ruleset file path.<br>
+					   Method B:New a java project and enable pmd in the project properties.Then close eclipse,copy the ".pmd" file of the newly bulid project to your project.Then reconfig.
+				</p>
 			</div>
 		</div>
 		</div>
 		<div id="usage">
 			<h1>Usage</h1>
 			<div id="usageInstall">
-				<h2>Installation</h2>
+				<h2>ation</h2>
 				<div id="usageEnvironment">
 					<h3>Environment</h3>
 					<p>Jdk1.6.0_33、Maven 3.0.4、Tomcat 7.0</p>
@@ -463,7 +465,7 @@ function showTxt(cat){
 					<p>1、Select "Help"->"Install New Software" on the eclipse main menu.</p>
 					<p>2、Click "Add" button on the Install dialog.</p>
 					<p>3、Input a name on the name field.Input "http://sourceforge.net/projects/pmd/files/pmd-eclipse/update-site/" on the Location field.Click OK.<br/><font style="color:red">Note:We only support for plugin v4.0,be cared about the plugin version.</font></p>
-					<p>4、You will see two items named "PMD" on the Install dialog.Select and Click next.</p>
+					<p>4、You will see some items on the Install dialog.Select and Click next.</p>
 					<p>5、While the plugin installing,it may popup a dialog warnning that plugin cant't be trusted,just click ok.</p>
 					<p>6、After the plugin installation finish,restart eclipse.</p>
 					<p>7、Select "Window"->"Preferences" on the eclipse main menu.</p>
@@ -509,13 +511,13 @@ function showTxt(cat){
 					<h3>Scan code in eclipse</h3>
 					<p>1、Switch to the "PMD" perspective.</p>
 					<img src="image/customize_load2.png" />
-					<p>2、Click the right mouse button on the project、folder、file(s).Click "PMD"->"Check code with pmd" on the popupmenu.</p>
+					<p>2、Click the right mouse button on the source folder or source file(s).Click "PMD"->"Check code with pmd" on the popupmenu.</p>
 					<img src="image/customize_load3.png" />
-					<p>3、You will see the violations on the Violation Overview,and you will see there are marks in the package and files,that means this files break rules.</p>
-					<img src="image/customize_load4.png" />
-					<img src="image/customize_load5.png" />
-					<img src="image/customize_load6.png" />
-					<img src="image/customize_load7.png" />
+					<p>3、You will see the violations on the Violation Overview(If you can't see this area,Please this menu:Window->Show View->Other->Pmd->Violation Overview).<br/>
+					<img src="image/customize_load4.png" /><br>
+					You will see there are marks in the package and files,that means this files break rules.
+					The Violations Outline will show the Violations current opened file break.
+					</p>
 				</div>
 			</div>
 		</div>

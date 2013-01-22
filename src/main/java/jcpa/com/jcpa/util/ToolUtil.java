@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -276,12 +277,12 @@ public class ToolUtil {
      * */
     public static String getTimeString() {
     	  String TimeString = "";
-    	  Calendar c = Calendar.getInstance();
+    	  Calendar c = Calendar.getInstance(Locale.CHINA);
 
     	  int yyyy = c.get(Calendar.YEAR);
     	  int mm = c.get(Calendar.MONTH) + 1;
     	  int dd = c.get(Calendar.DAY_OF_MONTH);
-    	  int hh = c.get(Calendar.HOUR) + 8;//中国属于东八区，时间加8小时
+    	  int hh = c.get(Calendar.HOUR_OF_DAY);
     	  int MM = c.get(Calendar.MINUTE);
     	  int SS = c.get(Calendar.SECOND);
 

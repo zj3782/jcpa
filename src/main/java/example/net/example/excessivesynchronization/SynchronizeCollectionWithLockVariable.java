@@ -30,6 +30,10 @@ public class SynchronizeCollectionWithLockVariable {
         }
     }
     
+    public void justOneLockStatement(){
+    	 r.lock();
+    }
+    
     public Data get(String key) {
         r.lock();
         try {
