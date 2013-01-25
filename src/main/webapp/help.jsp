@@ -400,7 +400,7 @@ function showTxt(cat){
 		<div id="usage">
 			<h1>Usage</h1>
 			<div id="usageInstall">
-				<h2>ation</h2>
+				<h2>Installation</h2>
 				<div id="usageEnvironment">
 					<h3>Environment</h3>
 					<p>Jdk1.6.0_33、Maven 3.0.4、Tomcat 7.0</p>
